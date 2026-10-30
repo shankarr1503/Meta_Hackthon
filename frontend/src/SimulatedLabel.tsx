@@ -1,0 +1,11 @@
+/** Visible honesty label: every result view shows that its data is simulated. */
+export default function SimulatedLabel() {
+  return (
+    <span
+      className="rounded border border-amber-600 bg-amber-100 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-amber-900 dark:border-amber-400 dark:bg-amber-900 dark:text-amber-100"
+      title="All data in FailureLab AI comes from a physics simulator, not a real machine."
+    >
+      Simulated
+    </span>
+  );
+}

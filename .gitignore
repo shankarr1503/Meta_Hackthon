@@ -1,0 +1,35 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Planning PDFs (kept out of the public repo)
+/*.pdf
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+build/
+
+# Node
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.vite/
+
+# Runtime replays: only curated demo replays are committed
+backend/replays/*
+!backend/replays/demo/
+!backend/replays/.gitkeep
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
