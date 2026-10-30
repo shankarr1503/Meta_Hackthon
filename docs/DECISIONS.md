@@ -157,3 +157,7 @@ decision changes, add a new entry that supersedes the old one instead of editing
 - **D-47 · 30 Oct 2026 · Investigator default in the UI.** The case picker defaults to the
   Meta model when `/api/ready` reports it configured, otherwise to information gain, and
   disables running Meta when it is not configured.
+- **D-48 · 30 Oct 2026 · Twin follows revealed measurements only.** The twin shows the
+  latest revealed measurement at its own operating point; before the first measurement it
+  spins at the alarm speed with no whirl, because the alarm gives only an overall level.
+  The 3D scene is lazy-loaded and replaced by a text note where WebGL is unavailable.

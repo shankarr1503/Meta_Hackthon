@@ -17,6 +17,7 @@ import Panel from "../dashboard/Panel";
 import SpectrumChart from "../dashboard/SpectrumChart";
 import { celsius, newtons, rpm, um } from "../format";
 import SimulatedLabel from "../SimulatedLabel";
+import TwinPanel from "../twin/TwinPanel";
 
 const DEBOUNCE_MS = 250;
 
@@ -218,6 +219,18 @@ export default function ManualLab() {
           <Panel title="Waveform">
             <Waveform result={result} />
           </Panel>
+          {reading && (
+            <Panel title="Digital twin">
+              <TwinPanel
+                reading={{
+                  rpm: reading.request.rpm,
+                  load_n: reading.request.load_n,
+                  measured: reading.result,
+                }}
+                seed={reading.request.seed}
+              />
+            </Panel>
+          )}
         </div>
       )}
     </div>

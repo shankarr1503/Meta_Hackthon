@@ -101,6 +101,11 @@ All code in this repository was written from scratch during the event. Work star
 - Manual lab (`frontend/src/lab/ManualLab.tsx`): fault, speed and load sliders on the public
   preset machine with debounced simulation, live readings, a simulator-computed response
   curve, spectrum and waveform. Tests cover the request, debouncing and errors.
+- 3D digital twin (`frontend/src/twin/`): shaft, bearings and load arrow in React Three
+  Fiber, lazy-loaded. Spin follows RPM (20× slower, labelled), whirl follows measured 1x
+  (1,000× exaggeration, stated), strong 2x draws a figure-eight, broadband adds seeded
+  jitter, bearing tint follows temperature rise. Before any measurement it shows no whirl.
+  Tests target the mapping functions; WebGL rendering itself is not tested.
 
 ## Benchmark results (simulated)
 
@@ -138,6 +143,9 @@ Direct dependencies, pinned to exact versions:
 | React, React DOM | 19.3.1 | Frontend UI | MIT |
 | Recharts | 3.10.1 | Spectrum and response charts | MIT |
 | react-is | 19.3.1 | Peer dependency of Recharts | MIT |
+| three | 0.186.1 | 3D twin rendering | MIT |
+| @react-three/fiber | 9.8.1 | React renderer for three.js | MIT |
+| @types/three | 0.186.0 | three.js type definitions | MIT |
 | Vite | 8.3.4 | Frontend dev server and build | MIT |
 | @vitejs/plugin-react | 6.1.2 | React support for Vite | MIT |
 | TypeScript | 6.0.3 | Frontend language | Apache-2.0 |

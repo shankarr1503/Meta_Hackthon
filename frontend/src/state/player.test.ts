@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { makeTrace } from "../test/fixtures";
-import { buildFrames, frameLabel, viewAt } from "./player";
+import { buildFrames, frameLabel, twinReading, viewAt } from "./player";
 
 const trace = makeTrace();
 const frames = buildFrames(trace);
@@ -70,5 +70,20 @@ describe("player frames", () => {
     const emptyFrames = buildFrames(empty);
     expect(emptyFrames).toHaveLength(3);
     expect(viewAt(empty, emptyFrames, 2).probabilities).toEqual(empty.alarm.posterior);
+  });
+});
+
+describe("twin reading", () => {
+  it("shows no motion before the first measurement", () => {
+    const reading = twinReading(trace, viewAt(trace, frames, at("predict", 0)));
+    expect(reading).toEqual({ rpm: 2950, load_n: 500, measured: null });
+  });
+
+  it("follows the latest revealed measurement", () => {
+    const reading = twinReading(trace, viewAt(trace, frames, at("result", 0)));
+    expect(reading.rpm).toBe(1500);
+    expect(reading.measured).toEqual(trace.steps[0].measured);
+    const waiting = twinReading(trace, viewAt(trace, frames, at("choice", 1)));
+    expect(waiting.rpm).toBe(1500); // the next experiment is not shown until measured
   });
 });

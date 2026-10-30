@@ -1,4 +1,5 @@
 import type { Probabilities, Step, Trace } from "../api/types";
+import type { TwinReading } from "../twin/mapping";
 
 /**
  * The step player turns a trace into frames. For each experiment it shows the choice and
@@ -85,4 +86,14 @@ export function frameLabel(frame: Frame): string {
     case "diagnosis":
       return "Diagnosis";
   }
+}
+
+/**
+ * What the 3D twin may show: the latest revealed measurement at its own operating point,
+ * or, before any experiment, the alarm's operating point with no measured motion.
+ */
+export function twinReading(trace: Trace, view: View): TwinReading {
+  const latest = view.revealedSteps.at(-1);
+  if (!latest) return { rpm: trace.alarm.rpm, load_n: trace.alarm.load_n, measured: null };
+  return { rpm: latest.rpm, load_n: latest.load_n, measured: latest.measured };
 }

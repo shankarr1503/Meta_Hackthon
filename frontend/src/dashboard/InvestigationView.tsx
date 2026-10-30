@@ -1,7 +1,9 @@
 import type { Trace } from "../api/types";
 import { hypothesisName, newtons, percent, plannerName, rpm, um } from "../format";
 import SimulatedLabel from "../SimulatedLabel";
+import { twinReading } from "../state/player";
 import { useInvestigation } from "../state/useInvestigation";
+import TwinPanel from "../twin/TwinPanel";
 import BudgetMeter from "./BudgetMeter";
 import DiagnosisCard from "./DiagnosisCard";
 import ExperimentLog from "./ExperimentLog";
@@ -44,6 +46,9 @@ export default function InvestigationView({ trace }: { trace: Trace }) {
           </Panel>
           <Panel title="Budget">
             <BudgetMeter remaining={view.budgetRemaining} budget={trace.budget} />
+          </Panel>
+          <Panel title="Digital twin">
+            <TwinPanel reading={twinReading(trace, view)} seed={trace.seed} />
           </Panel>
         </div>
 

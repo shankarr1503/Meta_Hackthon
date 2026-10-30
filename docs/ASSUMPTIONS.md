@@ -84,3 +84,10 @@ behaviour changes.
   with seeds 0–4 (rule planners) or 0–2 (Meta). Accuracy is top hypothesis = truth label.
 
 ## API and frontend
+
+- The 3D twin is an illustration, not a second simulator: every motion comes from a
+  measured feature. The shaft is drawn as a 0.8 m rotor; whirl is exaggerated 1,000×
+  (1 µm shown as 1 mm) and capped; spin is shown 20× slower than the true RPM; a figure-eight
+  is drawn when 2x is at least 1x and above the 2 µm noise floor; bearing tint saturates at
+  a 40 °C rise; jitter is seeded, so a replay looks the same each time.
+- Recommended checks and explanations are for the simulated machine only.
