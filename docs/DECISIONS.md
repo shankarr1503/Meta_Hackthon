@@ -125,3 +125,11 @@ decision changes, add a new entry that supersedes the old one instead of editing
 - **D-37 · 30 Oct 2026 · Signals in traces.** Each step stores its waveform preview and
   spectrum (rounded to 4 decimals) so the replay player can draw them without re-running
   the simulator.
+- **D-38 · 30 Oct 2026 · Experiment `kind`.** Experiment responses carry
+  `kind: "case"` and lab responses `kind: "lab"`, so the UI can label which machine a
+  reading came from.
+- **D-39 · 30 Oct 2026 · Lab response curve.** `/api/lab/simulate` also returns the
+  noise-free 1x and 2x curve over 0–6,000 RPM for the requested faults and load, so the
+  manual lab's response curve comes from the simulator, not the browser.
+- **D-40 · 30 Oct 2026 · Settings on the app.** `create_app(settings)` stores settings on
+  `app.state`; replay and results folders are settings, so tests use temporary folders.

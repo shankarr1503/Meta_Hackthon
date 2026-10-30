@@ -6,7 +6,8 @@ from pathlib import Path
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+ENV_FILE = BACKEND_DIR / ".env"
 
 SERVICE_NAME = "failurelab-ai"
 VERSION = "0.1.0"
@@ -27,7 +28,15 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = ""
     llm_base_url: str = ""
+    llm_timeout_s: float = 30.0
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
+    replays_dir: Path = BACKEND_DIR / "replays"
+    results_dir: Path = BACKEND_DIR / "results"
+
+    @property
+    def llm_configured(self) -> bool:
+        """True when key, model and endpoint are all set."""
+        return bool(self.llm_api_key.get_secret_value() and self.llm_model and self.llm_base_url)
 
 
 @lru_cache

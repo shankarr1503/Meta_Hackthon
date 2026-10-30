@@ -76,6 +76,11 @@ All code in this repository was written from scratch during the event. Work star
   each run, posterior updates, stopping at 90% or budget, diagnosis with doubts and a
   recommended check, and a JSON trace. Tests cover budget, repeats, sweep order, seeded
   bit-identical traces, no hidden values in traces, sealed-case accuracy and speed.
+- API (`app/api/`, `app/schemas/`): `/api/ready`, `/api/cases`, `/api/experiments`,
+  `/api/lab/simulate`, `/api/investigations` (run, save, list, load) with closed request
+  schemas, replay storage with id checks, and a clear 503 for an unconfigured Meta model.
+  Tests cover 422/404/400/503 paths, public fields only, no hidden values and the replay
+  round trip. Reference in `docs/API.md`.
 
 ### Dependencies
 
