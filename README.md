@@ -92,6 +92,12 @@ All code in this repository was written from scratch during the event. Work star
 - Benchmark (`backend/scripts/benchmark.py`, `GET /api/benchmark`): rule planners on six
   sealed cases × 5 seeds plus 120 generated cases; `--planner meta` runs separately with a
   response cache and a call limit. Results in `backend/results/benchmark.json`.
+- Dashboard player (`frontend/src/`): typed API client, case picker with investigator and
+  seed choice and saved replays, and a step player (play, pause, back, forward, skip) that
+  shows each experiment's choice and reasoning, then predictions, then the measurement and
+  spectrum, then updated probabilities, with budget, experiment log and a final diagnosis
+  card. Tests cover frame order, hidden-until-revealed measurements, diagnosis only at the
+  end, numeric probabilities, auto-play and the case picker.
 
 ## Benchmark results (simulated)
 
@@ -127,6 +133,8 @@ Direct dependencies, pinned to exact versions:
 | pytest | 9.1.1 | Backend tests | MIT |
 | Ruff | 0.17.0 | Backend lint and format | MIT |
 | React, React DOM | 19.3.1 | Frontend UI | MIT |
+| Recharts | 3.10.1 | Spectrum and response charts | MIT |
+| react-is | 19.3.1 | Peer dependency of Recharts | MIT |
 | Vite | 8.3.4 | Frontend dev server and build | MIT |
 | @vitejs/plugin-react | 6.1.2 | React support for Vite | MIT |
 | TypeScript | 6.0.3 | Frontend language | Apache-2.0 |

@@ -151,3 +151,9 @@ decision changes, add a new entry that supersedes the old one instead of editing
 - **D-45 · 30 Oct 2026 · Benchmark commands.** `make benchmark` / `make benchmark-meta`, or
   `python scripts/tasks.py benchmark` / `benchmark-meta`. The script adds `backend/` to its
   import path so it never runs a stale installed copy of the app.
+- **D-46 · 30 Oct 2026 · Player frames.** Each trace becomes frames: prior, alarm, then per
+  experiment choice → predictions → measurement → updated probabilities, then diagnosis.
+  The budget is charged when a measurement is revealed. Auto-play advances every 1.4 s.
+- **D-47 · 30 Oct 2026 · Investigator default in the UI.** The case picker defaults to the
+  Meta model when `/api/ready` reports it configured, otherwise to information gain, and
+  disables running Meta when it is not configured.
