@@ -92,7 +92,7 @@ Trace fields:
 | `experiments`, `cost`, `budget` | Totals |
 | `stop_reason` | `confident`, `budget` or `no_affordable_experiment` |
 | `diagnosis` | `top`, `probability`, `confident`, `ranked[]`, `remaining_doubts[]`, `recommended_check`, `explanation` |
-| `llm_events[]` | Every Meta model call and fallback (empty for rule planners) |
+| `llm_events[]` | Every Meta model call (empty for rule planners): `call` (`prior`, `choose:N`, `explain`), `model`, `response` (raw reply or null), `ok`, `fallback`, `usage` (token counts or null), and on failure `error_kind` (`model_error` or `invalid_output`) and `error` |
 
 ## `GET /api/investigations`
 

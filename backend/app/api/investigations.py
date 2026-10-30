@@ -6,6 +6,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.agent.investigate import investigate, investigation_id
+from app.agent.llm_client import ChatCompletionsClient
+from app.agent.meta_planner import MetaPlanner
 from app.agent.planners import Planner, rule_planner
 from app.api.deps import scenario_or_404, settings_of
 from app.api.storage import InvalidIdError, ReplayStore
@@ -28,7 +30,7 @@ def _planner(name: str, settings: Settings) -> Planner:
         return rule_planner(name)
     if not settings.llm_configured:
         raise HTTPException(status_code=503, detail=META_NOT_CONFIGURED)
-    raise HTTPException(status_code=503, detail="The Meta model planner is not available yet.")
+    return MetaPlanner(ChatCompletionsClient.from_settings(settings))
 
 
 @router.get("/ready", response_model=Ready)

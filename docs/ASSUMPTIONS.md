@@ -62,6 +62,15 @@ behaviour changes.
   per experiment by the runner.
 - "Remaining doubts" are the other hypotheses at 5% or more. Recommended checks are fixed
   maintenance texts per fault, not engineering advice for a real machine.
+- The Meta model sees only public data: the case title and note, engine probabilities, the
+  top five candidates with their expected information and the engine's per-hypothesis
+  predictions, and the measurements so far. It never sees hidden machine values.
+- The model's prior is renormalised and floored (`0.05 + 0.7 · p`); its experiment choice is
+  limited to the engine's top five by information per cost; its words never change
+  measurements, probabilities or stopping.
+- Model output is untrusted: JSON is extracted from the reply, unknown hypothesis names are
+  dropped, text is capped (reason 600, rationale 400, expectation 200, explanation 1,200
+  characters). Any failure falls back to `info_gain` for that call.
 
 ## Cases and benchmark
 

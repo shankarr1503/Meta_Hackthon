@@ -133,3 +133,12 @@ decision changes, add a new entry that supersedes the old one instead of editing
   manual lab's response curve comes from the simulator, not the browser.
 - **D-40 · 30 Oct 2026 · Settings on the app.** `create_app(settings)` stores settings on
   `app.state`; replay and results folders are settings, so tests use temporary folders.
+- **D-41 · 30 Oct 2026 · Adapter built before the endpoint was confirmed.** The owner has
+  Meta model API access (spending cap 150 USD) but the endpoint format was not yet
+  confirmed when step 4 was built, so `llm_client.py` follows D-22 (OpenAI-compatible chat
+  completions). The live smoke test confirms it once `backend/.env` is filled; only
+  `llm_client.py` changes if it differs.
+- **D-42 · 30 Oct 2026 · Meta events and replays.** Each model call is logged as
+  `{call, model, response, ok, fallback, usage}`, plus `error_kind` and `error` on failure.
+  `ReplayClient` replays these responses in order, so re-running a Meta trace through it
+  reproduces the trace exactly. Fallback steps are labelled `chosen_by: info_gain_fallback`.

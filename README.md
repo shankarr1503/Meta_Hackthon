@@ -81,6 +81,14 @@ All code in this repository was written from scratch during the event. Work star
   schemas, replay storage with id checks, and a clear 503 for an unconfigured Meta model.
   Tests cover 422/404/400/503 paths, public fields only, no hidden values and the replay
   round trip. Reference in `docs/API.md`.
+- Meta model investigator (`app/agent/meta_planner.py`, `app/agent/llm_client.py`): the
+  model turns the note into a prior (floored at 5%), picks one of the engine's top five
+  experiments with a rationale and an expected reading per hypothesis, and writes the
+  explanation. Output is parsed defensively and capped; any failure falls back to
+  `info_gain` and is logged in `llm_events` with the raw response, so replays are identical.
+  Tests use a fake model (valid and invalid output, timeouts, prompt leakage, note
+  injection, replay identity) and a mocked HTTP transport; a live smoke test runs only when
+  `backend/.env` configures the model.
 
 ### Dependencies
 

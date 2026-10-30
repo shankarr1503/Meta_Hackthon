@@ -1,6 +1,7 @@
 """API: closed schemas, error paths, public fields only, replays and readiness."""
 
 import json
+import re
 
 import pytest
 from fastapi.testclient import TestClient
@@ -184,3 +185,39 @@ def test_ready_without_model(client: TestClient) -> None:
         "meta_model_configured": False,
         "meta_model": "",
     }
+
+
+def _configured_client(make_settings, monkeypatch, complete) -> TestClient:
+    from app.agent.llm_client import ChatCompletionsClient
+
+    monkeypatch.setattr(ChatCompletionsClient, "complete", complete)
+    settings = make_settings(
+        llm_api_key="k", llm_model="m", llm_base_url="https://example.invalid/v1"
+    )
+    return TestClient(create_app(settings))
+
+
+def test_meta_investigation_with_working_model(make_settings, monkeypatch) -> None:
+    from tests.test_meta_planner import smart_reply
+
+    client = _configured_client(make_settings, monkeypatch, lambda self, s, u: smart_reply(u))
+    trace = client.post("/api/investigations", json={"case_id": "case-k7", "seed": 1}).json()
+    assert re.fullmatch(r"case-k7-meta-1-\d{14}", trace["investigation_id"])
+    assert trace["planner"] == "meta"
+    assert all(event["ok"] for event in trace["llm_events"])
+    assert client.get(f"/api/investigations/{trace['investigation_id']}").json() == trace
+
+
+def test_meta_investigation_falls_back_when_model_fails(make_settings, monkeypatch) -> None:
+    from app.agent.llm_client import LLMError
+
+    def fail(self, system: str, user: str) -> str:
+        raise LLMError("model request timed out")
+
+    client = _configured_client(make_settings, monkeypatch, fail)
+    response = client.post("/api/investigations", json={"case_id": "case-m9"})
+    assert response.status_code == 200
+    trace = response.json()
+    assert all(event["fallback"] for event in trace["llm_events"])
+    assert {step["chosen_by"] for step in trace["steps"]} == {"info_gain_fallback"}
+    assert trace["diagnosis"]["top"] == "friction"
