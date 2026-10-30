@@ -28,7 +28,9 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = ""
     llm_base_url: str = ""
-    llm_timeout_s: float = 30.0
+    llm_timeout_s: float = 60.0
+    # Muse Spark always reasons; "low" keeps each call fast and cheap. Empty = API default.
+    llm_reasoning_effort: str = "low"
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
     replays_dir: Path = BACKEND_DIR / "replays"
     results_dir: Path = BACKEND_DIR / "results"

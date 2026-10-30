@@ -42,6 +42,9 @@ def test_request_shape_and_reply() -> None:
     assert seen["auth"] == "Bearer test-key"
     assert seen["body"]["model"] == "test-model"
     assert seen["body"]["temperature"] == 0.2
+    assert seen["body"]["max_completion_tokens"] >= 2000  # room for reasoning
+    assert "max_tokens" not in seen["body"]
+    assert seen["body"]["reasoning_effort"] == "low"
     assert [m["role"] for m in seen["body"]["messages"]] == ["system", "user"]
     assert client.last_usage == {"prompt_tokens": 12, "completion_tokens": 3, "total_tokens": 15}
 
@@ -79,6 +82,22 @@ def test_error_messages_never_include_the_key() -> None:
     with pytest.raises(LLMError) as caught:
         _client(lambda r: httpx.Response(403, text="test-key rejected")).complete("s", "u")
     assert "test-key" not in str(caught.value)
+
+
+def test_reasoning_effort_is_optional_and_validated() -> None:
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["body"] = json.loads(request.content)
+        return _ok("{}")
+
+    client = ChatCompletionsClient(
+        "https://x.invalid/v1", "k", "m", 1.0, httpx.MockTransport(handler), reasoning_effort=None
+    )
+    client.complete("s", "u")
+    assert "reasoning_effort" not in seen["body"]
+    with pytest.raises(ValueError):
+        ChatCompletionsClient("https://x.invalid/v1", "k", "m", reasoning_effort="none")
 
 
 LIVE = Settings()

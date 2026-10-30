@@ -39,7 +39,8 @@ On Windows, Python 3.12 can be installed with the Python install manager
 
 Model access is optional for development. To enable the Meta model investigator, copy
 `backend/.env.example` to `backend/.env` (git-ignored) and fill in the `FAILURELAB_LLM_*`
-values. Never commit keys.
+values from a Meta Model API project at dev.meta.ai: model `muse-spark-1.3`, base URL
+`https://api.meta.ai/v1` and your API key. Never commit keys.
 
 ## Built during the hackathon (26 Oct – 4 Nov 2026)
 
@@ -116,6 +117,9 @@ All code in this repository was written from scratch during the event. Work star
   model clients closed after each run, every model-client error falls back, prior overflow
   guarded, one shared serialiser for traces and API responses, and the Meta benchmark now
   also runs `info_gain` on exactly the same runs so the comparison is like for like.
+- Meta model confirmed: Muse Spark 1.3 on Meta's Model API (OpenAI-compatible chat
+  completions); the adapter sends `max_completion_tokens` and `reasoning_effort` because
+  Muse Spark always reasons (D-55).
 
 ## Status
 

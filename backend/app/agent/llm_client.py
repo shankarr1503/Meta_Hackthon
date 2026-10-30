@@ -1,8 +1,10 @@
 """Model adapter: one `complete(system, user) -> str` interface over the Meta model endpoint.
 
-Speaks the OpenAI-compatible chat-completions format (D-22). If the hackathon's endpoint
-uses another format, only this file changes. Every failure is raised as LLMError so the
-planner can fall back. The key is read from settings and never logged or returned.
+Speaks the OpenAI-compatible chat-completions format of Meta's Model API
+(`POST https://api.meta.ai/v1/chat/completions`, Bearer key; D-55). Muse Spark models
+always reason before answering, so the output budget (`max_completion_tokens`) leaves room
+for reasoning and `reasoning_effort` keeps it short. Every failure is raised as LLMError so
+the planner can fall back. The key is read from settings and never logged or returned.
 """
 
 from typing import Any, Protocol
@@ -12,7 +14,8 @@ import httpx
 from app.config import Settings
 
 TEMPERATURE = 0.2
-MAX_TOKENS = 700
+MAX_COMPLETION_TOKENS = 4000  # reasoning + the JSON answer share this budget
+REASONING_EFFORTS = ("minimal", "low", "medium", "high", "xhigh")
 MAX_RESPONSE_CHARS = 8000
 
 
@@ -35,10 +38,14 @@ class ChatCompletionsClient:
         base_url: str,
         api_key: str,
         model: str,
-        timeout_s: float = 30.0,
+        timeout_s: float = 60.0,
         transport: httpx.BaseTransport | None = None,
+        reasoning_effort: str | None = "low",
     ) -> None:
+        if reasoning_effort is not None and reasoning_effort not in REASONING_EFFORTS:
+            raise ValueError(f"reasoning_effort must be one of {REASONING_EFFORTS}")
         self.model = model
+        self.reasoning_effort = reasoning_effort
         self.last_usage: dict[str, int] | None = None
         self._url = base_url.rstrip("/") + "/chat/completions"
         self._headers = {"Authorization": f"Bearer {api_key}"}
@@ -51,6 +58,7 @@ class ChatCompletionsClient:
             settings.llm_api_key.get_secret_value(),
             settings.llm_model,
             settings.llm_timeout_s,
+            reasoning_effort=settings.llm_reasoning_effort or None,
         )
 
     def close(self) -> None:
@@ -63,15 +71,17 @@ class ChatCompletionsClient:
         self.close()
 
     def complete(self, system: str, user: str) -> str:
-        payload = {
+        payload: dict[str, Any] = {
             "model": self.model,
             "temperature": TEMPERATURE,
-            "max_tokens": MAX_TOKENS,
+            "max_completion_tokens": MAX_COMPLETION_TOKENS,
             "messages": [
                 {"role": "system", "content": system},
                 {"role": "user", "content": user},
             ],
         }
+        if self.reasoning_effort is not None:
+            payload["reasoning_effort"] = self.reasoning_effort
         self.last_usage = None
         try:
             response = self._client.post(self._url, json=payload, headers=self._headers)

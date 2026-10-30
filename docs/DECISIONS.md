@@ -182,3 +182,12 @@ decision changes, add a new entry that supersedes the old one instead of editing
 - **D-54 · 30 Oct 2026 · Not changed: replay list cost.** The list endpoint reads every
   replay file. At hackathon scale (tens of files) this is fast enough; an index file would
   add moving parts for no visible gain.
+- **D-55 · 30 Oct 2026 · Meta model confirmed: Muse Spark 1.3 (supersedes D-22, D-41).**
+  The owner's Meta Model API project (dev.meta.ai) offers the Muse family. FailureLab uses
+  `muse-spark-1.3` in Standard mode ($1.25 / $4.25 per million input / output tokens;
+  Standard mode does not use our content for training) via the OpenAI-compatible
+  `POST https://api.meta.ai/v1/chat/completions`. Muse Wonder was rejected (3–5× the price,
+  built for long agentic coding) and Contributor mode left to the owner (cheaper, but grants
+  Meta training rights). Muse Spark always reasons, so requests send
+  `max_completion_tokens: 4000` and `reasoning_effort` (default `low`), and the timeout is
+  60 s. Temperature 0.2 is kept (allowed range 0–2).
