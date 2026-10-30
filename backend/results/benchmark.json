@@ -1,0 +1,280 @@
+{
+  "source": "simulation",
+  "model_version": "rotor-1",
+  "generated_at": "2026-10-30T05:54:43Z",
+  "rules": {
+    "budget": 8,
+    "confidence_target": 0.9
+  },
+  "protocols": {
+    "info_gain": {
+      "sealed_seeds": 5,
+      "generated_per_hypothesis": 20,
+      "generated_seed": 2026,
+      "runtime_s": 36.39
+    },
+    "sweep": {
+      "sealed_seeds": 5,
+      "generated_per_hypothesis": 20,
+      "generated_seed": 2026,
+      "runtime_s": 0.83
+    },
+    "random": {
+      "sealed_seeds": 5,
+      "generated_per_hypothesis": 20,
+      "generated_seed": 2026,
+      "runtime_s": 0.86
+    }
+  },
+  "planners": {
+    "info_gain": {
+      "all": {
+        "runs": 150,
+        "accuracy": 0.9933,
+        "mean_experiments": 2.0667,
+        "mean_cost": 2.1533,
+        "reached_target": 0.9667,
+        "accuracy_when_confident": 0.9931,
+        "fallback_rate": null
+      },
+      "generated": {
+        "runs": 120,
+        "accuracy": 0.9917,
+        "mean_experiments": 2.025,
+        "mean_cost": 2.1083,
+        "reached_target": 0.975,
+        "accuracy_when_confident": 0.9915,
+        "fallback_rate": null
+      },
+      "sealed": {
+        "runs": 30,
+        "accuracy": 1.0,
+        "mean_experiments": 2.2333,
+        "mean_cost": 2.3333,
+        "reached_target": 0.9333,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:friction": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 1.12,
+        "mean_cost": 1.12,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:healthy": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 1.96,
+        "mean_cost": 2.16,
+        "reached_target": 0.96,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 2.12,
+        "mean_cost": 2.32,
+        "reached_target": 0.92,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance+friction": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 1.12,
+        "mean_cost": 1.16,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance+misalignment": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 2.4,
+        "mean_cost": 2.44,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:misalignment": {
+        "runs": 25,
+        "accuracy": 0.96,
+        "mean_experiments": 3.68,
+        "mean_cost": 3.72,
+        "reached_target": 0.92,
+        "accuracy_when_confident": 0.9565,
+        "fallback_rate": null
+      }
+    },
+    "sweep": {
+      "all": {
+        "runs": 150,
+        "accuracy": 0.96,
+        "mean_experiments": 2.5067,
+        "mean_cost": 2.9867,
+        "reached_target": 0.9533,
+        "accuracy_when_confident": 0.986,
+        "fallback_rate": null
+      },
+      "generated": {
+        "runs": 120,
+        "accuracy": 0.95,
+        "mean_experiments": 2.5,
+        "mean_cost": 2.975,
+        "reached_target": 0.9417,
+        "accuracy_when_confident": 0.9823,
+        "fallback_rate": null
+      },
+      "sealed": {
+        "runs": 30,
+        "accuracy": 1.0,
+        "mean_experiments": 2.5333,
+        "mean_cost": 3.0333,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:friction": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 1.8,
+        "mean_cost": 1.96,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:healthy": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 2.48,
+        "mean_cost": 2.96,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 2.68,
+        "mean_cost": 3.28,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance+friction": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 1.64,
+        "mean_cost": 1.76,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance+misalignment": {
+        "runs": 25,
+        "accuracy": 0.92,
+        "mean_experiments": 3.16,
+        "mean_cost": 3.84,
+        "reached_target": 0.88,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:misalignment": {
+        "runs": 25,
+        "accuracy": 0.84,
+        "mean_experiments": 3.28,
+        "mean_cost": 4.12,
+        "reached_target": 0.84,
+        "accuracy_when_confident": 0.9048,
+        "fallback_rate": null
+      }
+    },
+    "random": {
+      "all": {
+        "runs": 150,
+        "accuracy": 0.98,
+        "mean_experiments": 2.7933,
+        "mean_cost": 3.9,
+        "reached_target": 0.94,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "generated": {
+        "runs": 120,
+        "accuracy": 0.9833,
+        "mean_experiments": 2.7083,
+        "mean_cost": 3.85,
+        "reached_target": 0.9333,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "sealed": {
+        "runs": 30,
+        "accuracy": 0.9667,
+        "mean_experiments": 3.1333,
+        "mean_cost": 4.1,
+        "reached_target": 0.9667,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:friction": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 1.4,
+        "mean_cost": 1.72,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:healthy": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 2.2,
+        "mean_cost": 3.12,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 3.72,
+        "mean_cost": 5.44,
+        "reached_target": 0.96,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance+friction": {
+        "runs": 25,
+        "accuracy": 1.0,
+        "mean_experiments": 1.32,
+        "mean_cost": 1.64,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance+misalignment": {
+        "runs": 25,
+        "accuracy": 0.92,
+        "mean_experiments": 4.56,
+        "mean_cost": 6.44,
+        "reached_target": 0.88,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:misalignment": {
+        "runs": 25,
+        "accuracy": 0.96,
+        "mean_experiments": 3.56,
+        "mean_cost": 5.04,
+        "reached_target": 0.8,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      }
+    }
+  }
+}

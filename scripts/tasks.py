@@ -1,6 +1,6 @@
 """Cross-platform task runner mirroring the Makefile, for machines without make.
 
-Usage: python scripts/tasks.py <setup|backend|frontend|test|lint|build|check>
+Usage: python scripts/tasks.py <setup|backend|frontend|test|lint|build|check|benchmark|benchmark-meta>
 Run `setup` with the interpreter you want in the venv (Python 3.11+, e.g. python3.12).
 """
 
@@ -71,6 +71,14 @@ def build() -> None:
     run([npm(), "run", "build"], FRONTEND)
 
 
+def benchmark() -> None:
+    run([venv_python(), "scripts/benchmark.py"], BACKEND)
+
+
+def benchmark_meta() -> None:
+    run([venv_python(), "scripts/benchmark.py", "--planner", "meta"], BACKEND)
+
+
 def check() -> None:
     lint()
     test()
@@ -85,6 +93,8 @@ TASKS: dict[str, Callable[[], None]] = {
     "lint": lint,
     "build": build,
     "check": check,
+    "benchmark": benchmark,
+    "benchmark-meta": benchmark_meta,
 }
 
 

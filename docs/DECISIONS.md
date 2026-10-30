@@ -142,3 +142,12 @@ decision changes, add a new entry that supersedes the old one instead of editing
   `{call, model, response, ok, fallback, usage}`, plus `error_kind` and `error` on failure.
   `ReplayClient` replays these responses in order, so re-running a Meta trace through it
   reproduces the trace exactly. Fallback steps are labelled `chosen_by: info_gain_fallback`.
+- **D-43 · 30 Oct 2026 · Thermal grid stays (0.75, 1.0, 1.3).** `info_gain` is 100% accurate
+  on the sealed cases (30 runs), so D-26's fallback of widening the grid is not needed.
+- **D-44 · 30 Oct 2026 · One results file.** The rule and Meta benchmarks both merge their
+  planner entries into `backend/results/benchmark.json`. Meta responses are cached in
+  `backend/results/llm_cache.json` (git-ignored); `--max-calls` (default 200) caps new model
+  calls per run, and calls beyond it fall back to `info_gain` like any model failure.
+- **D-45 · 30 Oct 2026 · Benchmark commands.** `make benchmark` / `make benchmark-meta`, or
+  `python scripts/tasks.py benchmark` / `benchmark-meta`. The script adds `backend/` to its
+  import path so it never runs a stale installed copy of the app.

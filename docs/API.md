@@ -14,6 +14,7 @@ changes. Every request model rejects unknown keys with `422`.
 | POST | `/api/investigations` | Run and save an investigation | 404, 422, 503 |
 | GET | `/api/investigations` | List saved replays | — |
 | GET | `/api/investigations/{id}` | Load a replay | 400, 404 |
+| GET | `/api/benchmark` | Latest benchmark results | 404 if not yet run |
 
 ## `GET /api/health`
 
@@ -103,3 +104,12 @@ demo}`: committed demo replays first, then saved runs, newest first.
 
 The saved trace. `400` if the id does not match `^[a-z0-9_-]{1,80}$`; `404` if no replay
 has that id. Looks in `backend/replays/` and then `backend/replays/demo/`.
+
+## `GET /api/benchmark`
+
+The contents of `backend/results/benchmark.json`: `source: "simulation"`, `model_version`,
+`generated_at`, `rules` (`budget`, `confidence_target`), `protocols` (per planner: seeds,
+generated cases, runtime, and for Meta the model and call counts) and `planners`. Each
+planner maps groups (`all`, `sealed`, `generated`, `truth:<hypothesis>`) to `{runs,
+accuracy, mean_experiments, mean_cost, reached_target, accuracy_when_confident,
+fallback_rate}`. `404` until the benchmark has been run.

@@ -1,5 +1,5 @@
 # FailureLab AI developer commands. On machines without make, use:
-#   python scripts/tasks.py <setup|backend|frontend|test|lint|check>
+#   python scripts/tasks.py <setup|backend|frontend|test|lint|check|benchmark|benchmark-meta>
 
 PYTHON ?= python3
 VENV := backend/.venv
@@ -7,7 +7,7 @@ VENV := backend/.venv
 VENV_BIN := $(if $(wildcard $(VENV)/Scripts/python.exe),$(VENV)/Scripts,$(VENV)/bin)
 PY := $(CURDIR)/$(VENV_BIN)/python
 
-.PHONY: setup backend frontend test lint build check
+.PHONY: setup backend frontend test lint build check benchmark benchmark-meta
 
 setup:
 	cd backend && $(PYTHON) -m venv .venv
@@ -37,3 +37,9 @@ build:
 	cd frontend && npm run build
 
 check: lint test build
+
+benchmark:
+	cd backend && $(PY) scripts/benchmark.py
+
+benchmark-meta:
+	cd backend && $(PY) scripts/benchmark.py --planner meta

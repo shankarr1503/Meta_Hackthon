@@ -28,6 +28,9 @@ backend/replays/*
 !backend/replays/demo/
 !backend/replays/.gitkeep
 
+# Cached Meta model responses from the benchmark
+backend/results/llm_cache.json
+
 # OS / editor
 .DS_Store
 Thumbs.db

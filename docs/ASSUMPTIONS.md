@@ -80,5 +80,7 @@ behaviour changes.
   speed uniform in 3,300–3,900 RPM, thermal factor uniform in 0.7–1.4 (off the engine's
   grid on purpose), and a note saying no history is available.
 - Misalignment combined with friction is not a modelled hypothesis, so no case has it.
+- Benchmark: generated cases use seed 2026 and one investigation seed each; sealed cases run
+  with seeds 0–4 (rule planners) or 0–2 (Meta). Accuracy is top hypothesis = truth label.
 
 ## API and frontend

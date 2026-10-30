@@ -89,6 +89,27 @@ All code in this repository was written from scratch during the event. Work star
   Tests use a fake model (valid and invalid output, timeouts, prompt leakage, note
   injection, replay identity) and a mocked HTTP transport; a live smoke test runs only when
   `backend/.env` configures the model.
+- Benchmark (`backend/scripts/benchmark.py`, `GET /api/benchmark`): rule planners on six
+  sealed cases × 5 seeds plus 120 generated cases; `--planner meta` runs separately with a
+  response cache and a call limit. Results in `backend/results/benchmark.json`.
+
+## Benchmark results (simulated)
+
+Measured on 30 Oct 2026 with `python scripts/tasks.py benchmark` (150 runs per planner:
+6 sealed cases × 5 seeds + 120 generated cases; budget 8 points; stop at 90%). All cases
+are simulated with the same model family the engine assumes, so these numbers show the
+method works when the model is structurally right, not real-world accuracy.
+
+| Planner | Accuracy | Mean cost (points) | Mean experiments | Reached 90% | Runtime |
+|---|---|---|---|---|---|
+| `info_gain` | 99.3% | 2.15 | 2.15 | 96.7% | 36.4 s |
+| `sweep` | 96.0% | 2.99 | 2.81 | 95.3% | 0.8 s |
+| `random` | 98.0% | 3.90 | 3.17 | 94.0% | 0.9 s |
+
+On this simulator every planner usually finds the fault within budget; the clear
+difference is cost: `info_gain` needs about 28% fewer points than the fixed sweep and 45%
+fewer than random choice. The hardest hypothesis is misalignment (`info_gain` 96%, `sweep`
+84%). The Meta model has not been benchmarked yet.
 
 ### Dependencies
 

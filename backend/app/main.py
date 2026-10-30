@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.benchmark import router as benchmark_router
 from app.api.health import router as health_router
 from app.api.investigations import router as investigations_router
 from app.api.simulation import router as simulation_router
@@ -23,7 +24,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_headers=["Content-Type"],
     )
     app.state.settings = settings
-    for router in (health_router, simulation_router, investigations_router):
+    for router in (health_router, simulation_router, investigations_router, benchmark_router):
         app.include_router(router)
     return app
 
