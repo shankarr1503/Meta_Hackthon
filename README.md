@@ -146,6 +146,22 @@ difference is cost: `info_gain` needs about 28% fewer points than the fixed swee
 fewer than random choice. The hardest hypothesis is misalignment (`info_gain` 96%, `sweep`
 84%). The Meta model has not been benchmarked yet.
 
+### Against the targets set before building
+
+Targets from `docs/PRODUCT_FEATURES.md` §6. Numbers from `backend/results/benchmark.json`
+and the test suite; "not measured" means exactly that.
+
+| Metric | Target | Measured | Met |
+|---|---|---|---|
+| Accuracy on 120 unseen simulated cases | ≥ 95% | `info_gain` 99.2%, `sweep` 95.0%, `random` 98.3% | Yes (`info_gain`) |
+| Cost, information gain vs fixed sweep | Lower at equal accuracy | 2.15 vs 2.99 points, accuracy 99.3% vs 96.0% | Yes |
+| Cost, Meta model vs information gain on cases with notes | Equal or lower | Not measured yet (needs the model) | — |
+| Accuracy when the system says ≥ 90% | ≥ 90% | `info_gain` 99.3%, `sweep` 98.6%, `random` 100% | Yes |
+| Meta model fallbacks | < 5% of calls | Not measured yet (needs the model) | — |
+| Investigation time without the model | < 2 s | Under 2 s (`test_investigation_is_fast`; `info_gain` on sealed cases 0.1–0.6 s, seed 0) | Yes |
+| Rule-planner benchmark run time | < 2 min | 38 s for all three planners | Yes |
+| Sealed demo cases diagnosed correctly | 6 of 6 | `info_gain` 6 of 6 on all 5 seeds (30 of 30 runs) | Yes (`info_gain`) |
+
 ### Dependencies
 
 Direct dependencies, pinned to exact versions:
