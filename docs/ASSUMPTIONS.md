@@ -37,6 +37,21 @@ behaviour changes.
 
 ## Inference engine
 
+- The engine assumes the simulator's own model family: results show the method works when
+  the model is structurally right, not robustness to unmodelled physics.
+- Six hypotheses, each a grid of particles: severities (0.15, 0.3, 0.5, 0.75, 1.0) per present
+  fault, critical speeds 3,300–3,900 RPM in steps of 150, thermal factors (0.75, 1.0, 1.3);
+  990 particles. A hypothesis's prior is spread evenly over its particles.
+- Features are compared in log space for 1x and 2x (`log(1 + x)`, spread 0.354) and
+  broadband (spread 0.206), and linearly for temperature (`√(1.5² + (0.1·T)²)` °C). The
+  alarm uses log overall RMS (spread 0.354). Features are treated as independent.
+- Probabilities are over hypotheses only; the severity and machine values of the particles
+  are nuisance parameters that are summed out.
+- Expected information gain is a 64-sample Monte Carlo estimate with feature-level noise
+  only (no waveforms), seeded by the investigation, clipped at zero.
+- Per-hypothesis predictions are the belief-weighted mean of that hypothesis's particles'
+  noise-free values at the operating point.
+
 ## Planners and the Meta model
 
 ## Cases and benchmark

@@ -66,6 +66,11 @@ All code in this repository was written from scratch during the event. Work star
 - Six sealed cases, public `CaseView` and a seeded generator for benchmark cases
   (`app/cases.py`); `make_runner` as the only bridge to hidden truth (`app/runner.py`).
 - Architecture test that fails on forbidden imports.
+- Bayesian engine (`app/inference/engine.py`): 990-particle grid over six hypotheses,
+  log-space updates for experiments and the alarm, vectorised expected information gain,
+  candidate ranking by information per cost, per-hypothesis predictions. Tests cover the
+  grid, priors, posterior normalisation, each hypothesis winning on clean evidence,
+  non-negative and seeded information gain, ranking rules and speed.
 
 ### Dependencies
 
