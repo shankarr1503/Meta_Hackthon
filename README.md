@@ -106,6 +106,27 @@ All code in this repository was written from scratch during the event. Work star
   (1,000× exaggeration, stated), strong 2x draws a figure-eight, broadband adds seeded
   jitter, bearing tint follows temperature rise. Before any measurement it shows no whirl.
   Tests target the mapping functions; WebGL rendering itself is not tested.
+- Benchmark screen (`frontend/src/benchmark/BenchmarkView.tsx`) with a case-group filter,
+  and curated demo replays in `backend/replays/demo/` created by
+  `backend/scripts/demo_replays.py`; a test re-runs every demo replay and checks it is
+  identical (Meta replays through the recorded model responses).
+
+## Status
+
+- Done and tested: simulator, Bayesian engine, rule planners, investigation loop, API, Meta
+  model investigator (with a fake model), benchmark, dashboard player, manual lab, 3D twin,
+  benchmark screen, demo replays.
+- Not yet verified: the Meta model against the real endpoint (no key configured yet), the
+  Meta benchmark and a Meta demo replay. The 3D scene has not been checked visually in a
+  browser by an automated test.
+
+To finish the Meta parts once `backend/.env` is filled:
+
+```sh
+cd backend && .venv/Scripts/python -m pytest tests/test_llm_client.py   # live smoke test
+python scripts/tasks.py benchmark-meta                                   # sealed cases × 3 seeds
+cd backend && .venv/Scripts/python scripts/demo_replays.py --planner meta --cases case-t4
+```
 
 ## Benchmark results (simulated)
 

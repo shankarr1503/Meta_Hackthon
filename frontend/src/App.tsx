@@ -8,16 +8,18 @@ import {
   runInvestigation,
 } from "./api/client";
 import type { CaseView, PlannerName, ReadyResponse, Trace, TraceSummary } from "./api/types";
+import BenchmarkView from "./benchmark/BenchmarkView";
 import CasePicker from "./dashboard/CasePicker";
 import InvestigationView from "./dashboard/InvestigationView";
 import ManualLab from "./lab/ManualLab";
 import SimulatedLabel from "./SimulatedLabel";
 
-type Tab = "investigate" | "lab";
+type Tab = "investigate" | "lab" | "benchmark";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "investigate", label: "Investigate" },
   { id: "lab", label: "Manual lab" },
+  { id: "benchmark", label: "Benchmark" },
 ];
 
 interface Loaded {
@@ -107,6 +109,7 @@ export default function App() {
         </nav>
 
         {tab === "lab" && <ManualLab />}
+        {tab === "benchmark" && <BenchmarkView />}
 
         {tab === "investigate" && error && (
           <p role="alert" className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
