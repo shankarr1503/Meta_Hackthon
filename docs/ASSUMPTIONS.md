@@ -54,6 +54,15 @@ behaviour changes.
 
 ## Planners and the Meta model
 
+- Rule planners start from a uniform prior; they do not read the maintenance note.
+- Every planner shares the candidates (8 speeds × 3 loads), costs (2 points above
+  4,000 RPM, else 1), budget (8), no repeats and the stop at 90%.
+- The planner's random draws (information-gain sampling, random choices) come from a
+  generator seeded by the investigation seed alone; measurement noise is seeded separately
+  per experiment by the runner.
+- "Remaining doubts" are the other hypotheses at 5% or more. Recommended checks are fixed
+  maintenance texts per fault, not engineering advice for a real machine.
+
 ## Cases and benchmark
 
 - Six sealed cases with fixed truths and hidden machine values (TECHNICAL_DESIGN.md §11);

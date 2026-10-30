@@ -71,6 +71,11 @@ All code in this repository was written from scratch during the event. Work star
   candidate ranking by information per cost, per-hypothesis predictions. Tests cover the
   grid, priors, posterior normalisation, each hypothesis winning on clean evidence,
   non-negative and seeded information gain, ranking rules and speed.
+- Rule planners `info_gain`, `sweep`, `random` (`app/agent/planners.py`) and the
+  investigation loop (`app/agent/investigate.py`): prior, alarm, predictions recorded before
+  each run, posterior updates, stopping at 90% or budget, diagnosis with doubts and a
+  recommended check, and a JSON trace. Tests cover budget, repeats, sweep order, seeded
+  bit-identical traces, no hidden values in traces, sealed-case accuracy and speed.
 
 ### Dependencies
 

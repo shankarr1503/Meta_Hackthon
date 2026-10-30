@@ -116,3 +116,12 @@ decision changes, add a new entry that supersedes the old one instead of editing
 - **D-34 · 30 Oct 2026 · First commit date (supersedes the date part of D-08).** The skeleton
   was written on 28 Oct 2026 but first committed on 30 Oct 2026. Commits are never
   backdated; the README states both dates.
+- **D-35 · 30 Oct 2026 · Planner interface.** `choose` also receives the steps recorded so
+  far, so the Meta model's prompt can show the evidence history. Planners expose an
+  `events` list that the loop copies into the trace's `llm_events`.
+- **D-36 · 30 Oct 2026 · Stop reasons.** A trace records `stop_reason`: `confident` (top
+  hypothesis at 90% or more, possibly straight after the alarm), `budget` (no points left)
+  or `no_affordable_experiment`.
+- **D-37 · 30 Oct 2026 · Signals in traces.** Each step stores its waveform preview and
+  spectrum (rounded to 4 decimals) so the replay player can draw them without re-running
+  the simulator.
