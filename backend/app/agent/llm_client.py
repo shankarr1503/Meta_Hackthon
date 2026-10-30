@@ -53,6 +53,15 @@ class ChatCompletionsClient:
             settings.llm_timeout_s,
         )
 
+    def close(self) -> None:
+        self._client.close()
+
+    def __enter__(self) -> "ChatCompletionsClient":
+        return self
+
+    def __exit__(self, *exc_info: object) -> None:
+        self.close()
+
     def complete(self, system: str, user: str) -> str:
         payload = {
             "model": self.model,
@@ -68,7 +77,7 @@ class ChatCompletionsClient:
             response = self._client.post(self._url, json=payload, headers=self._headers)
         except httpx.TimeoutException as error:
             raise LLMError("model request timed out") from error
-        except httpx.HTTPError as error:
+        except Exception as error:  # any client failure (bad URL, bad header) must fall back
             raise LLMError(f"model request failed: {type(error).__name__}") from error
         if response.status_code != 200:
             raise LLMError(f"model returned HTTP {response.status_code}")

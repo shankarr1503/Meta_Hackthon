@@ -23,6 +23,7 @@ export const PLANNER_NAMES: Record<string, string> = {
   sweep: "Fixed sweep",
   random: "Random",
   info_gain_fallback: "Information gain (Meta fallback)",
+  info_gain_meta_cases: "Information gain (same runs as Meta)",
 };
 
 export function hypothesisName(hypothesis: string): string {
@@ -51,4 +52,8 @@ export function rpm(value: number): string {
 
 export function newtons(value: number): string {
   return `${Math.round(value).toLocaleString("en-US")} N`;
+}
+
+export function count(n: number, noun: string): string {
+  return `${n} ${noun}${n === 1 ? "" : "s"}`;
 }

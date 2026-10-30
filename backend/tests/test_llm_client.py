@@ -91,3 +91,23 @@ def test_live_model_returns_json() -> None:
         "Reply with one JSON object only.", 'Return {"status": "ok"} and nothing else.'
     )
     assert "ok" in reply
+
+
+def test_unexpected_client_errors_raise_llm_error() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise RuntimeError("misconfigured")
+
+    with pytest.raises(LLMError):
+        _client(handler).complete("s", "u")
+
+
+def test_bad_base_url_raises_llm_error() -> None:
+    client = ChatCompletionsClient("not a url", "k", "m", 1.0)
+    with pytest.raises(LLMError):
+        client.complete("s", "u")
+
+
+def test_client_closes_its_connection_pool() -> None:
+    with _client(lambda r: _ok("{}")) as client:
+        client.complete("s", "u")
+    assert client._client.is_closed

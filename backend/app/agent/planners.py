@@ -69,7 +69,8 @@ def template_explanation(trace: Trace) -> str:
     diagnosis = trace["diagnosis"]
     steps = trace["steps"]
     text = (
-        f"After {len(steps)} simulated experiments costing {trace['cost']} of "
+        f"After {len(steps)} simulated experiment{'' if len(steps) == 1 else 's'} costing "
+        f"{trace['cost']} of "
         f"{trace['budget']} points, the engine rates {diagnosis['top']} most likely at "
         f"{diagnosis['probability']:.0%}."
     )

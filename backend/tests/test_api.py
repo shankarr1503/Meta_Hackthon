@@ -221,3 +221,14 @@ def test_meta_investigation_falls_back_when_model_fails(make_settings, monkeypat
     assert all(event["fallback"] for event in trace["llm_events"])
     assert {step["chosen_by"] for step in trace["steps"]} == {"info_gain_fallback"}
     assert trace["diagnosis"]["top"] == "friction"
+
+
+def test_saved_run_shadows_demo_with_same_id(make_settings) -> None:
+    settings = make_settings()
+    client = TestClient(create_app(settings))
+    trace = client.post("/api/investigations", json={"case_id": "case-k7", "planner": "sweep"})
+    demo = settings.replays_dir / "demo"
+    demo.mkdir()
+    (demo / "case-k7-sweep-0.json").write_text(trace.text, encoding="utf-8")
+    listed = client.get("/api/investigations").json()
+    assert [(s["investigation_id"], s["demo"]) for s in listed] == [("case-k7-sweep-0", False)]

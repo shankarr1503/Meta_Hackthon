@@ -1,5 +1,5 @@
 import type { Trace } from "../api/types";
-import { hypothesisName, newtons, percent, plannerName, rpm, um } from "../format";
+import { count, hypothesisName, newtons, percent, plannerName, rpm, um } from "../format";
 import SimulatedLabel from "../SimulatedLabel";
 import { twinReading } from "../state/player";
 import { useInvestigation } from "../state/useInvestigation";
@@ -94,7 +94,7 @@ export default function InvestigationView({ trace }: { trace: Trace }) {
           )}
           {view.showDiagnosis && (
             <p className="text-sm">
-              Investigation finished after {trace.experiments} experiments: leading hypothesis{" "}
+              Investigation finished after {count(trace.experiments, "experiment")}: leading hypothesis{" "}
               {hypothesisName(trace.diagnosis.top)} at {percent(trace.diagnosis.probability)}.
             </p>
           )}

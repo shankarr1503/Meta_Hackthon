@@ -279,3 +279,9 @@ def test_note_injection_cannot_escape_floor() -> None:
 
 def test_parse_json_object_handles_fences() -> None:
     assert parse_json_object('Sure!\n```json\n{"a": 1}\n```') == {"a": 1}
+
+
+def test_prior_with_huge_values_still_sums_to_one() -> None:
+    prior = floored_prior({"imbalance": 1e308, "friction": 1e308})
+    assert sum(prior.values()) == pytest.approx(1.0, abs=1e-12)
+    assert prior["imbalance"] == prior["friction"] == pytest.approx(0.05 + 0.35)

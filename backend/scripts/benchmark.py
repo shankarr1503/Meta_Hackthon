@@ -37,6 +37,8 @@ RESULTS_DIR = BACKEND_DIR / "results"
 RESULTS_FILE = RESULTS_DIR / "benchmark.json"
 CACHE_FILE = RESULTS_DIR / "llm_cache.json"
 RULE_PLANNERS = ("info_gain", "sweep", "random")
+# info_gain re-run on the Meta protocol, for a like-for-like comparison.
+SAME_CASES_BASELINE = "info_gain_meta_cases"
 GENERATED_SEED = 2026
 
 
@@ -150,12 +152,18 @@ def benchmark_planner(
     return summarise(outcomes), round(time.perf_counter() - start, 2)
 
 
+def _now() -> str:
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def merge_results(path: Path, entries: dict[str, Any], protocols: dict[str, Any]) -> dict:
+    """Merge planner entries into the results file. Each planner's protocol records the
+    model version, rules and time it was measured with, so older entries keep theirs."""
     existing = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
     result = {
         "source": "simulation",
         "model_version": MODEL_VERSION,
-        "generated_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at": _now(),
         "rules": {"budget": BUDGET, "confidence_target": CONFIDENCE_TARGET},
         "protocols": existing.get("protocols", {}) | protocols,
         "planners": existing.get("planners", {}) | entries,
@@ -171,6 +179,10 @@ def _protocol_dict(protocol: Protocol, runtime_s: float, extra: dict | None = No
         "generated_per_hypothesis": protocol.generated_per_hypothesis,
         "generated_seed": GENERATED_SEED,
         "runtime_s": runtime_s,
+        "model_version": MODEL_VERSION,
+        "budget": BUDGET,
+        "confidence_target": CONFIDENCE_TARGET,
+        "measured_at": _now(),
     } | (extra or {})
 
 
@@ -190,15 +202,27 @@ def run_meta(protocol: Protocol, max_calls: int, out: Path, cache_file: Path) ->
     if not settings.llm_configured:
         sys.exit("Meta model not configured: fill FAILURELAB_LLM_* in backend/.env")
     cache = json.loads(cache_file.read_text(encoding="utf-8")) if cache_file.is_file() else {}
-    client = CachedClient(ChatCompletionsClient.from_settings(settings), cache, max_calls)
-    try:
-        entry, runtime = benchmark_planner("meta", protocol, lambda: MetaPlanner(client), True)
-    finally:
-        cache_file.parent.mkdir(parents=True, exist_ok=True)
-        cache_file.write_text(json.dumps(cache, indent=1), encoding="utf-8")
+    with ChatCompletionsClient.from_settings(settings) as inner:
+        client = CachedClient(inner, cache, max_calls)
+        try:
+            entry, runtime = benchmark_planner("meta", protocol, lambda: MetaPlanner(client), True)
+        finally:
+            cache_file.parent.mkdir(parents=True, exist_ok=True)
+            cache_file.write_text(json.dumps(cache, indent=1), encoding="utf-8")
     extra = {"model": settings.llm_model, "new_model_calls": client.calls, "max_calls": max_calls}
     print(f"meta: accuracy {entry['all']['accuracy']:.1%}, {client.calls} new model calls")
-    return merge_results(out, {"meta": entry}, {"meta": _protocol_dict(protocol, runtime, extra)})
+    # info_gain on exactly the same runs, so the comparison is like for like.
+    baseline, baseline_runtime = benchmark_planner(
+        SAME_CASES_BASELINE, protocol, lambda: rule_planner("info_gain")
+    )
+    return merge_results(
+        out,
+        {"meta": entry, SAME_CASES_BASELINE: baseline},
+        {
+            "meta": _protocol_dict(protocol, runtime, extra),
+            SAME_CASES_BASELINE: _protocol_dict(protocol, baseline_runtime),
+        },
+    )
 
 
 def main(argv: list[str] | None = None) -> None:

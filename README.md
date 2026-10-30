@@ -110,6 +110,12 @@ All code in this repository was written from scratch during the event. Work star
   and curated demo replays in `backend/replays/demo/` created by
   `backend/scripts/demo_replays.py`; a test re-runs every demo replay and checks it is
   identical (Meta replays through the recorded model responses).
+- Hardening after an independent code review and a headless-browser check of every screen
+  in light, dark and phone layouts: each replay id listed once, atomic replay writes,
+  unreadable replays skipped (404 instead of 500), unique Meta ids within the same second,
+  model clients closed after each run, every model-client error falls back, prior overflow
+  guarded, one shared serialiser for traces and API responses, and the Meta benchmark now
+  also runs `info_gain` on exactly the same runs so the comparison is like for like.
 
 ## Status
 
@@ -137,9 +143,9 @@ method works when the model is structurally right, not real-world accuracy.
 
 | Planner | Accuracy | Mean cost (points) | Mean experiments | Reached 90% | Runtime |
 |---|---|---|---|---|---|
-| `info_gain` | 99.3% | 2.15 | 2.07 | 96.7% | 36.4 s |
+| `info_gain` | 99.3% | 2.15 | 2.07 | 96.7% | 36.7 s |
 | `sweep` | 96.0% | 2.99 | 2.51 | 95.3% | 0.8 s |
-| `random` | 98.0% | 3.90 | 2.79 | 94.0% | 0.9 s |
+| `random` | 98.0% | 3.90 | 2.79 | 94.0% | 0.8 s |
 
 On this simulator every planner usually finds the fault within budget; the clear
 difference is cost: `info_gain` needs about 28% fewer points than the fixed sweep and 45%
@@ -159,7 +165,7 @@ and the test suite; "not measured" means exactly that.
 | Accuracy when the system says ≥ 90% | ≥ 90% | `info_gain` 99.3%, `sweep` 98.6%, `random` 100% | Yes |
 | Meta model fallbacks | < 5% of calls | Not measured yet (needs the model) | — |
 | Investigation time without the model | < 2 s | Under 2 s (`test_investigation_is_fast`; `info_gain` on sealed cases 0.1–0.6 s, seed 0) | Yes |
-| Rule-planner benchmark run time | < 2 min | 38 s for all three planners | Yes |
+| Rule-planner benchmark run time | < 2 min | 38.3 s for all three planners | Yes |
 | Sealed demo cases diagnosed correctly | 6 of 6 | `info_gain` 6 of 6 on all 5 seeds (30 of 30 runs) | Yes (`info_gain`) |
 
 ### Dependencies

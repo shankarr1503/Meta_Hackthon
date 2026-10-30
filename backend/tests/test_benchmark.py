@@ -71,3 +71,37 @@ def test_benchmark_api(make_settings) -> None:
     body = client.get("/api/benchmark").json()
     assert body["source"] == "simulation"
     assert body["planners"]["sweep"]["all"]["runs"] == 12
+
+
+def test_meta_benchmark_adds_like_for_like_baseline(tmp_path: Path, monkeypatch) -> None:
+    from scripts import benchmark
+    from tests.test_meta_planner import smart_reply
+
+    class FakeChat:
+        model = "fake"
+        last_usage = None
+
+        def complete(self, system: str, user: str) -> str:
+            return smart_reply(user)
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc: object) -> None:
+            pass
+
+    class Configured:
+        llm_configured = True
+        llm_model = "fake"
+
+    monkeypatch.setattr(benchmark, "get_settings", lambda: Configured())
+    monkeypatch.setattr(benchmark.ChatCompletionsClient, "from_settings", lambda s: FakeChat())
+    out = tmp_path / "b.json"
+    result = benchmark.run_meta(Protocol(1, 0), 500, out, tmp_path / "cache.json")
+    meta = result["planners"]["meta"]["all"]
+    baseline = result["planners"][benchmark.SAME_CASES_BASELINE]["all"]
+    assert meta["runs"] == baseline["runs"] == 6
+    assert meta["fallback_rate"] == 0
+    assert result["protocols"]["meta"]["model"] == "fake"
+    assert result["protocols"]["meta"]["model_version"] == "rotor-1"
+    assert (tmp_path / "cache.json").is_file()

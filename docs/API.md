@@ -78,7 +78,8 @@ default `meta`), `seed` (0–10,000, default 0).
 
 The trace is saved to `backend/replays/{investigation_id}.json` and returned. Ids:
 `{case_id}-{planner}-{seed}` for rule planners and `{case_id}-meta-{seed}-{YYYYMMDDhhmmss}`
-(UTC) for Meta, matching `^[a-z0-9_-]{1,80}$`.
+(UTC) for Meta, with `-2`, `-3`, … appended when several Meta runs of the same case and
+seed start in the same second. All ids match `^[a-z0-9_-]{1,80}$`.
 
 Trace fields:
 
@@ -98,18 +99,22 @@ Trace fields:
 ## `GET /api/investigations`
 
 A list of `{investigation_id, case_id, planner, seed, top, probability, experiments, cost,
-demo}`: committed demo replays first, then saved runs, newest first.
+demo}`: committed demo replays first, then saved runs, newest first. Each id appears once;
+a saved run with the same id as a demo replay replaces it in the list, as it does when
+loading. Unreadable files are skipped.
 
 ## `GET /api/investigations/{id}`
 
 The saved trace. `400` if the id does not match `^[a-z0-9_-]{1,80}$`; `404` if no replay
-has that id. Looks in `backend/replays/` and then `backend/replays/demo/`.
+has that id, or if the file is unreadable or from an older trace format. Looks in `backend/replays/` and then `backend/replays/demo/`.
 
 ## `GET /api/benchmark`
 
 The contents of `backend/results/benchmark.json`: `source: "simulation"`, `model_version`,
 `generated_at`, `rules` (`budget`, `confidence_target`), `protocols` (per planner: seeds,
-generated cases, runtime, and for Meta the model and call counts) and `planners`. Each
+generated cases, runtime, physics model version, budget, confidence target and
+`measured_at`; for Meta also the model and call counts) and `planners`. A Meta benchmark
+also writes `info_gain_meta_cases`: `info_gain` on exactly the Meta runs. Each
 planner maps groups (`all`, `sealed`, `generated`, `truth:<hypothesis>`) to `{runs,
 accuracy, mean_experiments, mean_cost, reached_target, accuracy_when_confident,
 fallback_rate}`. `404` until the benchmark has been run.

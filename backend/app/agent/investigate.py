@@ -50,11 +50,11 @@ def recommended_check(hypothesis: str) -> str:
     return " ".join(RECOMMENDED_CHECKS[part] for part in hypothesis.split("+"))
 
 
-def _round(values: np.ndarray) -> list[float]:
+def rounded(values: np.ndarray) -> list[float]:
     return [round(float(v), DECIMALS) for v in values]
 
 
-def _features(measurement: Measurement) -> dict[str, float]:
+def feature_fields(measurement: Measurement) -> dict[str, float]:
     return {k: round(v, DECIMALS) for k, v in asdict(measurement.features).items()}
 
 
@@ -62,14 +62,15 @@ def _probabilities(belief: Belief) -> dict[str, float]:
     return {h: round(p, 6) for h, p in belief.as_dict().items()}
 
 
-def _signals(measurement: Measurement) -> dict[str, list[float]]:
+def signal_fields(measurement: Measurement) -> dict[str, list[float]]:
+    """Waveform preview and spectrum, rounded, as stored in traces and API responses."""
     time_s, displacement = waveform_preview(measurement.displacement_um, measurement.sample_rate_hz)
     freq, amp = spectrum(measurement.displacement_um, measurement.sample_rate_hz)
     return {
-        "time_s": _round(time_s),
-        "displacement_um": _round(displacement),
-        "spectrum_freq_hz": _round(freq),
-        "spectrum_amp_um": _round(amp),
+        "time_s": rounded(time_s),
+        "displacement_um": rounded(displacement),
+        "spectrum_freq_hz": rounded(freq),
+        "spectrum_amp_um": rounded(amp),
     }
 
 
@@ -159,8 +160,8 @@ def investigate(
                 "predictions": {
                     h: {k: round(v, DECIMALS) for k, v in p.items()} for h, p in predictions.items()
                 },
-                "measured": _features(measurement),
-                "signals": _signals(measurement),
+                "measured": feature_fields(measurement),
+                "signals": signal_fields(measurement),
                 "posterior": _probabilities(belief),
                 "budget_remaining": remaining,
             }

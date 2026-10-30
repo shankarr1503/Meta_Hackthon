@@ -13,3 +13,11 @@ describe("spectrumSummary", () => {
     expect(spectrumSummary([0, 1], [0, 0], 0)).toMatch(/stopped/);
   });
 });
+
+describe("count", () => {
+  it("pluralises", async () => {
+    const { count } = await import("../format");
+    expect(count(1, "experiment")).toBe("1 experiment");
+    expect(count(3, "experiment")).toBe("3 experiments");
+  });
+});

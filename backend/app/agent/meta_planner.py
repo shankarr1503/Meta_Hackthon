@@ -118,10 +118,15 @@ def floored_prior(raw: Any) -> dict[str, float]:
         if not math.isfinite(value) or value < 0:
             raise InvalidOutputError(f"prior for {hypothesis} is negative or not finite")
         values[hypothesis] = float(value)
-    total = sum(values.values())
+    largest = max(values.values())
+    if largest <= 0:
+        raise InvalidOutputError("priors sum to zero")
+    # Divide by the largest value first so huge finite numbers cannot overflow the sum.
+    scaled = {h: v / largest for h, v in values.items()}
+    total = sum(scaled.values())
     if total <= 0:
         raise InvalidOutputError("priors sum to zero")
-    return {h: PRIOR_FLOOR + PRIOR_SCALE * v / total for h, v in values.items()}
+    return {h: PRIOR_FLOOR + PRIOR_SCALE * v / total for h, v in scaled.items()}
 
 
 def _probabilities(belief: Belief) -> dict[str, float]:

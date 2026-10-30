@@ -1,7 +1,7 @@
 {
   "source": "simulation",
   "model_version": "rotor-1",
-  "generated_at": "2026-10-30T05:54:43Z",
+  "generated_at": "2026-10-30T06:27:38Z",
   "rules": {
     "budget": 8,
     "confidence_target": 0.9
@@ -11,19 +11,31 @@
       "sealed_seeds": 5,
       "generated_per_hypothesis": 20,
       "generated_seed": 2026,
-      "runtime_s": 36.39
+      "runtime_s": 36.72,
+      "model_version": "rotor-1",
+      "budget": 8,
+      "confidence_target": 0.9,
+      "measured_at": "2026-10-30T06:27:36Z"
     },
     "sweep": {
       "sealed_seeds": 5,
       "generated_per_hypothesis": 20,
       "generated_seed": 2026,
-      "runtime_s": 0.83
+      "runtime_s": 0.79,
+      "model_version": "rotor-1",
+      "budget": 8,
+      "confidence_target": 0.9,
+      "measured_at": "2026-10-30T06:27:37Z"
     },
     "random": {
       "sealed_seeds": 5,
       "generated_per_hypothesis": 20,
       "generated_seed": 2026,
-      "runtime_s": 0.86
+      "runtime_s": 0.81,
+      "model_version": "rotor-1",
+      "budget": 8,
+      "confidence_target": 0.9,
+      "measured_at": "2026-10-30T06:27:38Z"
     }
   },
   "planners": {

@@ -5,9 +5,9 @@ import type { BenchmarkResult, PlannerMetrics } from "../api/types";
 import Panel from "../dashboard/Panel";
 import { hypothesisName, percent, plannerName } from "../format";
 import SimulatedLabel from "../SimulatedLabel";
+import { casesLabel } from "./cases";
 
-const PLANNER_ORDER = ["meta", "info_gain", "sweep", "random"];
-
+const PLANNER_ORDER = ["meta", "info_gain_meta_cases", "info_gain", "sweep", "random"];
 function groupLabel(group: string): string {
   if (group === "all") return "All runs";
   if (group === "sealed") return "Sealed cases";
@@ -19,10 +19,20 @@ function optionalPercent(value: number | null): string {
   return value === null ? "—" : percent(value);
 }
 
-function Row({ planner, m, runtime }: { planner: string; m: PlannerMetrics; runtime: unknown }) {
+function Row({
+  planner,
+  m,
+  protocol,
+}: {
+  planner: string;
+  m: PlannerMetrics;
+  protocol: Record<string, unknown> | undefined;
+}) {
+  const runtime = protocol?.runtime_s;
   return (
     <tr className="border-t border-slate-200 dark:border-slate-800">
       <td className="py-1 pr-3 font-sans">{plannerName(planner)}</td>
+      <td className="pr-3 font-sans text-xs">{casesLabel(protocol)}</td>
       <td className="pr-3">{m.runs}</td>
       <td className="pr-3">{percent(m.accuracy)}</td>
       <td className="pr-3">{m.mean_cost.toFixed(2)}</td>
@@ -104,6 +114,7 @@ export default function BenchmarkView() {
             <thead className="text-xs uppercase text-slate-500">
               <tr>
                 <th className="py-1 pr-3">Planner</th>
+                <th className="pr-3">Cases</th>
                 <th className="pr-3">Runs</th>
                 <th className="pr-3">Accuracy</th>
                 <th className="pr-3">Mean cost</th>
@@ -122,12 +133,16 @@ export default function BenchmarkView() {
                     key={p}
                     planner={p}
                     m={result.planners[p][group]}
-                    runtime={result.protocols[p]?.runtime_s}
+                    protocol={result.protocols[p]}
                   />
                 ))}
             </tbody>
           </table>
         </div>
+        <p className="mt-3 text-xs text-slate-500">
+          Rows that cover different runs are not directly comparable: compare the Meta model with
+          “{plannerName("info_gain_meta_cases")}”, which runs on exactly the same cases and seeds.
+        </p>
         {!("meta" in result.planners) && (
           <p className="mt-3 text-sm text-slate-500">
             The Meta model has not been benchmarked yet (run{" "}
