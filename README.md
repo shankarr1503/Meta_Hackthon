@@ -102,9 +102,9 @@ method works when the model is structurally right, not real-world accuracy.
 
 | Planner | Accuracy | Mean cost (points) | Mean experiments | Reached 90% | Runtime |
 |---|---|---|---|---|---|
-| `info_gain` | 99.3% | 2.15 | 2.15 | 96.7% | 36.4 s |
-| `sweep` | 96.0% | 2.99 | 2.81 | 95.3% | 0.8 s |
-| `random` | 98.0% | 3.90 | 3.17 | 94.0% | 0.9 s |
+| `info_gain` | 99.3% | 2.15 | 2.07 | 96.7% | 36.4 s |
+| `sweep` | 96.0% | 2.99 | 2.51 | 95.3% | 0.8 s |
+| `random` | 98.0% | 3.90 | 2.79 | 94.0% | 0.9 s |
 
 On this simulator every planner usually finds the fault within budget; the clear
 difference is cost: `info_gain` needs about 28% fewer points than the fixed sweep and 45%
