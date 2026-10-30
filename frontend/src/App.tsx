@@ -10,7 +10,15 @@ import {
 import type { CaseView, PlannerName, ReadyResponse, Trace, TraceSummary } from "./api/types";
 import CasePicker from "./dashboard/CasePicker";
 import InvestigationView from "./dashboard/InvestigationView";
+import ManualLab from "./lab/ManualLab";
 import SimulatedLabel from "./SimulatedLabel";
+
+type Tab = "investigate" | "lab";
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: "investigate", label: "Investigate" },
+  { id: "lab", label: "Manual lab" },
+];
 
 interface Loaded {
   ready: ReadyResponse;
@@ -22,6 +30,7 @@ function message(error: unknown): string {
 }
 
 export default function App() {
+  const [tab, setTab] = useState<Tab>("investigate");
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [replays, setReplays] = useState<TraceSummary[]>([]);
   const [trace, setTrace] = useState<Trace | null>(null);
@@ -79,14 +88,36 @@ export default function App() {
           <SimulatedLabel />
         </header>
 
-        {error && (
+        <nav aria-label="Sections" className="flex gap-1 border-b border-slate-200 dark:border-slate-800">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              aria-current={tab === t.id ? "page" : undefined}
+              onClick={() => setTab(t.id)}
+              className={`-mb-px border-b-2 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+                tab === t.id
+                  ? "border-indigo-600 font-semibold text-indigo-700 dark:text-indigo-300"
+                  : "border-transparent text-slate-600 hover:text-slate-900 dark:text-slate-400"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </nav>
+
+        {tab === "lab" && <ManualLab />}
+
+        {tab === "investigate" && error && (
           <p role="alert" className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
             {error}
           </p>
         )}
-        {busy && <p role="status">Running the simulated investigation…</p>}
+        {tab === "investigate" && busy && (
+          <p role="status">Running the simulated investigation…</p>
+        )}
 
-        {trace ? (
+        {tab !== "investigate" ? null : trace ? (
           <div className="space-y-4">
             <button
               type="button"

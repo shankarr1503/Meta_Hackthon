@@ -98,6 +98,9 @@ All code in this repository was written from scratch during the event. Work star
   spectrum, then updated probabilities, with budget, experiment log and a final diagnosis
   card. Tests cover frame order, hidden-until-revealed measurements, diagnosis only at the
   end, numeric probabilities, auto-play and the case picker.
+- Manual lab (`frontend/src/lab/ManualLab.tsx`): fault, speed and load sliders on the public
+  preset machine with debounced simulation, live readings, a simulator-computed response
+  curve, spectrum and waveform. Tests cover the request, debouncing and errors.
 
 ## Benchmark results (simulated)
 

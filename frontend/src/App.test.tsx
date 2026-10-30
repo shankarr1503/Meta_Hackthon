@@ -77,3 +77,14 @@ describe("App", () => {
     expect(screen.getByText("Simulated")).toBeVisible();
   });
 });
+
+describe("App navigation", () => {
+  it("switches to the manual lab", async () => {
+    stubBackend();
+    render(<App />);
+    await screen.findByText("Pump drive A");
+    fireEvent.click(screen.getByRole("button", { name: "Manual lab" }));
+    expect(screen.getByRole("heading", { name: "Manual lab" })).toBeInTheDocument();
+    expect(screen.queryByText("Pump drive A")).not.toBeInTheDocument();
+  });
+});
