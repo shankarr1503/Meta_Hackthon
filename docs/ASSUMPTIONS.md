@@ -6,12 +6,46 @@ behaviour changes.
 
 ## Physics model
 
+- One shaft on two bearings, modelled as a single-mass (10 kg) Jeffcott rotor with one
+  bending mode; steady state only (no run-up transients).
+- Viscous damping, `ζ = 0.03 + 0.08 · friction`: friction lowers resonance peaks.
+- A residual unbalance of 1e-5 kg·m is always present, so a healthy machine shows a small 1x.
+- Imbalance adds a 2x equal to 20% of its 1x. Misalignment is a static force
+  `30 · severity · (1 + load/1500)` N that excites 2x through `D(2r)` and a 1x of 0.6× the
+  static deflection.
+- Contributions add in phase (amplitudes sum); no phase information is modelled.
+- Friction broadband is `6 · friction · rpm/3000` µm RMS of white noise.
+- Temperature is the steady bearing temperature rise above ambient, in °C; ambient is not
+  modelled. Even a healthy machine warms with speed and load.
+- Model version `rotor-1` (`MODEL_VERSION` in `app/physics/model.py`).
+
 ## Measurement and sensors
+
+- Model error is random, not systematic: true 1x and 2x are multiplied by log-normal factors
+  (log spread 0.35), friction broadband by a log-normal factor (0.20), temperature by
+  `1 + 0.10·z`, plus 1.5 °C additive noise.
+- One ideal displacement sensor: 1 s at 5 kHz by default, 2 µm RMS white sensor noise, random
+  1x and 2x phases.
+- 1x and 2x are extracted by least-squares sinusoid fitting at the known running speed
+  (ideal tachometer); broadband is the RMS of the fit residual, so it includes sensor noise.
+  At 0 RPM no harmonics are reported.
+- Temperature is measured directly, not derived from the signal; measured rise can be
+  slightly negative at low speed because of the additive noise.
+- Each experiment's noise is seeded from (seed, case id, experiment index), so a reading
+  does not depend on which experiments ran before it.
+- The alarm reports overall RMS `√((A1² + A2²)/2 + B²)` from the measured features.
 
 ## Inference engine
 
 ## Planners and the Meta model
 
 ## Cases and benchmark
+
+- Six sealed cases with fixed truths and hidden machine values (TECHNICAL_DESIGN.md §11);
+  all start from an alarm at 2,950 RPM and 500 N.
+- Generated cases: equal numbers per hypothesis, severities uniform in 0.15–0.8, critical
+  speed uniform in 3,300–3,900 RPM, thermal factor uniform in 0.7–1.4 (off the engine's
+  grid on purpose), and a note saying no history is available.
+- Misalignment combined with friction is not a modelled hypothesis, so no case has it.
 
 ## API and frontend

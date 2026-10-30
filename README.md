@@ -56,6 +56,17 @@ All code in this repository was written from scratch during the event. Work star
 - Frontend: Vite + React + TypeScript + Tailwind page that calls `/api/health` through the
   Vite proxy and shows a visible "Simulated" label, with tests.
 
+### 30 Oct 2026
+
+- First commit (skeleton).
+- Physics simulator (`app/physics/model.py`): vectorised Jeffcott-rotor response (1x, 2x,
+  broadband, bearing temperature rise), seeded noisy measurement with least-squares feature
+  extraction, alarm RMS, spectrum and waveform preview. Tests check each fault's signature,
+  determinism, extraction accuracy and the stated noise spread.
+- Six sealed cases, public `CaseView` and a seeded generator for benchmark cases
+  (`app/cases.py`); `make_runner` as the only bridge to hidden truth (`app/runner.py`).
+- Architecture test that fails on forbidden imports.
+
 ### Dependencies
 
 Direct dependencies, pinned to exact versions:
@@ -93,4 +104,9 @@ Direct dependencies, pinned to exact versions:
 | GitHub Actions (checkout, setup-python, setup-node) | v5 / v6 / v5 | CI | MIT |
 
 Transitive dependencies are under compatible licenses: permissive (MIT, BSD, Apache-2.0,
-ISC), MPL-2.0 used 
+ISC), MPL-2.0 used unmodified (e.g. certifi), and CC-BY-4.0 data (caniuse-lite). No GPL or
+AGPL code is used.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

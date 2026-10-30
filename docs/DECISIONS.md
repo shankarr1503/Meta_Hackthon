@@ -108,4 +108,11 @@ decision changes, add a new entry that supersedes the old one instead of editing
 - **D-31 · Sealed cases.** The six sealed cases (ids, titles, notes, truths, wn, thermal) are
   fixed as listed in TECHNICAL_DESIGN.md §11.
 - **D-32 · 3D twin tests** target the mapping functions, not WebGL rendering.
-- **D-33 · Architecture block.** `
+- **D-33 · Architecture block.** `app/schemas/` holds the Pydantic request and response
+  models and is part of CLAUDE.md's architecture block.
+
+## Later decisions
+
+- **D-34 · 30 Oct 2026 · First commit date (supersedes the date part of D-08).** The skeleton
+  was written on 28 Oct 2026 but first committed on 30 Oct 2026. Commits are never
+  backdated; the README states both dates.
