@@ -115,8 +115,9 @@ app, test and script folders was removed before rerunning; no source was removed
 ## Still pending
 
 - Final recorded video.
-- Remote CI result, public repository URL and any required hosted deployment. No Git
-  remote was configured during this review; no push or publication was performed.
+- Any required hosted deployment. No Git remote was configured during this review; the
+  repository was published later and its first remote CI run is recorded in "Public
+  repository and first GitHub CI run" below.
 - Owner confirmation of current official hackathon rules, eligibility and submission fields.
 
 The public Meta and Cerebral Valley event overviews were checked on 1 November 2026;
@@ -315,3 +316,27 @@ investigator) and D-76 (container).
   record, injection marker in no answer, mean latency 3.25 s. The entries, including
   the unanswerable question and the injection attempt, are recorded unchanged in
   `backend/results/ask-audit.json`; every quoted number was found in the record.
+
+## Public repository and first GitHub CI run – 2 November 2026 (night)
+
+- `main` at commit 97bfd2b was pushed to the public repository
+  https://github.com/shankarr1503/Meta_Hackthon. Before the push, tracked files were
+  scanned for `.env` files and API-key patterns; none were found. `backend/.env` stays
+  Git-ignored.
+- The first GitHub Actions run on that commit (run 41479840290) passed all three jobs:
+
+| Job | Result | Duration |
+|---|---|---|
+| Lint, test and build (ubuntu-latest) | Passed | 2 min 22 s |
+| Lint, test and build (windows-latest) | Passed | 3 min 23 s |
+| Build container image, then smoke test of `/api/health`, `/api/ready` and `/` | Passed | 43 s |
+
+- CI has no model key, so the live-model smoke test is skipped there. Remote test counts
+  were not read: GitHub requires sign-in to download job logs (the endpoint returned 403).
+- Local check rerun after the documentation updates: Ruff lint and formatting (54 files),
+  backend 323 passed (the live-model test ran with the local key), frontend 81 passed in
+  15 files, TypeScript and the Vite production build passed.
+- Test count correction: the submission draft said 303 backend tests. Commit 97bfd2b added
+  13 grounding-audit tests and 7 demo-replay checks (one per new Meta replay), so 323 are
+  collected; with 81 frontend tests that is 404.
+- Not verified here: a hosted deployment, browsers other than Chromium.

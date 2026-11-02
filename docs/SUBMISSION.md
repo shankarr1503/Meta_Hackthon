@@ -1,8 +1,9 @@
 # Submission draft
 
-Text for the owner to review and paste into the submission form. Account eligibility,
-the current organiser rules, repository visibility, hosting and the final video link have
-not been verified here (see "Materials the owner must supply").
+Text for the owner to review and paste into the submission form. The repository is
+public and its CI passes on GitHub. Account eligibility, the current organiser rules,
+hosting and the final video link have not been verified here (see "Materials the owner
+must supply").
 
 ## Project name
 
@@ -56,9 +57,10 @@ Fiber), all written during the hackathon. The Meta Model API is called through a
 OpenAI-compatible chat-completions adapter with timeouts, length caps and validation.
 Investigations stream live to the dashboard as Server-Sent Events. Studies are
 pre-registered: a frozen plan (hashes of code, prompts and splits) is written before the
-first model call. 303 backend and 81 frontend tests, an architecture test that blocks any
-path from the investigator to the hidden fault, a CI workflow for Linux and Windows plus a
-container build, and a one-command Docker image with a Render blueprint.
+first model call. 323 backend and 81 frontend tests, an architecture test that blocks any
+path from the investigator to the hidden fault, a CI workflow that passes on GitHub for
+Linux and Windows plus a container build, and a one-command Docker image with a Render
+blueprint.
 
 ## Evidence
 
@@ -84,14 +86,16 @@ pre-registered real-2.
 
 ## How it maps to the judging criteria
 
-Weights as reported publicly for this hackathon; confirm them in the participant portal.
+Meta's event page judges the Indie developer track on "creativity, technical ambition, and
+whether it works" and gives no weights. The weights below come from third-party listings
+of this hackathon (checked 2 November 2026); confirm them in the participant portal.
 
 | Criterion | Where to look |
 |---|---|
 | Impact (30%) | A general pattern for diagnosis under a test budget: an AI that decides what to measure, commits to predictions, and shows its work. Built for rotating machinery, the most common industrial asset class; the same loop applies to any domain with a simulator and a hypothesis set. |
 | Use of Meta AI tooling (25%) | Muse Spark 1.3 is the investigator at six points: prior from the note, experiment choice, stated expectations, explanation, grounded question answering, and sensor-by-sensor assessment of real recordings. Every call is validated, capped, logged and replayable. |
 | Demo (25%) | Live stream of each decision and measurement, a 3D twin driven by measured features, the Ask panel, unseen machines by seed, the benchmark and challenge evidence, and real recordings with the rig photograph. One command or one container to run. |
-| Technical depth and execution (20%) | Vectorised physics and a 990-particle Bayesian engine with expected information gain; architecture test that isolates the hidden truth; pre-registered, replayable studies with intervals; 384 tests; CI on Linux and Windows plus a container build. |
+| Technical depth and execution (20%) | Vectorised physics and a 990-particle Bayesian engine with expected information gain; architecture test that isolates the hidden truth; pre-registered, replayable studies with intervals; 404 tests; CI passing on GitHub for Linux and Windows plus a container build. |
 
 ## What's next
 
@@ -100,9 +104,7 @@ and letting the model request new physical test points on a connected rig.
 
 ## Materials the owner must supply
 
-- Public repository URL (no Git remote is configured yet). Create an empty public GitHub
-  repository, then from the repository root:
-  `git remote add origin <url>` and `git push -u origin main`.
+- Public repository URL: https://github.com/shankarr1503/Meta_Hackthon (`main` pushed on 2 November 2026).
 - Hosted demo URL if the form asks for one: deploy the Render blueprint (`render.yaml`)
   from the public repository and enter the Meta API key in the Render dashboard, or run
   the Docker image on any host (see `docs/DEPLOYMENT.md`).

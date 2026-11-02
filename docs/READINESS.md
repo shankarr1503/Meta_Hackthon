@@ -32,7 +32,7 @@ Everything the repository can verify on its own is done and recorded in
 
 | Item | Current state | Next action |
 |---|---|---|
-| Git hosting | No remote configured | Create an empty public GitHub repository, then `git remote add origin <url>` and `git push -u origin main`; confirm both CI jobs (check on Linux and Windows, container build) pass |
+| Git hosting | Public repository https://github.com/shankarr1503/Meta_Hackthon; `main` pushed on 2 November 2026 | Keep `main` pushed after each commit; CI result is recorded in VERIFICATION.md |
 | Hosted demo | Dockerfile and `render.yaml` verified locally | Create a Render Blueprint from the public repository, enter `FAILURELAB_LLM_API_KEY` in the Render dashboard, deploy; or run the image on another host (DEPLOYMENT.md) |
 | Final video | Script in DEMO.md rehearsed against the production build | Record the three-minute script (one live Meta run, one live question, one unseen machine); upload and supply its URL |
 | Team and eligibility | Account-specific details unavailable | Confirm in the participant portal and add members |

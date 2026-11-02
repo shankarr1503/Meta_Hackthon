@@ -123,6 +123,8 @@ flowchart LR
 ## Try it in two minutes
 
 ```sh
+git clone https://github.com/shankarr1503/Meta_Hackthon.git
+cd Meta_Hackthon
 python3.12 scripts/tasks.py setup
 python scripts/tasks.py build
 python scripts/tasks.py serve        # http://127.0.0.1:8000
@@ -347,6 +349,10 @@ All code in this repository was written from scratch during the event. Work star
   live questions, every answer recorded unchanged in `backend/results/ask-audit.json`;
   a test re-checks each quoted number against the replay offline. Result:
   194/194 numbers grounded, every quoted number was found in the record, injection marker absent.
+- Published to the public repository https://github.com/shankarr1503/Meta_Hackthon. The
+  first GitHub Actions run passed all three jobs: lint, tests and build on Linux and on
+  Windows, and the container build with its smoke test
+  ([Verification](docs/VERIFICATION.md)).
 
 ## Benchmark results (simulated)
 

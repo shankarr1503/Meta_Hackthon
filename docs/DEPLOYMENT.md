@@ -38,7 +38,8 @@ tests, scripts or Node runtime.
 **Render.** `render.yaml` is a Blueprint for one Docker web service with the health
 probe and the `FAILURELAB_*` variables declared; the API key is marked `sync: false`, so
 Render asks for it in the dashboard and never reads it from the repository. Create a
-Blueprint from the public repository, paste the key, deploy. Any other container host
+Blueprint from the public repository (https://github.com/shankarr1503/Meta_Hackthon),
+paste the key, deploy. Any other container host
 (Fly.io, Railway, Cloud Run, a VM with Docker) works the same way: build the Dockerfile,
 set the same variables, point the health probe at `/api/health`.
 
