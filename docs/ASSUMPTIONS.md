@@ -1,7 +1,8 @@
 # Assumptions register
 
-Every modelling and product assumption, stated openly. All data in FailureLab AI is
-simulated; nothing here claims validated real-world accuracy. Update this file whenever
+Every modelling and product assumption, stated openly. Data in FailureLab AI is
+simulated, except the attributed measured-laboratory recordings path (REAL_DATA.md);
+nothing here claims validated real-world accuracy. Update this file whenever
 behaviour changes.
 
 ## Physics model
@@ -28,7 +29,9 @@ behaviour changes.
   1x and 2x phases.
 - 1x and 2x are extracted by least-squares sinusoid fitting at the known running speed
   (ideal tachometer); broadband is the RMS of the fit residual, so it includes sensor noise.
-  At 0 RPM no harmonics are reported.
+  No harmonics are reported at 0 RPM or when the window holds fewer than two shaft cycles,
+  where the least-squares fit is ill-conditioned (D-66). Investigations (≥ 900 RPM, 1 s)
+  always exceed this minimum.
 - Temperature is measured directly, not derived from the signal; measured rise can be
   slightly negative at low speed because of the additive noise.
 - Each experiment's noise is seeded from (seed, case id, experiment index), so a reading
@@ -93,6 +96,8 @@ behaviour changes.
   delays, because simultaneous replacements can briefly deny access.
 - Production dashboard hosting is opt-in through `FAILURELAB_FRONTEND_DIR`; it exposes
   only the built frontend directory. The API-only development mode stays the default.
+- The cross-site guard relies on browsers sending `Sec-Fetch-Site` or `Origin`; non-browser
+  clients are not blocked by it. The Meta run limit is counted per server process (D-64).
 
 - The 3D twin is an illustration, not a second simulator: every motion comes from a
   measured feature. The shaft is drawn as a 0.8 m rotor; whirl is exaggerated 1,000×
@@ -105,6 +110,8 @@ behaviour changes.
 
 The paired proof challenge uses 24 newly generated machines under three note
 conditions. Notes are correlated variants of each machine, not independent samples.
+Identical prompts reuse a recorded model reply, so repeated stages are not independent
+model samples; the injection-note prior was effectively sampled once.
 The inference and simulator still share a model family. See PROOF_OF_CONCEPT.md
 for the frozen protocol, uncertainty estimates and limits.
 
@@ -113,5 +120,14 @@ for the frozen protocol, uncertainty estimates and limits.
 Real recordings are from a physical test rig with deliberately introduced faults.
 They are not simulated numbers or naturally occurring factory failures. The
 measured path has four different classes and no calibrated probability model.
-Only eight held-out trials from one rig were evaluated; the 6/8 result has wide
-uncertainty. Absolute amplitude units are unverified. See REAL_DATA.md.
+Only eight held-out trials from one rig were evaluated; the study real-2 result (Meta
+8/8, Wilson 95% interval 67.56%–100%; baseline 5/8) has wide uncertainty. The
+superseded real-1 (6/8 each) is preserved. Absolute amplitude units are unverified.
+See REAL_DATA.md.
+
+- Shaft speed is estimated per recording (D-67): a harmonic-sum search within ±15% of
+  the documented 1238 RPM over the first four harmonics. This assumes the shaft
+  harmonics dominate that band; another strong periodic source there could shift the
+  estimate and every harmonic band centred on it.
+- Measured harmonic features are the largest amplitude within ±1 Hz of each order of the
+  estimated shaft frequency.

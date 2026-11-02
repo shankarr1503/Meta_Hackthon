@@ -110,7 +110,7 @@ export default function BenchmarkView() {
             ))}
           </select>
         </label>
-        <div className="overflow-x-auto">
+        <div className="relative overflow-x-auto">
           <table className="w-full text-left text-sm">
             <caption className="sr-only">Benchmark results for {groupLabel(group)}</caption>
             <thead className="text-xs uppercase text-slate-500">

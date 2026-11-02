@@ -277,3 +277,14 @@ A full code review on 2 November found the issues below; each fix ships with tes
   are numbered in truth-label order. Meta never runs on them (the proof renames them to
   opaque ids and a neutral title), so the order is not exposed; changing the generator
   would invalidate the published rule-planner benchmark.
+- **D-71 · 2 Nov 2026 · Live runs survive tab switches.** A running live investigation
+  stays mounted (hidden) while another tab is shown, so returning never opens a second
+  stream or starts a second paid Meta run. "Back to cases" ends it; "Open full replay"
+  hands the saved trace to the replay player.
+- **D-72 · 2 Nov 2026 · Prediction check.** Every experiment, live or replayed, shows the
+  engine's prediction for each hypothesis, the Meta model's stated expectation, the
+  measurement and the probability before → after, marking the largest rise. All values
+  come from the trace; the dashboard computes no probability.
+- **D-73 · 2 Nov 2026 · No displayed certainty.** Probabilities that round to 100.0% or
+  0.0% (but are not exactly 0) display as ">99.9%" and "<0.1%". Accuracies, which are
+  exact counts, still display as percentages.

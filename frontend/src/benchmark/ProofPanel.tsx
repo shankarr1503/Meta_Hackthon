@@ -42,7 +42,7 @@ export default function ProofPanel({ report }: { report: ProofReport }) {
           ))}
         </select>
       </label>
-      <div className="overflow-x-auto">
+      <div className="relative overflow-x-auto">
         <table className="w-full text-left text-sm">
           <caption className="sr-only">Challenge results: {NAMES[condition] ?? condition}</caption>
           <thead className="text-xs text-slate-500">
@@ -86,7 +86,7 @@ export default function ProofPanel({ report }: { report: ProofReport }) {
         <details className="mt-4 text-sm">
           <summary className="cursor-pointer font-medium">Inspect every paired result</summary>
           <p className="my-2">True labels below are revealed for retrospective scoring only.</p>
-          <div className="overflow-x-auto">
+          <div className="relative overflow-x-auto">
             <table className="w-full text-left text-xs">
               <caption className="sr-only">Per-machine challenge audit</caption>
               <thead><tr>

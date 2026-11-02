@@ -1,5 +1,5 @@
 import type { Diagnosis } from "../api/types";
-import { hypothesisName, percent } from "../format";
+import { hypothesisName, probability } from "../format";
 import SimulatedLabel from "../SimulatedLabel";
 
 const STOP_REASONS: Record<string, string> = {
@@ -23,7 +23,7 @@ export default function DiagnosisCard({
       <header className="flex items-center justify-between gap-2">
         <h3 id="diagnosis-heading" className="text-lg font-semibold">
           Diagnosis: {hypothesisName(diagnosis.top)}{" "}
-          <span className="font-mono">{percent(diagnosis.probability)}</span>
+          <span className="font-mono">{probability(diagnosis.probability)}</span>
         </h3>
         <SimulatedLabel />
       </header>
@@ -41,7 +41,7 @@ export default function DiagnosisCard({
             {diagnosis.remaining_doubts.map((d) => (
               <li key={d.hypothesis}>
                 {hypothesisName(d.hypothesis)}{" "}
-                <span className="font-mono">{percent(d.probability)}</span>
+                <span className="font-mono">{probability(d.probability)}</span>
               </li>
             ))}
           </ul>

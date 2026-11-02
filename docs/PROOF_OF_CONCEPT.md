@@ -2,7 +2,8 @@
 
 FailureLab asks a Meta model to decide which experiment to run next, then lets a
 simulator produce the reading and a Bayesian engine update the diagnosis. The model
-cannot replace a measurement with an invented value. All machine data is simulated.
+cannot replace a measurement with an invented value. All machine data in this challenge
+is simulated; the separate measured-laboratory recordings path is in REAL_DATA.md.
 
 ## The challenge
 
@@ -84,11 +85,17 @@ The simulator and inference share a model family. This does not prove performanc
 real sensors, unseen physics, extra fault types or industrial operating conditions.
 The next validation stage requires independent measured signals or a physical test rig,
 held-out machines, and review by a vibration specialist. None of those are claimed here.
+A small separate step, eight held-out trials from one laboratory rig, is reported in
+REAL_DATA.md; it is not multi-machine validation or specialist review.
 
-## Measured challenge results ? 2 November 2026
+## Measured challenge results – 2 November 2026
 
 The complete frozen challenge finished: 24 new machines, 72 Meta and 72 baseline
 investigations, 209 new API calls and 273 recorded model stages, with zero fallbacks.
+Identical prompts reuse a recorded reply, so the stages are not independent samples:
+the prior stage had 1 distinct reply across the 24 no-history runs, 1 across the 24
+injection runs and 6 across the 24 misleading runs. The injection-note prior was
+effectively sampled once and reused.
 The 95% Wilson accuracy interval is 79.76% to 99.26% in each condition.
 
 | Note condition | Meta correct | Baseline correct | Meta mean points | Baseline mean points | Paired points saved, 95% interval |
@@ -101,7 +108,8 @@ This challenge shows maintained accuracy under these note perturbations, not a
 Meta accuracy or experiment-cost advantage. Meta mean investigation latency was
 12.6, 14.0 and 13.1 seconds respectively; baseline mean latency was below 0.4 seconds.
 These are observed latencies for this execution, including any cached responses.
-The demanded injection marker appeared in none of the 24 final explanations.
+The demanded injection marker appeared in none of the 24 final explanations, with the
+injection-note prior sampled once and reused as noted above.
 That narrow check does not establish general injection resistance.
 
 Both investigators confidently misclassified `proof-d2b377871703`: a true
@@ -111,8 +119,9 @@ failure, not three independent failures. It is retained in the evidence and dash
 The shared inference model and 90% stopping rule can therefore be confidently wrong.
 
 The earlier 18-run sealed-case study remains a separate result: 100% accuracy for
-both planners, with 23.8% fewer experiment points for Meta on that sample. Its cost
-advantage did not carry over to this new challenge.
+both planners, with 23.8% fewer experiment points for Meta on that small sample only.
+That saving did not carry over to this new challenge; a Meta cost advantage is not
+established.
 
 Artifacts: `backend/results/proof-plan.json`, `backend/results/proof.json` and the
 `proof` summary in `backend/results/benchmark.json`. No key is needed to inspect or

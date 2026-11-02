@@ -1,10 +1,12 @@
 # Verification record
 
-Checks performed locally on 1 November 2026. All machine data is simulated.
+Checks performed locally on 1 and 2 November 2026; each section states when it was run.
+Machine data is simulated, except the attributed measured-laboratory recordings path
+(REAL_DATA.md).
 
-## Full project check
+## Full project check (1 November 2026)
 
-`python scripts/tasks.py check` passed after the changes:
+`python scripts/tasks.py check` passed after the 1 November changes:
 
 - Ruff lint and formatting: passed (45 Python files already formatted).
 - ESLint: passed.
@@ -73,7 +75,7 @@ git-ignored. Set `FAILURELAB_BROWSER_URL` to use a different frontend address.
 This check does not establish Safari/Firefox support, physical accuracy of the 3D
 illustration or accessibility conformance.
 
-## Simulated benchmark
+## Simulated benchmark (1 November 2026)
 
 `python scripts/tasks.py benchmark` completed 450 investigations: 150 per rule planner.
 Each planner saw the same six sealed cases with five seeds and 120 generated cases.
@@ -86,7 +88,8 @@ Each planner saw the same six sealed cases with five seeds and 120 generated cas
 
 The committed machine-readable record is `backend/results/benchmark.json`. Runtime varies
 by machine. All planners usually succeed in this simulator; the main measured benefit is
-lower experiment cost. Meta has not yet been measured.
+lower experiment cost. This table covers the rule planners only; Meta was measured
+separately on 2 November (see "Live Meta benchmark" below).
 
 ## Fixes and regression coverage
 
@@ -128,26 +131,29 @@ rules and account-specific requirements remain pending.
   model-selected experiments, four model calls, zero errors or fallbacks, and a
   simulated misalignment diagnosis at 94.6725% probability. This single run does
   not establish aggregate accuracy or fallback rate.
-- `python scripts/tasks.py check` passed: Ruff lint/format, ESLint, 218 backend
+- `python scripts/tasks.py check` passed at that point, before the review fixes:
+  Ruff lint/format, ESLint, 218 backend
   tests (including the live call and recorded replay reproduction), 45 frontend
   tests, TypeScript and the Vite production build.
 - Sandbox socket and temporary-directory restrictions affected the first attempt;
   checks passed when rerun with the required access. One existing Starlette/httpx
   deprecation warning remains.
 
-## Live Meta benchmark ? 2 November 2026
+## Live Meta benchmark – 2 November 2026
 
 Muse Spark 1.3 (`muse-spark-1.3`) completed six sealed simulated cases with three
-seeds each (18 investigations), using 53 new API calls in 242.69 seconds, with
-zero fallbacks. Both planners below ran on exactly the same cases and seeds.
+seeds each (18 investigations) in 242.69 seconds, with 0 fallbacks in about 65 model
+stages (53 new API calls; identical prompts reuse a recorded reply). Both planners
+below ran on exactly the same cases and seeds.
 
 | Planner | Accuracy | Mean experiment cost | Mean experiments | Reached 90% |
 |---|---|---|---|---|
 | Meta | 100% | 1.7778 | 1.6111 | 100% |
 | Information gain, same runs | 100% | 2.3333 | 2.2778 | 94.44% |
 
-Meta used about 23.8% fewer experiment points on this small sealed-case sample.
-Experiment cost measures simulated experiment budget, not API billing or latency.
+Meta used about 23.8% fewer experiment points on this small sealed-case sample only;
+the larger challenge below did not reproduce it, so a general Meta cost advantage is not
+established. Experiment cost measures simulated experiment budget, not API billing or latency.
 This result does not establish real-world accuracy or generalisation to unseen
 machines. Source: `backend/results/benchmark.json`.
 
@@ -156,10 +162,14 @@ alerts or page overflow; fresh investigation, keyboard navigation, WebGL fallbac
 and backend-disconnection checks passed. The saved Meta replay also played through
 to diagnosis successfully in the production dashboard.
 
-## Measured challenge results ? 2 November 2026
+## Measured challenge results – 2 November 2026
 
 The complete frozen challenge finished: 24 new machines, 72 Meta and 72 baseline
 investigations, 209 new API calls and 273 recorded model stages, with zero fallbacks.
+Identical prompts reuse a recorded reply, so the stages are not independent samples:
+the prior stage had 1 distinct reply across the 24 no-history runs, 1 across the 24
+injection runs and 6 across the 24 misleading runs. The injection-note prior was
+effectively sampled once and reused.
 The 95% Wilson accuracy interval is 79.76% to 99.26% in each condition.
 
 | Note condition | Meta correct | Baseline correct | Meta mean points | Baseline mean points | Paired points saved, 95% interval |
@@ -172,7 +182,8 @@ This challenge shows maintained accuracy under these note perturbations, not a
 Meta accuracy or experiment-cost advantage. Meta mean investigation latency was
 12.6, 14.0 and 13.1 seconds respectively; baseline mean latency was below 0.4 seconds.
 These are observed latencies for this execution, including any cached responses.
-The demanded injection marker appeared in none of the 24 final explanations.
+The demanded injection marker appeared in none of the 24 final explanations, with the
+injection-note prior sampled once and reused as noted above.
 That narrow check does not establish general injection resistance.
 
 Both investigators confidently misclassified `proof-d2b377871703`: a true
@@ -182,14 +193,15 @@ failure, not three independent failures. It is retained in the evidence and dash
 The shared inference model and 90% stopping rule can therefore be confidently wrong.
 
 The earlier 18-run sealed-case study remains a separate result: 100% accuracy for
-both planners, with 23.8% fewer experiment points for Meta on that sample. Its cost
-advantage did not carry over to this new challenge.
+both planners, with 23.8% fewer experiment points for Meta on that small sample only.
+That saving did not carry over to this new challenge; a Meta cost advantage is not
+established.
 
 Artifacts: `backend/results/proof-plan.json`, `backend/results/proof.json` and the
 `proof` summary in `backend/results/benchmark.json`. No key is needed to inspect or
 replay this recorded evidence.
 
-Final proof release check passed on 2 November 2026: 224 backend tests
+Final proof release check passed on 2 November 2026, before the review fixes: 224 backend tests
 (including offline reproduction of all 72 published pairs), 48 frontend tests,
 Ruff lint/format, ESLint, TypeScript and Vite production build. The expanded
 challenge audit passed all 25 production browser views with no page errors,
@@ -197,18 +209,27 @@ visible error alerts or page overflow. Desktop and dark phone evidence screens
 were visually inspected. The credential scan of tracked and unignored project
 files passed. One existing Starlette/httpx deprecation warning remains.
 
-## Real measured examples ? 2 November 2026
+## Real measured examples – 2 November 2026
 
 Downloaded first naturally sorted one-second recording from each of 20 source
 trials in Brito et al. (2022), DOI 10.17632/zx8pfhdtnb.1, CC BY 4.0. Verified
 ZIP-entry CRC, sample shape/finiteness, local recording hashes and the complete
 source test-rig photograph hash. Full archive hashes are advertised, not verified.
 
-Meta completed eight trial-held-out assessments with 32 calls and no model
-errors: 6/8 correct, matching the nearest-reference baseline. Both held-out
-looseness trials were classified as unbalance by Meta and remain visible.
-Source units remain native and unverified. See REAL_DATA.md for protocol and limits.
+First study, real-1 (now superseded): Meta completed eight trial-held-out
+assessments with 32 calls and no model errors: 6/8 correct, matching the
+nearest-reference baseline. Both held-out looseness trials were classified as
+unbalance by Meta; real-1 is preserved in `backend/data/real/studies/real-1/`.
 
+A code review later on 2 November found real-1's harmonic bands centred on the
+documented 1238 RPM, while the recordings run at 1,260–1,302 RPM, so the 3x band
+missed the 3x peak. Pre-registered study real-2 estimates shaft speed per recording
+(D-67): Meta 8/8 held-out correct (Wilson 95% interval 67.56%–100%), reference-distance
+baseline 5/8, 32 model calls, 0 model errors. These are eight trials from one rig; they
+support no industrial-reliability or general-advantage claim. Source units remain
+native and unverified. See REAL_DATA.md for protocol and limits.
+
+The checks below were run for real-1, before the review fixes.
 Full checks passed: 229 backend tests, 50 frontend tests, Ruff lint/format,
 ESLint, TypeScript and production build. Measured features and plots reproduced
 from local raw bytes; all eight assessments replayed without model calls.
@@ -219,3 +240,24 @@ passed again. Five real-recording browser views (desktop/phone, light/dark and
 320-pixel width) passed source badge, source photograph, four-sensor selection,
 two charts, label reveal and retained-error checks, with no page errors or
 horizontal overflow. Desktop and dark-phone screenshots were visually reviewed.
+
+Final verification for the 2 November review fixes: see the last section (added after the final check).
+
+## Final verification after the review fixes – 2 November 2026
+
+Run on Windows 11, Python 3.12 venv, Node 22, after commits 4e27d68 (backend fixes),
+1732b4f (live view), 631de71 (real-2) and the UI polish that followed.
+
+- `python scripts/tasks.py check`: Ruff lint and format passed (52 files); backend
+  **258 passed** in 209.5 s, none skipped (the live-model smoke test ran because a key is
+  configured locally); frontend **72 passed** in 14 files; ESLint, TypeScript and the
+  production build passed.
+- `node scripts/browser-smoke.cjs` against `python scripts/tasks.py serve`: all 25 views
+  (desktop and phone, light and dark, 320 px) without page errors or horizontal overflow;
+  a fresh live investigation ended on its diagnosis with no error banner, one log row per
+  experiment and the prediction check, survived a tab switch without a second stream,
+  opened as a replay and returned to the case list; the no-WebGL fallback, keyboard
+  navigation and backend-unavailable states passed.
+- A live Meta investigation of `case-t4` through the browser completed without alerts or
+  page errors; it produced the README screenshots in `docs/images/`.
+- Not verified here: CI on GitHub (no remote yet), browsers other than Chromium.

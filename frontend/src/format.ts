@@ -47,6 +47,14 @@ export function percent(p: number, digits = 1): string {
   return `${(p * 100).toFixed(digits)}%`;
 }
 
+/** A Bayesian probability for display. Never shows a rounded-up certainty: values that
+ * round to 100.0% or to 0.0% but are not exactly 0 read ">99.9%" or "<0.1%". */
+export function probability(p: number): string {
+  if (p >= 0.9995) return ">99.9%";
+  if (p > 0 && p < 0.0005) return "<0.1%";
+  return percent(p);
+}
+
 export function um(value: number): string {
   return `${value.toFixed(value < 10 ? 2 : 1)} µm`;
 }

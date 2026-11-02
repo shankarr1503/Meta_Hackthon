@@ -67,6 +67,18 @@ export default function RealRecordings() {
             {" "}{(report.meta_accuracy_ci95[0] * 100).toFixed(1)}% to {(report.meta_accuracy_ci95[1] * 100).toFixed(1)}%.</p>}
           <p className="mt-2 text-xs text-slate-500">Small, single-rig evaluation. Baseline uses all sensors;
             Meta may inspect fewer. This is not evidence of industrial reliability or a controlled superiority claim.</p>
+          {report.superseded_study && (
+            <p className="mt-2 text-xs text-slate-500">
+              Study {report.study_version ?? "real-2"} estimates each recording's shaft speed
+              ({report.shaft_rpm_estimated_range
+                ? `${Math.round(report.shaft_rpm_estimated_range[0])}–${Math.round(report.shaft_rpm_estimated_range[1])} RPM`
+                : "per recording"}
+              ). The earlier study {report.superseded_study.version} assumed{" "}
+              {report.shaft_rpm_documented ?? 1238} RPM, which misplaced the harmonic bands; it scored Meta{" "}
+              {report.superseded_study.meta_correct ?? "—"}/{report.superseded_study.held_out_trials}, baseline{" "}
+              {report.superseded_study.baseline_correct}/{report.superseded_study.held_out_trials}, and is kept as superseded.
+            </p>
+          )}
         </Panel>
       </div>
       {!record || !reading ? (

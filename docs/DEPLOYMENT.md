@@ -1,6 +1,7 @@
 # Build and run
 
-All machine data is simulated. A model key is optional: the information-gain baseline,
+Machine data is simulated, except the attributed measured-laboratory recordings path
+(REAL_DATA.md). A model key is optional: the information-gain baseline,
 manual lab, benchmark and saved baseline replays work without it.
 
 ## Local production demo
@@ -20,9 +21,12 @@ Do not run the development backend on port 8000 at the same time.
 ## Hosting the same build
 
 Build on a machine with Node 22.12+ and Python 3.11+ (3.12 recommended). Keep the repository
-layout, including `frontend/dist`, `backend/replays/demo` and `backend/results/benchmark.json`.
-Install the backend with `pip install .` from `backend` in the hosting virtual environment.
-Development packages and Node are not needed at runtime after the build.
+layout, including `frontend/dist`, `backend/replays/demo`, the whole `backend/results/`
+directory and `backend/data/real/` (manifest, studies and `test-bench.jpg`).
+Install the backend with `pip install -e .` from `backend` in the hosting virtual environment,
+and run it from that source checkout. `backend/app/config.py` locates `.env`, replays, results
+and `data/real/test-bench.jpg` relative to the source tree, so a non-editable `pip install .`
+breaks them. Development packages and Node are not needed at runtime after the build.
 
 Set these environment variables through the host configuration:
 
@@ -50,6 +54,15 @@ hackathon demo. Keep a deployment private or access-controlled when enabling a p
 When the owner supplies Meta access, set the existing `FAILURELAB_LLM_*` variables in the
 host's secret configuration and restart. Never put them in a `VITE_*` variable or frontend
 build. `GET /api/ready` reports configuration only; it does not verify live model access.
+
+Guards that matter when hosting (see [DECISIONS.md](DECISIONS.md), D-63 to D-65):
+
+- The live stream `GET /api/investigations/stream` saves the trace before its final frame (D-63).
+- Investigation requests a browser marks as cross-site get 403 (D-64).
+- Meta runs are capped at `FAILURELAB_META_RUNS_PER_HOUR` (default 30) per server process per
+  rolling hour; beyond that the API returns 429. With several worker processes, each has its
+  own cap (D-64).
+- An invalid `FAILURELAB_LLM_REASONING_EFFORT` stops startup with a validation error (D-65).
 
 ## Verify before recording
 

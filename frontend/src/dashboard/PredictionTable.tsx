@@ -1,5 +1,5 @@
 import type { Measured, Prediction } from "../api/types";
-import { celsius, hypothesisName, orderedHypotheses, percent, um } from "../format";
+import { celsius, hypothesisName, orderedHypotheses, probability, um } from "../format";
 import type { ProbabilityChange } from "../state/player";
 
 /** Changes smaller than the 0.1% display resolution read as unchanged. */
@@ -36,7 +36,7 @@ function ProbabilityCell({ before, after }: { before: number; after: number }) {
   const arrow = ARROWS[direction(before, after)];
   return (
     <td className="whitespace-nowrap pr-3 font-mono tabular-nums">
-      {percent(before)} → {percent(after)}{" "}
+      {probability(before)} → {probability(after)}{" "}
       <span aria-hidden className={arrow.className}>
         {arrow.glyph}
       </span>
@@ -74,7 +74,7 @@ export default function PredictionTable({ index, predictions, expectations, meas
 
   return (
     <div className="space-y-1">
-      <div className="overflow-x-auto">
+      <div className="relative overflow-x-auto">
         <table className="w-full text-left text-sm">
           <caption className="pb-1 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
             {caption}

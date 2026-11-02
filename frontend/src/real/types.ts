@@ -37,4 +37,11 @@ export interface RealReport {
   model_errors: number;
   limitations: string[];
   records: RealRecord[];
+  study_version?: string;
+  shaft_rpm_documented?: number;
+  shaft_rpm_estimated_range?: [number, number];
+  superseded_study?: {
+    version: string; reason: string; baseline_correct: number; meta_correct: number | null;
+    held_out_trials: number;
+  };
 }

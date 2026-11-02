@@ -1,21 +1,120 @@
 # FailureLab AI
 
-FailureLab AI is a Meta-model investigator that finds why a simulated rotating machine
-vibrates by designing and running experiments on a physics-based digital twin. A
-simulator produces every measurement, a Bayesian engine produces every probability, and a
-Meta model chooses experiments, states its predictions before each result and explains the
-diagnosis, without ever seeing the true fault. **Investigation and lab data are simulated.** The Real recordings view uses
-attributed measurements from a physical laboratory rig; see [Real data](docs/REAL_DATA.md). Built for the Meta Global AI Developer Hackathon 2026
+**An AI investigator that finds out why a machine vibrates by running experiments, and
+states what it expects to see before every result.**
+
+When a rotating machine starts to vibrate, an engineer has to work out why: imbalance,
+misalignment, a failing bearing, or several at once. Each test costs time and machine
+downtime. FailureLab AI hands that investigation to a Meta model. It reads the maintenance
+note, picks the next most informative experiment (speed, load), **writes down what each
+possible fault should show there before the result arrives**, updates its beliefs, and
+stops as soon as it is confident. Then it explains the diagnosis and the check to do next.
+
+Three roles keep it honest:
+
+- a **physics simulator** (a digital twin of a rotor on bearings) produces every
+  measurement;
+- a **Bayesian engine** produces every probability;
+- the **Meta model** (Muse Spark 1.3) chooses experiments, states predictions and explains.
+  It never supplies numbers that are scored, and it never sees the true fault.
+
+**Investigation and lab data are simulated.** A separate Real recordings view analyses
+attributed accelerometer recordings from a physical laboratory rig
+([Real data](docs/REAL_DATA.md)). Built for the Meta Global AI Developer Hackathon 2026
 (track: Indie Developer).
 
-Plans: [Product features](docs/PRODUCT_FEATURES.md) ·
+![Live investigation: the Meta model states its expectations, then the measurement arrives and the probabilities update](docs/images/live-investigation.png)
+
+## Results at a glance
+
+Every number below comes from a file in `backend/results/` that the tests re-check.
+
+| Evidence | Data | Result |
+|---|---|---|
+| Rule-planner benchmark | 150 simulated runs per planner (6 sealed cases × 5 seeds + 120 generated machines) | Information gain 99.3% correct at 2.15 experiment points; fixed sweep 96.0% at 2.99; random 98.0% at 3.90 |
+| Meta model, sealed cases | 18 simulated runs (6 cases × 3 seeds), same runs for both | Meta 100% correct at 1.78 points; information gain 100% at 2.33. 0 fallbacks |
+| Meta model, paired challenge | 24 new simulated machines × 3 note conditions (none, misleading, prompt injection): 72 pairs | Meta 23/24 correct in every condition, the same as information gain. Misleading notes and injection did not lower accuracy; no injected text reached an explanation. No cost advantage on these machines (1.92–1.96 vs 1.875 points) |
+| Meta model, real recordings | 8 held-out recordings from a physical lab rig (study real-2) | Meta 8/8 correct (95% interval 67.6%–100%); reference-distance baseline 5/8. One rig, eight trials: promising, not proof of industrial reliability |
+
+What we do **not** claim: real-world accuracy from the simulator, a general Meta cost
+advantage, or industrial reliability from eight recordings. The first real-data study
+(real-1, 6/8 vs 6/8) had a frequency error found in review; it is kept and reported as
+superseded ([details](docs/REAL_DATA.md)).
+
+## How it works
+
+```mermaid
+flowchart LR
+    N[Maintenance note] --> M
+    subgraph Investigator
+      M[Meta model<br/>prior, choice, expectations, explanation]
+      E[Bayesian engine<br/>990 particles, 6 hypotheses<br/>information gain per cost]
+    end
+    E -- top 5 experiments --> M
+    M -- chosen experiment --> R[runner.py]
+    R --> S[Physics simulator<br/>hidden fault]
+    S -- measurement --> E
+    E -- probabilities --> D[Dashboard]
+    M -- explanation --> D
+```
+
+1. **Prior from the note.** The model turns the maintenance note into starting beliefs.
+   Every hypothesis keeps at least 5%, so a wrong or malicious note cannot rule out the
+   truth.
+2. **Choose and predict.** The engine ranks experiments by expected information per cost
+   point. The model picks one of the top five, gives its reason and **states the reading
+   it expects under each hypothesis** before the experiment runs.
+3. **Measure and update.** The simulator runs the experiment on the hidden machine; the
+   engine updates the probabilities. The dashboard shows each hypothesis's predicted
+   reading next to the measurement, and which hypotheses gained or lost.
+4. **Stop and explain.** At 90% confidence or when the 8-point budget runs out, the model
+   explains the diagnosis, the remaining doubts and the check to do next.
+
+If the model times out, errs or returns anything unusable, that step falls back to the
+information-gain planner and the event is logged. Every model reply is stored in the
+trace, so any investigation replays exactly.
+
+## Why the numbers can be trusted
+
+- **The investigator cannot see the answer.** Only `runner.py` touches the hidden fault;
+  an architecture test parses every import and fails on any other path.
+- **The model cannot inject numbers.** Measurements come from the simulator, probabilities
+  from the engine. Model output is parsed defensively, length-capped and validated.
+- **Pre-registered studies.** The paired challenge and the real-data study write a frozen
+  plan (hashes of code, prompts and splits) before the first model call, and refuse to run
+  if it changes. All outcomes are kept, including failures and the superseded study.
+- **Reproducible.** All randomness is seeded; rule runs are bit-identical; Meta runs replay
+  from their recorded replies. Offline verification re-runs the recorded evidence without
+  API calls.
+- **Safe to host.** Closed request schemas, replay-id checks, a cross-site guard on the
+  endpoints that start runs, and an hourly cap on Meta investigations
+  ([decisions D-62 to D-70](docs/DECISIONS.md)).
+
+## Try it in two minutes
+
+```sh
+python3.12 scripts/tasks.py setup
+python scripts/tasks.py build
+python scripts/tasks.py serve        # http://127.0.0.1:8000
+```
+
+1. **Investigate**: choose a case and planner `meta`, then watch it live: the model's
+   expectations, each measurement and the probability changes.
+2. **Lab**: move the speed and load sliders on the public preset machine and watch the
+   3D twin and spectrum respond.
+3. **Benchmark**: compare planners, and inspect the paired challenge evidence machine by
+   machine.
+4. **Real recordings**: inspect real sensor signals, the model's sensor-by-sensor
+   reasoning, and reveal each trial's true label.
+
+Without a Meta key, use planner `info_gain` or open the saved Meta replays.
+
+Plans and records: [Product features](docs/PRODUCT_FEATURES.md) ·
 [Technical design](docs/TECHNICAL_DESIGN.md) · [Decisions](docs/DECISIONS.md) ·
-[Assumptions](docs/ASSUMPTIONS.md) · [API](docs/API.md)
-
-Demo: [Recording guide](docs/DEMO.md) · [Submission draft](docs/SUBMISSION.md) ·
-[Verification record](docs/VERIFICATION.md)
-
-Next steps: [Readiness and Meta handoff](docs/READINESS.md).
+[Assumptions](docs/ASSUMPTIONS.md) · [API](docs/API.md) ·
+[Proof of concept](docs/PROOF_OF_CONCEPT.md) · [Real data](docs/REAL_DATA.md) ·
+[Verification](docs/VERIFICATION.md) · [Demo guide](docs/DEMO.md) ·
+[Submission](docs/SUBMISSION.md)
 
 ## Setup
 
@@ -49,10 +148,9 @@ python scripts/tasks.py serve
 Open http://127.0.0.1:8000. The dashboard and API share one origin; Node is only
 needed to build the frontend. See [Deployment](docs/DEPLOYMENT.md) for hosting setup.
 
-A live, step-by-step investigation stream is available via
-`GET /api/investigations/stream?case_id=<id>&planner=<planner>&seed=<n>` (text/event-stream);
-the dashboard opens it automatically when you investigate a case. All streamed data is
-simulated and labelled as such.
+When you investigate a case, the dashboard runs it live over
+`GET /api/investigations/stream` (Server-Sent Events; see [API](docs/API.md)). All streamed
+data is simulated and labelled as such.
 
 On Windows, Python 3.12 can be installed with the Python install manager
 (`pymanager install 3.12`), which provides `python3.12`.
@@ -152,31 +250,32 @@ All code in this repository was written from scratch during the event. Work star
 - Made concurrent saves of the same replay id use independent temporary files, with a
   regression test for two simultaneous writers.
 - Added baseline demo replays for the other three cases, so all six cases are available.
-- Added a recording guide, submission draft and verification record. The final video,
-  public repository and live Meta results remain pending.
+- Added a recording guide, submission draft and verification record.
 - Added a single-process production demo command, static-asset/API integration tests and
   deployment instructions. CI now checks Windows as well as Linux.
 - Final check: backend 216 passed, 1 live-model test skipped; frontend 45 passed;
   Ruff, ESLint, TypeScript and the production build passed. Optional browser checks use
   Playwright 1.64.1 (Apache-2.0) installed outside the app dependency tree.
 
-## Status
+### 2 Nov 2026
 
-- Done and tested: simulator, Bayesian engine, rule planners, investigation loop, API, Meta
-  model investigator (with a fake model), benchmark, dashboard player, manual lab, 3D twin,
-  benchmark screen, demo replays.
-- Verified on 2 November: live Meta endpoint and a saved Meta investigation on `case-r2`
-  (four calls, zero fallbacks, 94.7% simulated misalignment probability).
-- Verified: full Meta benchmark (18 simulated investigations, 100% accuracy, zero fallbacks). The 3D scene rendered in browser checks on
-  1 November; these checks do not establish physical accuracy or cross-browser support.
-
-To repeat the Meta checks and run the remaining benchmark:
-
-```sh
-cd backend && .venv/Scripts/python -m pytest tests/test_llm_client.py   # live smoke test
-python scripts/tasks.py benchmark-meta                                   # sealed cases × 3 seeds
-cd backend && .venv/Scripts/python scripts/demo_replays.py --planner meta --cases case-t4
-```
+- Live Meta benchmark on the six sealed cases × 3 seeds (18 investigations, 53 new API
+  calls, 0 fallbacks), with information gain on exactly the same runs.
+- Paired proof challenge (`scripts/proof.py`): 24 new generated machines × 3 note
+  conditions, frozen plan, checkpoint and resume, Wilson and paired-bootstrap intervals,
+  downloadable evidence and offline verification ([Proof of concept](docs/PROOF_OF_CONCEPT.md)).
+- Real recordings path (`app/measured.py`, `scripts/fetch_real.py`,
+  `scripts/real_examples.py`, Real recordings view): attributed CC BY 4.0 laboratory
+  recordings, measured features, a trial-disjoint split and Meta sensor-by-sensor
+  assessment with labels hidden.
+- Live investigation stream (`GET /api/investigations/stream`) and a live dashboard view.
+- Full code review, then fixes with tests (D-62 to D-70): model replies can no longer crash
+  a run; the stream saves the trace before its final frame; cross-site guard and an hourly
+  Meta cap; settings validated at startup; harmonics need two shaft turns; stricter
+  architecture test; compact, gzip-served evidence.
+- Real-data correction: the review found the harmonic bands assumed 1238 RPM while the rig
+  runs at 1,260–1,302 RPM. Study real-1 is preserved as superseded; pre-registered study
+  real-2 estimates the speed per recording (Meta 8/8, baseline 5/8).
 
 ## Benchmark results (simulated)
 
@@ -194,23 +293,60 @@ method works when the model is structurally right, not real-world accuracy.
 On this simulator every planner usually finds the fault within budget; the clear
 difference is cost: `info_gain` needs about 28% fewer points than the fixed sweep and 45%
 fewer than random choice. The hardest hypothesis is misalignment (`info_gain` 96%, `sweep`
-84%). The live Meta benchmark is reported below.
+84%). The Meta model results follow.
 
 ### Against the targets set before building
 
-Targets from `docs/PRODUCT_FEATURES.md` §6. Numbers from `backend/results/benchmark.json`
-and the test suite; "not measured" means exactly that.
+Targets from `docs/PRODUCT_FEATURES.md` §6. Numbers from `backend/results/` and the test
+suite; "not established" means the data does not support the target.
 
 | Metric | Target | Measured | Met |
 |---|---|---|---|
 | Accuracy on 120 unseen simulated cases | ≥ 95% | `info_gain` 99.2%, `sweep` 95.0%, `random` 98.3% | Yes (`info_gain`) |
 | Cost, information gain vs fixed sweep | Lower at equal accuracy | 2.15 vs 2.99 points, accuracy 99.3% vs 96.0% | Not established at equal accuracy |
-| Cost, Meta model vs information gain on cases with notes | Equal or lower | 1.78 vs 2.33 points on the same 18 sealed runs | Yes on this sample |
+| Cost, Meta model vs information gain on cases with notes | Equal or lower | 1.78 vs 2.33 points on the 18 sealed runs; 1.92–1.96 vs 1.875 on the 72-pair challenge (paired intervals include zero) | Not established in general |
 | Accuracy when the system says ≥ 90% | ≥ 90% | `info_gain` 99.3%, `sweep` 98.6%, `random` 100% | Yes |
-| Meta model fallbacks | < 5% of calls | 0 of 53 calls | Yes on this sample |
+| Meta model fallbacks | < 5% of calls | 0 fallbacks in about 65 stages (53 new calls) and in 273 stages (209 new calls); identical prompts reuse a recorded reply | Yes on these samples |
 | Investigation time without the model | < 2 s | Under 2 s (`test_investigation_is_fast`; `info_gain` on sealed cases 0.1–0.6 s, seed 0) | Yes |
 | Rule-planner benchmark run time | < 2 min | 54.2 s for all three planners | Yes |
 | Sealed demo cases diagnosed correctly | 6 of 6 | `info_gain` 6 of 6 on all 5 seeds (30 of 30 runs) | Yes (`info_gain`) |
+
+### Meta model on the sealed cases (2 November 2026)
+
+Muse Spark 1.3 (`muse-spark-1.3`) completed six sealed simulated cases with three seeds
+each (18 investigations), using 53 new API calls in 242.69 seconds, with zero fallbacks.
+Both planners ran on exactly the same cases and seeds.
+
+| Planner | Accuracy | Mean experiment cost | Mean experiments | Reached 90% |
+|---|---|---|---|---|
+| Meta | 100% | 1.7778 | 1.6111 | 100% |
+| Information gain, same runs | 100% | 2.3333 | 2.2778 | 94.44% |
+
+On this small sample Meta used about 23.8% fewer experiment points, helped by the case
+notes. Experiment cost measures simulated experiment budget, not API billing or latency.
+
+### Paired challenge (2 November 2026)
+
+The [paired challenge](docs/PROOF_OF_CONCEPT.md) runs Meta and information gain on the
+same 24 newly generated machines and sensor noise, with no note, a misleading note and a
+prompt-injection note. Both scored 23/24 (95.8%, 95% interval 79.8%–99.3%) in every
+condition. Meta had zero fallbacks across 273 recorded stages (209 new API calls;
+identical prompts reuse a recorded reply, so the injection prior was in effect sampled
+once). No experiment-cost advantage was established on these machines. Run
+`python scripts/tasks.py proof`; inspect the evidence on the Benchmark screen.
+
+![Benchmark screen: the paired challenge per condition, with intervals and downloadable model evidence](docs/images/benchmark.png)
+
+### Real recordings (2 November 2026)
+
+Open `http://127.0.0.1:8000/?view=real`. Study real-2 uses 12 labelled reference trials
+and eight separate held-out trials from a physical rig: Meta 8/8 (95% interval
+67.6%–100%), reference-distance baseline 5/8, 32 calls, no model errors. Superseded study
+real-1 (6/8 each) is preserved. Dataset and photograph: Brito, Susto, Brito and Duarte
+(2022), DOI 10.17632/zx8pfhdtnb.1, CC BY 4.0; analysis code is original. See
+[Real data](docs/REAL_DATA.md).
+
+![Real recordings: the source test rig, the held-out evaluation and measured signals](docs/images/real-recordings.png)
 
 ### Dependencies
 
@@ -259,52 +395,5 @@ AGPL code is used.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
-
-## Live Meta benchmark ? 2 November 2026
-
-Muse Spark 1.3 (`muse-spark-1.3`) completed six sealed simulated cases with three
-seeds each (18 investigations), using 53 new API calls in 242.69 seconds, with
-zero fallbacks. Both planners below ran on exactly the same cases and seeds.
-
-| Planner | Accuracy | Mean experiment cost | Mean experiments | Reached 90% |
-|---|---|---|---|---|
-| Meta | 100% | 1.7778 | 1.6111 | 100% |
-| Information gain, same runs | 100% | 2.3333 | 2.2778 | 94.44% |
-
-Meta used about 23.8% fewer experiment points on this small sealed-case sample.
-Experiment cost measures simulated experiment budget, not API billing or latency.
-This result does not establish real-world accuracy or generalisation to unseen
-machines. Source: `backend/results/benchmark.json`.
-
-## Auditable proof of concept
-
-The [paired challenge](docs/PROOF_OF_CONCEPT.md) tests 24 newly generated simulated
-machines with absent, misleading and adversarial maintenance notes. Run
-`python scripts/tasks.py proof`; inspect the evidence panel on the Benchmark screen.
-The frozen plan, per-run results and raw model replies make the experiment auditable.
-Offline verification reproduces recorded investigations without API calls.
-
-Built on 2 November 2026: frozen paired challenge, checkpoint/resume, uncertainty
-intervals, downloadable model evidence and per-machine dashboard audit. No new
-dependencies were added.
-
-Measured challenge result: Meta and baseline each achieved 23/24 correct diagnoses
-(95.8%) in every note condition; Meta had zero fallbacks across 273 recorded stages
-and 209 new API calls. No experiment-cost advantage was established on these new
-machines. The earlier 23.8% saving applies to the original sealed-case sample only.
-See the proof document for uncertainty, latency and the retained failure case.
-
-## Real machine examples
-
-Open `http://127.0.0.1:8000/?view=real` to inspect genuine four-channel accelerometer
-recordings and the source authors' photograph of the physical rotor test rig.
-The [real-data study](docs/REAL_DATA.md) uses 12 labelled reference trials and eight
-separate held-out trials. Meta and a reference-distance baseline each scored 6/8;
-this small single-rig sample does not establish industrial reliability.
-
-Built on 2 November 2026: licensed real-signal downloader, measured-feature analysis,
-held-out Meta sensor inspection, source-label reveal and a Real recordings dashboard.
-Dataset and photograph: Brito, Susto, Brito and Duarte (2022),
-DOI 10.17632/zx8pfhdtnb.1, CC BY 4.0. Original signal analysis code; no new software
-dependencies. See REAL_DATA.md for attribution, modifications and reproduction.
+Code: MIT, see [LICENSE](LICENSE). Real recordings and the test-rig photograph: CC BY 4.0,
+attributed in [Real data](docs/REAL_DATA.md).

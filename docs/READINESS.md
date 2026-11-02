@@ -16,7 +16,9 @@ Local development and the baseline demo do not need a model key. Use
    experiments, four model calls, no errors or fallbacks. Production dashboard playback
    and diagnosis passed browser verification.
 5. Complete: `python scripts/tasks.py benchmark-meta` passed on 2 November: 18/18
-   correct diagnoses, 53 model calls, zero fallbacks, mean cost 1.7778 vs 2.3333.
+   correct diagnoses, 0 fallbacks in about 65 model stages (53 new calls), mean cost
+   1.7778 vs 2.3333 on this small sealed-case sample only; the larger challenge did not
+   reproduce the saving (see PROOF_OF_CONCEPT.md).
    Inspect the Meta and `info_gain_meta_cases` rows on the same cases and seeds. Record
    actual model identifier, accuracy, cost and fallback rate, even when targets are missed.
 6. Complete: README, submission draft and verification record updated with measured results.
@@ -52,12 +54,14 @@ been performed by the local checks. See [VERIFICATION.md](VERIFICATION.md) for e
 The new 24-machine, three-condition challenge and evidence panel are implemented.
 All 72 paired investigations are retained and reproduce offline. Meta matched the
 baseline at 23/24 correct per condition with zero fallbacks, but did not improve
-experiment cost on this sample. See PROOF_OF_CONCEPT.md before making performance
+experiment cost on this sample. Identical prompts reuse a recorded reply, so the
+injection-note prior was effectively sampled once. See PROOF_OF_CONCEPT.md before making performance
 claims. The evidence download contains all model replies and measured features.
 
 ## Real machine examples complete
 
 The Real recordings view uses actual physical-rig accelerometer signals and
 source photograph under CC BY 4.0. Open `/?view=real`; details and the small
-6/8 held-out result are in REAL_DATA.md. It is recorded laboratory evidence,
+held-out result are in REAL_DATA.md (study real-2: Meta 8/8, reference-distance baseline
+5/8, eight trials from one rig; superseded real-1: 6/8 each). It is recorded laboratory evidence,
 not a live factory deployment or a validated industrial diagnostic product.

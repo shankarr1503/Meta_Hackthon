@@ -283,7 +283,7 @@ target the mapping functions, not WebGL rendering.
 |---|---|
 | `frontend/src/api/` | `client.ts`, `types.ts` |
 | `frontend/src/state/` | `useInvestigation.ts` |
-| `frontend/src/dashboard/` | CasePicker, ProbabilityBars, BudgetMeter, ExperimentLog, PredictionTable, SpectrumChart, DiagnosisCard, PlayerControls |
+| `frontend/src/dashboard/` | CasePicker, ProbabilityBars, BudgetMeter, ExperimentLog, ExperimentCard, PredictionTable (prediction check), SpectrumChart, DiagnosisCard, PlayerControls, LiveInvestigationView; `src/state/live.ts` reduces live frames; `src/ErrorBoundary.tsx` isolates each view |
 | `frontend/src/twin/` | ShaftScene, Shaft, Bearing, LoadArrow |
 | `frontend/src/lab/` | ManualLab |
 | `frontend/src/benchmark/` | BenchmarkView |

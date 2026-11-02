@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 
 import { streamInvestigation } from "../api/client";
 import type { CaseView, PlannerName, Trace } from "../api/types";
-import { count, hypothesisName, newtons, percent, plannerName, rpm, um } from "../format";
+import { count, hypothesisName, newtons, probability, plannerName, rpm, um } from "../format";
 import SimulatedLabel from "../SimulatedLabel";
 import { currentExperiment, INITIAL_LIVE, liveReducer, type LiveState } from "../state/live";
 import type { TwinReading } from "../twin/mapping";
@@ -150,7 +150,7 @@ export default function LiveInvestigationView({ caseView, planner, seed, onOpenR
               <p className="text-sm">
                 Investigation finished after {count(diagnosis.experiments, "experiment")}: leading
                 hypothesis {hypothesisName(diagnosis.diagnosis.top)} at{" "}
-                {percent(diagnosis.diagnosis.probability)}.
+                {probability(diagnosis.diagnosis.probability)}.
               </p>
             )}
           </div>

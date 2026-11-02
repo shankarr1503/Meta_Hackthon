@@ -1,5 +1,5 @@
 import type { Probabilities } from "../api/types";
-import { HYPOTHESES, hypothesisName, percent } from "../format";
+import { HYPOTHESES, hypothesisName, probability } from "../format";
 
 const TARGET = 0.9;
 
@@ -21,7 +21,7 @@ export default function ProbabilityBars({ probabilities }: { probabilities: Prob
               aria-valuemin={0}
               aria-valuemax={1}
               aria-valuenow={p}
-              aria-valuetext={percent(p)}
+              aria-valuetext={probability(p)}
             >
               <span
                 className={`absolute inset-y-0 left-0 rounded transition-[width] duration-700 ${
@@ -35,7 +35,7 @@ export default function ProbabilityBars({ probabilities }: { probabilities: Prob
                 style={{ left: `${TARGET * 100}%` }}
               />
             </span>
-            <span className="text-right font-mono tabular-nums">{percent(p)}</span>
+            <span className="text-right font-mono tabular-nums">{probability(p)}</span>
           </li>
         );
       })}

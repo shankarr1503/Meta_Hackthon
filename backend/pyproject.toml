@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "failurelab-backend"
 version = "0.1.0"
-description = "FailureLab AI backend: simulated rotor twin, Bayesian engine and Meta model investigator. All data is simulated."
+description = "FailureLab AI backend: simulated rotor twin, Bayesian engine and Meta model investigator. Simulated, except the attributed measured-laboratory recordings path."
 license = "MIT"
 requires-python = ">=3.11"
 dependencies = [

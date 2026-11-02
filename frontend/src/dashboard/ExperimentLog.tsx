@@ -7,7 +7,7 @@ export default function ExperimentLog({ steps }: { steps: Step[] }) {
     return <p className="text-sm text-slate-500">No experiments run yet.</p>;
   }
   return (
-    <div className="overflow-x-auto">
+    <div className="relative overflow-x-auto">
       <table className="w-full text-left text-sm">
         <caption className="sr-only">Experiment log</caption>
         <thead className="text-xs uppercase text-slate-500">
