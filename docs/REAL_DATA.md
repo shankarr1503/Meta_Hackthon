@@ -20,7 +20,8 @@ FailureLab. This project adds feature extraction, plot previews, an evaluation s
 AI assessments. The dataset is third-party evidence; our analysis code is original.
 
 The authors document 20 tests, five per condition, with four accelerometer channels
-sampled at 25 kHz. The shaft speed is approximately 1238 RPM. The apparatus was
+sampled at 25 kHz. The authors document a shaft speed of approximately 1238 RPM; the
+recorded spectra show 1,260–1,302 RPM (see Analysis). The apparatus was
 dismantled and returned to normal before introducing each test condition.
 
 ## Selection, integrity and split
@@ -40,16 +41,22 @@ We do not split adjacent windows of a recording between reference and test. This
 still one apparatus with few trials, not independent validation across machines.
 
 `backend/data/real/manifest.json` records the source links, archive member names and
-recording hashes. `analysis-plan.json` records the split, feature list, feature-code
-hash and system-prompt hash before API calls. Raw selected samples are local and
+recording hashes. Each study version's `studies/<version>/analysis-plan.json` records the
+split, feature list, speed-estimation settings, feature-code hash and system-prompt hash,
+and is written before that version's first API call; the script refuses to run if it
+changes. Raw selected samples are local and
 Git-ignored; regenerate them using the command below. The derived measured examples,
 source photograph, original manifest and recorded model replies are shareable artifacts.
 
 ## Analysis
 
 The dedicated measured-data path computes per-sensor RMS, crest factor, kurtosis and
-the spectral peak near 1x, 2x and 3x shaft frequency, using a mean-centred signal and a
-Hann-windowed FFT. Waveforms show a downsampled first 50 ms; spectra show 0–1,000 Hz.
+the spectral peak at 1x, 2x and 3x shaft frequency, using a mean-centred signal and a
+Hann-windowed FFT. The shaft frequency is estimated from each recording: the frequency
+within ±15% of the documented 1238 RPM whose first four harmonics carry the most energy
+across the four sensors (each sensor's spectrum divided by its median level, spectrum
+zero-padded to 1/8 Hz). Each harmonic feature is the largest amplitude within ±1 Hz of
+its order times that frequency. Estimates range from 1,260 to 1,302 RPM. Waveforms show a downsampled first 50 ms; spectra show 0–1,000 Hz.
 Features use the full selected second. The source amplitude unit has not been verified;
 we keep native units rather than invent a conversion to g, displacement or temperature.
 
@@ -65,18 +72,34 @@ No simulator likelihood, simulated feature, inferred temperature or calibrated f
 probability is used in this path. The normal, unbalance, misalignment and looseness
 classes belong to this dataset and are not silently mapped to the simulator's classes.
 
-## Observed results
+## Observed results (study real-2)
 
-Muse Spark 1.3 classified 6/8 held-out real trials correctly, matching the baseline's
-6/8. Its 95% Wilson accuracy interval is 40.93%–92.85%, reflecting the small sample.
-All eight model assessments completed without a model error, using 32 calls. Meta
-inspected all four sensors for every query. It labelled both held-out looseness trials
-as unbalance. The baseline misclassified one normal trial and one looseness trial.
-All outcomes remain in the report; there was no retry based on correctness.
+Muse Spark 1.3 labelled **8/8** held-out real trials correctly; the reference-distance
+baseline labelled 5/8. Meta's 95% Wilson accuracy interval is 67.56%–100%: with eight
+trials the true accuracy could be well below 100%. All eight assessments completed
+without a model error, using 32 calls; Meta inspected all four sensors for every query.
+The baseline confused one normal trial with misalignment and both held-out unbalance
+trials with looseness. All outcomes are kept; there was no retry based on correctness.
 
-These results demonstrate end-to-end processing of genuine measurements. They do not
-establish industrial reliability, calibrated confidence or a Meta advantage. A stronger
-future study needs more trials, independent rigs and measured physical amplitude units.
+Order of work, for transparency: the real-2 plan was written by an offline run, which
+also computed the baseline (5/8), before any real-2 model call. No setting changed after
+that point; the plan hash in every recorded assessment matches.
+
+These results demonstrate end-to-end processing of genuine measurements and a
+promising held-out result on one rig. They do not establish industrial reliability,
+calibrated confidence or a general Meta advantage. A stronger study needs more trials,
+independent rigs and measured physical amplitude units.
+
+### Superseded study real-1
+
+The first study (real-1) centred the harmonic bands on the documented 1238 RPM
+(20.63 Hz). A code review on 2 November found that the recordings run faster: the 3x
+band (60.4–63.4 Hz) missed the 3x peak near 65 Hz, and the 2x band caught only its
+edge. Under real-1, Meta and the baseline each scored 6/8 (Meta interval
+40.93%–92.85%); Meta labelled both looseness trials as unbalance. real-1's plan, raw
+replies and scores are preserved unchanged in `backend/data/real/studies/real-1/` and
+summarised in the report's `superseded_study` field. real-2 changed only the speed
+handling; the split, features, classes and system prompt are the same.
 
 ## Reproduce
 
@@ -86,7 +109,7 @@ python scripts/tasks.py check
 ```
 
 The first command downloads selected real recordings and makes at most 32 model calls
-on the first run. Existing recorded assessments are reused. It needs network access and
+for a study version that has no recorded assessments yet. Existing recorded assessments are reused. It needs network access and
 the local Meta configuration for the initial assessment. To regenerate the derived report
 from already downloaded signals and recorded replies without a model call:
 

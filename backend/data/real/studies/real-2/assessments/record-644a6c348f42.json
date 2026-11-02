@@ -1,0 +1,40 @@
+{
+  "plan_hash": "42dcc3feac403fc0f5ce227c68ebe627abc7ae47ac38a533149b75c2fbb3c912",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "misalignment",
+    "reason": "Query shows low 1x (~0.0009-0.0014) on all 4 channels with elevated 2x on channels 0 (0.0114) and 2 (0.00906) and low 2x on 1 (0.00288) and 3 (0.00174). This matches labelled misalignment trials which show 1x <~0.0012 with 2x-dominant on ch0/ch2 (e.g., 0.0156/0.0150, 0.0149/0.0117, 0.0061/0.0048) and low 2x on ch1/ch3, unlike unbalance (1x ~0.005-0.018 dominant) and looseness (elevated 1x ~0.004-0.014 on all channels with elevated 2x/3x). Kurtosis ~3.2-3.7 and crest ~4.5-5.5 also align with misalignment/normal, not impulsive. Limitation: radial signals and one short recording may not uniquely distinguish faults; amplitude units unspecified so comparison is relative to same-rig references.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Query ch0 shows low 1x with elevated 2x, similar to misalignment references, but single radial channel is insufficient; ch2 distinguishes misalignment (high 2x on ch0 and ch2) from normal/unbalance, so inspect ch2 next.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Query ch0 shows low 1x with elevated 2x, similar to misalignment references, but single radial channel is insufficient; ch2 distinguishes misalignment (high 2x on ch0 and ch2) from normal/unbalance, so inspect ch2 next.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Query ch0 and ch2 show low 1x (~0.001) with dominant 2x (~0.011, ~0.009), matching labelled misalignment trials where ch0/ch2 have high 2x and low 1x, unlike unbalance (high 1x ~0.005-0.018) and normal (low 1x and low 2x). Need ch1 to check if 1x/2x/3x remain low as in misalignment references versus elevated harmonics as in looseness.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Query ch0 and ch2 show low 1x (~0.001) with dominant 2x (~0.011, ~0.009), matching labelled misalignment trials where ch0/ch2 have high 2x and low 1x, unlike unbalance (high 1x ~0.005-0.018) and normal (low 1x and low 2x). Need ch1 to check if 1x/2x/3x remain low as in misalignment references versus elevated harmonics as in looseness.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0 and ch2 show low 1x (~0.001) with elevated 2x (~0.011, ~0.009), matching misalignment reference pattern of 2x dominance on ch0/ch2, but ch3 is needed to confirm low 1x and modest 2x vs unbalance/looseness which show high 1x on all channels.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0 and ch2 show low 1x (~0.001) with elevated 2x (~0.011, ~0.009), matching misalignment reference pattern of 2x dominance on ch0/ch2, but ch3 is needed to confirm low 1x and modest 2x vs unbalance/looseness which show high 1x on all channels.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows low 1x (~0.0009-0.0014) on all 4 channels with elevated 2x on channels 0 (0.0114) and 2 (0.00906) and low 2x on 1 (0.00288) and 3 (0.00174). This matches labelled misalignment trials which show 1x <~0.0012 with 2x-dominant on ch0/ch2 (e.g., 0.0156/0.0150, 0.0149/0.0117, 0.0061/0.0048) and low 2x on ch1/ch3, unlike unbalance (1x ~0.005-0.018 dominant) and looseness (elevated 1x ~0.004-0.014 on all channels with elevated 2x/3x). Kurtosis ~3.2-3.7 and crest ~4.5-5.5 also align with misalignment/normal, not impulsive. Limitation: radial signals and one short recording may not uniquely distinguish faults; amplitude units unspecified so comparison is relative to same-rig references.",
+        "raw_response": "{\"action\":\"diagnose\", \"label\": \"misalignment\", \"reason\": \"Query shows low 1x (~0.0009-0.0014) on all 4 channels with elevated 2x on channels 0 (0.0114) and 2 (0.00906) and low 2x on 1 (0.00288) and 3 (0.00174). This matches labelled misalignment trials which show 1x <~0.0012 with 2x-dominant on ch0/ch2 (e.g., 0.0156/0.0150, 0.0149/0.0117, 0.0061/0.0048) and low 2x on ch1/ch3, unlike unbalance (1x ~0.005-0.018 dominant) and looseness (elevated 1x ~0.004-0.014 on all channels with elevated 2x/3x). Kurtosis ~3.2-3.7 and crest ~4.5-5.5 also align with misalignment/normal, not impulsive. Limitation: radial signals and one short recording may not uniquely distinguish faults; amplitude units unspecified so comparison is relative to same-rig references.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "status": "completed"
+  }
+}

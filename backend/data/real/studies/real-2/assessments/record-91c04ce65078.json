@@ -1,0 +1,40 @@
+{
+  "plan_hash": "42dcc3feac403fc0f5ce227c68ebe627abc7ae47ac38a533149b75c2fbb3c912",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "looseness",
+    "reason": "Query shows elevated 1x on all channels (ch0 0.01017, ch1 0.00621, ch2 0.01552, ch3 0.00373) unlike normal (~0.0003-0.0016) and misalignment (~0.0003-0.0012) references where 1x stays low. Unlike unbalance references where 1x dominates 2x/3x (e.g., 0.01379 vs 0.00194, 0.01786 vs 0.00529), query has multiple harmonics co-elevated: ch0 2x 0.00958 and 3x 0.01214 >=1x, ch2 2x 0.00837 and 3x 0.00563, ch3 3x 0.00447 >1x. This multi-harmonic elevation with 3x comparable to or exceeding 1x matches looseness references (e.g., 1x 0.01045/2x 0.00358/3x 0.01052 and 1x 0.01420/2x 0.01311/3x 0.02426; low-rms looseness 1x 0.00751/2x 0.00772/3x 0.00486). RMS level ~0.027-0.031 also matches low-rms looseness reference ~0.022-0.028 vs higher normal/unbalance ~0.036-0.052. Limitation: only four channels and one short recording supplied, radial sensitivity and overlap between unbalance and looseness 1x elevation mean fault cannot be uniquely isolated without more data.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channel 0 shows elevated 1x, 2x and 3x with 3x highest, similar to both looseness references and partly unbalance, but single radial channel cannot separate 1x-dominant unbalance from multi-harmonic looseness; need another channel to check harmonic pattern across sensors.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":1,\"reason\":\"Channel 0 shows elevated 1x, 2x and 3x with 3x highest, similar to both looseness references and partly unbalance, but single radial channel cannot separate 1x-dominant unbalance from multi-harmonic looseness; need another channel to check harmonic pattern across sensors.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Seen ch0 shows elevated 1x/2x/3x together and low rms, consistent with looseness but 1x-2x-3x balance needs confirmation on another radial channel; ch2 distinguishes looseness harmonics from unbalance 1x dominance and misalignment 2x dominance.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Seen ch0 shows elevated 1x/2x/3x together and low rms, consistent with looseness but 1x-2x-3x balance needs confirmation on another radial channel; ch2 distinguishes looseness harmonics from unbalance 1x dominance and misalignment 2x dominance.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0 (1x 0.01017, 2x 0.00958, 3x 0.01213) and ch2 (1x 0.01552, 2x 0.00837, 3x 0.00563) show elevated 1x plus elevated 2x/3x, unlike normal (1x ~0.0004-0.0016) and misalignment (1x low, 2x dominant ~0.006-0.015 on ch0/2). This matches both unbalance (high 1x) and looseness (high 1x+2x+3x). Reference unbalance ch2 has very low 3x <0.001, while query ch2 3x is 0.00563 favoring looseness, but radial channels alone are ambiguous. Channel 3 is diagnostic: reference looseness ch3 shows high 1x/2x/3x with very high 3x up to 0.024, versus unbalance ch3 low 2x/3x ~0.001-0.005 and misalignment ch3 low 2x ~0.002. Need ch3 to confirm.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0 (1x 0.01017, 2x 0.00958, 3x 0.01213) and ch2 (1x 0.01552, 2x 0.00837, 3x 0.00563) show elevated 1x plus elevated 2x/3x, unlike normal (1x ~0.0004-0.0016) and misalignment (1x low, 2x dominant ~0.006-0.015 on ch0/2). This matches both unbalance (high 1x) and looseness (high 1x+2x+3x). Reference unbalance ch2 has very low 3x <0.001, while query ch2 3x is 0.00563 favoring looseness, but radial channels alone are ambiguous. Channel 3 is diagnostic: reference looseness ch3 shows high 1x/2x/3x with very high 3x up to 0.024, versus unbalance ch3 low 2x/3x ~0.001-0.005 and misalignment ch3 low 2x ~0.002. Need ch3 to confirm.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows elevated 1x on all channels (ch0 0.01017, ch1 0.00621, ch2 0.01552, ch3 0.00373) unlike normal (~0.0003-0.0016) and misalignment (~0.0003-0.0012) references where 1x stays low. Unlike unbalance references where 1x dominates 2x/3x (e.g., 0.01379 vs 0.00194, 0.01786 vs 0.00529), query has multiple harmonics co-elevated: ch0 2x 0.00958 and 3x 0.01214 >=1x, ch2 2x 0.00837 and 3x 0.00563, ch3 3x 0.00447 >1x. This multi-harmonic elevation with 3x comparable to or exceeding 1x matches looseness references (e.g., 1x 0.01045/2x 0.00358/3x 0.01052 and 1x 0.01420/2x 0.01311/3x 0.02426; low-rms looseness 1x 0.00751/2x 0.00772/3x 0.00486). RMS level ~0.027-0.031 also matches low-rms looseness reference ~0.022-0.028 vs higher normal/unbalance ~0.036-0.052. Limitation: only four channels and one short recording supplied, radial sensitivity and overlap between unbalance and looseness 1x elevation mean fault cannot be uniquely isolated without more data.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"looseness\", \"reason\": \"Query shows elevated 1x on all channels (ch0 0.01017, ch1 0.00621, ch2 0.01552, ch3 0.00373) unlike normal (~0.0003-0.0016) and misalignment (~0.0003-0.0012) references where 1x stays low. Unlike unbalance references where 1x dominates 2x/3x (e.g., 0.01379 vs 0.00194, 0.01786 vs 0.00529), query has multiple harmonics co-elevated: ch0 2x 0.00958 and 3x 0.01214 >=1x, ch2 2x 0.00837 and 3x 0.00563, ch3 3x 0.00447 >1x. This multi-harmonic elevation with 3x comparable to or exceeding 1x matches looseness references (e.g., 1x 0.01045/2x 0.00358/3x 0.01052 and 1x 0.01420/2x 0.01311/3x 0.02426; low-rms looseness 1x 0.00751/2x 0.00772/3x 0.00486). RMS level ~0.027-0.031 also matches low-rms looseness reference ~0.022-0.028 vs higher normal/unbalance ~0.036-0.052. Limitation: only four channels and one short recording supplied, radial sensitivity and overlap between unbalance and looseness 1x elevation mean fault cannot be uniquely isolated without more data.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "status": "completed"
+  }
+}

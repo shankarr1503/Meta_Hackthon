@@ -1,0 +1,40 @@
+{
+  "plan_hash": "42dcc3feac403fc0f5ce227c68ebe627abc7ae47ac38a533149b75c2fbb3c912",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "looseness",
+    "reason": "Query shows high 1x on all 4 channels 0.011-0.016, ruling out normal (~0.0003-0.0016) and misalignment (1x ~0.0003-0.0012, 2x-dominant). 1x dominance alone suggests unbalance vs looseness. Unlike unbalance references where 1x >>2x e.g. 0.0137 vs 0.0019, 0.0126 vs 0.0050, 0.0178 vs 0.0052, query has substantial harmonics: ch0 1x 0.0116, 2x 0.0089, 3x 0.0115 (1x/3x ~1.0) and ch2 1x 0.0159, 2x 0.0130, 3x 0.0032 (1x/2x ~1.2). This multi-harmonic elevation with 1x still high matches looseness references e.g. 1x 0.0075/2x 0.0077/3x 0.0048 and 1x 0.0142/2x 0.0131/3x 0.0242. Limitation: radial signals and one short recording cannot uniquely separate unbalance with secondary looseness, but harmonic pattern favors looseness over pure unbalance.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Query ch0 shows high 1x (~0.0117) plus high 2x (~0.009) and 3x (~0.0115), above normal refs (1x <0.002). High 1x matches unbalance and looseness refs, but high 2x/3x also suggests misalignment or looseness. Misalignment refs show strong channel dependence with high 2x on ch0/ch2 and low 2x and low 1x on ch1/ch3, while unbalance/looseness show high 1x on ch1. Inspecting ch1 tests this distinction.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Query ch0 shows high 1x (~0.0117) plus high 2x (~0.009) and 3x (~0.0115), above normal refs (1x <0.002). High 1x matches unbalance and looseness refs, but high 2x/3x also suggests misalignment or looseness. Misalignment refs show strong channel dependence with high 2x on ch0/ch2 and low 2x and low 1x on ch1/ch3, while unbalance/looseness show high 1x on ch1. Inspecting ch1 tests this distinction.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0 shows high 1x with comparably high 2x and 3x, and ch1 shows high 1x; this overlaps unbalance (1x dominant) and looseness (elevated 1x+2x+3x) references. Need ch3 harmonic pattern to check for multi-harmonic elevation vs pure 1x dominance.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0 shows high 1x with comparably high 2x and 3x, and ch1 shows high 1x; this overlaps unbalance (1x dominant) and looseness (elevated 1x+2x+3x) references. Need ch3 harmonic pattern to check for multi-harmonic elevation vs pure 1x dominance.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Query ch0 shows elevated 1x, 2x and 3x together, and ch1/ch3 show high 1x with elevated 2x, which overlaps looseness vs unbalance references; missing channel 2 is needed to check harmonic pattern across all positions before diagnosing.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Query ch0 shows elevated 1x, 2x and 3x together, and ch1/ch3 show high 1x with elevated 2x, which overlaps looseness vs unbalance references; missing channel 2 is needed to check harmonic pattern across all positions before diagnosing.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows high 1x on all 4 channels 0.011-0.016, ruling out normal (~0.0003-0.0016) and misalignment (1x ~0.0003-0.0012, 2x-dominant). 1x dominance alone suggests unbalance vs looseness. Unlike unbalance references where 1x >>2x e.g. 0.0137 vs 0.0019, 0.0126 vs 0.0050, 0.0178 vs 0.0052, query has substantial harmonics: ch0 1x 0.0116, 2x 0.0089, 3x 0.0115 (1x/3x ~1.0) and ch2 1x 0.0159, 2x 0.0130, 3x 0.0032 (1x/2x ~1.2). This multi-harmonic elevation with 1x still high matches looseness references e.g. 1x 0.0075/2x 0.0077/3x 0.0048 and 1x 0.0142/2x 0.0131/3x 0.0242. Limitation: radial signals and one short recording cannot uniquely separate unbalance with secondary looseness, but harmonic pattern favors looseness over pure unbalance.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"looseness\", \"reason\": \"Query shows high 1x on all 4 channels 0.011-0.016, ruling out normal (~0.0003-0.0016) and misalignment (1x ~0.0003-0.0012, 2x-dominant). 1x dominance alone suggests unbalance vs looseness. Unlike unbalance references where 1x >>2x e.g. 0.0137 vs 0.0019, 0.0126 vs 0.0050, 0.0178 vs 0.0052, query has substantial harmonics: ch0 1x 0.0116, 2x 0.0089, 3x 0.0115 (1x/3x ~1.0) and ch2 1x 0.0159, 2x 0.0130, 3x 0.0032 (1x/2x ~1.2). This multi-harmonic elevation with 1x still high matches looseness references e.g. 1x 0.0075/2x 0.0077/3x 0.0048 and 1x 0.0142/2x 0.0131/3x 0.0242. Limitation: radial signals and one short recording cannot uniquely separate unbalance with secondary looseness, but harmonic pattern favors looseness over pure unbalance.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      1,
+      3,
+      2
+    ],
+    "status": "completed"
+  }
+}

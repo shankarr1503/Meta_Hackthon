@@ -1,0 +1,48 @@
+{
+  "version": "real-2",
+  "supersedes": {
+    "version": "real-1",
+    "plan_sha256": "2c7feea992373f3193fc8c76a267f60603fc2b116dfa80d50a6fc8d18d666b4c"
+  },
+  "speed_estimation": {
+    "nominal_rpm": 1238,
+    "search_fraction": 0.15,
+    "harmonics": 4,
+    "band_half_width_hz": 1.0
+  },
+  "dataset": "10.17632/zx8pfhdtnb.1",
+  "features": [
+    "rms",
+    "crest_factor",
+    "kurtosis",
+    "shaft_1x",
+    "shaft_2x",
+    "shaft_3x"
+  ],
+  "references": [
+    "record-257c3db02489",
+    "record-cd61ce8601e9",
+    "record-ac276d6db91b",
+    "record-c5d1ac6d3a5d",
+    "record-d6b6170a2513",
+    "record-7504dca10256",
+    "record-cc9d7e628235",
+    "record-5a3ffbae7698",
+    "record-e44089d828e7",
+    "record-f4e2327560a3",
+    "record-0d97c4c805ef",
+    "record-6418bd8699cb"
+  ],
+  "held_out": [
+    "record-0d126ea3c43c",
+    "record-b0e6c8b2f966",
+    "record-b6ac62ee0e90",
+    "record-644a6c348f42",
+    "record-943acf955a19",
+    "record-877cfc1d921a",
+    "record-91c04ce65078",
+    "record-de01d5c01c15"
+  ],
+  "system_prompt_sha256": "0ce2da0ad4cd6c48a875e22f8c53e83cad4a03a94bbf9163e0b284cb18d57cec",
+  "feature_code_sha256": "d7c2715c7127d26ad836862c367ec9681c2961e6d9c3bf422ef8c8e76fa817f9"
+}

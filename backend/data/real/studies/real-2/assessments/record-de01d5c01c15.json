@@ -1,0 +1,40 @@
+{
+  "plan_hash": "42dcc3feac403fc0f5ce227c68ebe627abc7ae47ac38a533149b75c2fbb3c912",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "unbalance",
+    "reason": "All 4 channels show elevated 1x with 1x >> 2x: ch0 0.01384 vs 0.00457, ch1 0.00864 vs 0.00296, ch2 0.01170 vs 0.00762, ch3 0.00806 vs 0.00410. This matches unbalance references where 1x ~0.005-0.018 dominates, vs normal 1x ~0.0003-0.0016 and misalignment 1x low with 2x dominant on ch0/ch2 ~0.006-0.016. Closest match is unbalance trial with ch0 0.01786/0.00529/0.00802, ch2 0.01524/0.00612, ch3 0.01004/0.00487. Looseness also has high 1x but typically more comparable 2x and high 3x e.g. 0.0105, 0.0243 on ch3; query 3x lower except ch0 0.00846 which overlaps. Limitation: radial-only features and one short recording cannot uniquely separate unbalance from looseness with multiple harmonics.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channel 0 shows high 1x (0.0138) with moderate 2x/3x, matching both unbalance and looseness references vs normal/misalignment; need channel 1 to check if 1x dominance persists across channels and compare 2x/3x pattern.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Channel 0 shows high 1x (0.0138) with moderate 2x/3x, matching both unbalance and looseness references vs normal/misalignment; need channel 1 to check if 1x dominance persists across channels and compare 2x/3x pattern.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Channels 0-1 show dominant 1x with moderate 3x, consistent with both unbalance and looseness references; channel 2 distinguishes misalignment (high 2x on ch0/ch2 in references) and helps compare 1x-dominance vs broad harmonics for unbalance vs looseness.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Channels 0-1 show dominant 1x with moderate 3x, consistent with both unbalance and looseness references; channel 2 distinguishes misalignment (high 2x on ch0/ch2 in references) and helps compare 1x-dominance vs broad harmonics for unbalance vs looseness.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0-2 show elevated 1x (0.008-0.013) with moderate 2x/3x, matching both unbalance and looseness references; ch3 is needed to compare 1x-dominant vs raised 2x/3x pattern before diagnosing.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0-2 show elevated 1x (0.008-0.013) with moderate 2x/3x, matching both unbalance and looseness references; ch3 is needed to compare 1x-dominant vs raised 2x/3x pattern before diagnosing.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "All 4 channels show elevated 1x with 1x >> 2x: ch0 0.01384 vs 0.00457, ch1 0.00864 vs 0.00296, ch2 0.01170 vs 0.00762, ch3 0.00806 vs 0.00410. This matches unbalance references where 1x ~0.005-0.018 dominates, vs normal 1x ~0.0003-0.0016 and misalignment 1x low with 2x dominant on ch0/ch2 ~0.006-0.016. Closest match is unbalance trial with ch0 0.01786/0.00529/0.00802, ch2 0.01524/0.00612, ch3 0.01004/0.00487. Looseness also has high 1x but typically more comparable 2x and high 3x e.g. 0.0105, 0.0243 on ch3; query 3x lower except ch0 0.00846 which overlaps. Limitation: radial-only features and one short recording cannot uniquely separate unbalance from looseness with multiple harmonics.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"unbalance\", \"reason\": \"All 4 channels show elevated 1x with 1x >> 2x: ch0 0.01384 vs 0.00457, ch1 0.00864 vs 0.00296, ch2 0.01170 vs 0.00762, ch3 0.00806 vs 0.00410. This matches unbalance references where 1x ~0.005-0.018 dominates, vs normal 1x ~0.0003-0.0016 and misalignment 1x low with 2x dominant on ch0/ch2 ~0.006-0.016. Closest match is unbalance trial with ch0 0.01786/0.00529/0.00802, ch2 0.01524/0.00612, ch3 0.01004/0.00487. Looseness also has high 1x but typically more comparable 2x and high 3x e.g. 0.0105, 0.0243 on ch3; query 3x lower except ch0 0.00846 which overlaps. Limitation: radial-only features and one short recording cannot uniquely separate unbalance from looseness with multiple harmonics.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "status": "completed"
+  }
+}

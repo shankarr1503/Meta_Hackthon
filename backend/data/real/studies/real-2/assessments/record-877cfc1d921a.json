@@ -1,0 +1,40 @@
+{
+  "plan_hash": "42dcc3feac403fc0f5ce227c68ebe627abc7ae47ac38a533149b75c2fbb3c912",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "unbalance",
+    "reason": "Query shows elevated 1x on all 4 channels (ch0 0.0156, ch1 0.0093, ch2 0.0133, ch3 0.0089) vs normal (~0.0004-0.0016) and misalignment (~0.0003-0.0012) references. 1x dominates 2x on ch0/ch1, matching unbalance references (e.g., 0.010-0.018 ch0, 0.005-0.010 ch1, 0.008-0.015 ch2) rather than misalignment 2x-dominant pattern (2x 0.006-0.015 on ch0/ch2 with low 1x). Absolute levels, rms ~0.037-0.042, crest ~4-6, kurtosis ~3.2-3.4 also match unbalance trials. Looseness also has high 1x but typically shows 2x/3x comparable to or exceeding 1x (e.g., ch3 3x 0.024 >1x 0.014) and higher rms; not seen here. Limitation: radial-only short recording, 3x on ch0 (0.008) is relatively high and looseness/unbalance overlap, so cannot fully exclude looseness.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channel 0 shows high 1X with low 2X suggesting unbalance, but looseness can also show elevated 1X; need another radial channel to check 1X dominance and 2X/3X pattern against references.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Channel 0 shows high 1X with low 2X suggesting unbalance, but looseness can also show elevated 1X; need another radial channel to check 1X dominance and 2X/3X pattern against references.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "channels 0-1 show dominant 1x with elevated 3x, matching both unbalance and looseness references; need another channel to compare 1x vs 2x/3x harmonic pattern",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"channels 0-1 show dominant 1x with elevated 3x, matching both unbalance and looseness references; need another channel to compare 1x vs 2x/3x harmonic pattern\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0-2 show dominant 1x (~0.009-0.015) with low 2x, matching unbalance references, but looseness references also show elevated 1x with higher 2x/3x harmonics; channel 3 in references helps separate unbalance (moderate 1x, low 3x) vs looseness (high 1x+2x+3x, e.g. 3x up to 0.024). Need ch3 to check harmonic pattern before diagnosing.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0-2 show dominant 1x (~0.009-0.015) with low 2x, matching unbalance references, but looseness references also show elevated 1x with higher 2x/3x harmonics; channel 3 in references helps separate unbalance (moderate 1x, low 3x) vs looseness (high 1x+2x+3x, e.g. 3x up to 0.024). Need ch3 to check harmonic pattern before diagnosing.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows elevated 1x on all 4 channels (ch0 0.0156, ch1 0.0093, ch2 0.0133, ch3 0.0089) vs normal (~0.0004-0.0016) and misalignment (~0.0003-0.0012) references. 1x dominates 2x on ch0/ch1, matching unbalance references (e.g., 0.010-0.018 ch0, 0.005-0.010 ch1, 0.008-0.015 ch2) rather than misalignment 2x-dominant pattern (2x 0.006-0.015 on ch0/ch2 with low 1x). Absolute levels, rms ~0.037-0.042, crest ~4-6, kurtosis ~3.2-3.4 also match unbalance trials. Looseness also has high 1x but typically shows 2x/3x comparable to or exceeding 1x (e.g., ch3 3x 0.024 >1x 0.014) and higher rms; not seen here. Limitation: radial-only short recording, 3x on ch0 (0.008) is relatively high and looseness/unbalance overlap, so cannot fully exclude looseness.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"unbalance\", \"reason\": \"Query shows elevated 1x on all 4 channels (ch0 0.0156, ch1 0.0093, ch2 0.0133, ch3 0.0089) vs normal (~0.0004-0.0016) and misalignment (~0.0003-0.0012) references. 1x dominates 2x on ch0/ch1, matching unbalance references (e.g., 0.010-0.018 ch0, 0.005-0.010 ch1, 0.008-0.015 ch2) rather than misalignment 2x-dominant pattern (2x 0.006-0.015 on ch0/ch2 with low 1x). Absolute levels, rms ~0.037-0.042, crest ~4-6, kurtosis ~3.2-3.4 also match unbalance trials. Looseness also has high 1x but typically shows 2x/3x comparable to or exceeding 1x (e.g., ch3 3x 0.024 >1x 0.014) and higher rms; not seen here. Limitation: radial-only short recording, 3x on ch0 (0.008) is relatively high and looseness/unbalance overlap, so cannot fully exclude looseness.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "status": "completed"
+  }
+}

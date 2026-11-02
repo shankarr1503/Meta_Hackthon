@@ -1,0 +1,40 @@
+{
+  "plan_hash": "42dcc3feac403fc0f5ce227c68ebe627abc7ae47ac38a533149b75c2fbb3c912",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "normal",
+    "reason": "All four channels show low 1x (0.00052-0.00092), low 2x (0.00039-0.00375) and low 3x (0.00058-00121), rms 0.039-0.052, crest ~4.1-4.6, kurtosis ~3.0-3.2. This matches labelled normal trials with 1x <~0.0016 and 2x up to ~0.0064 on ch0/ch2. It lacks unbalance signature of high 1x 0.004-0.017 dominating 2x, lacks looseness signature of elevated 1x >0.004 plus elevated 2x/3x up to 0.024, and lacks strong misalignment signature of 2x 0.0048-0.0156 on ch0/ch2 with 1x <0.0012. Query 2x 0.0037 is below all misalignment ch0/ch2 examples and within normal range. Limitation: radial-only short recording, weak misalignment overlaps normal, cannot exclude incipient fault.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Channel 0 shows low 1x (0.00065) ruling against unbalance/looseness on this channel, with 2x 0.0037 borderline between normal and misalignment references; channels 0 and 2 show elevated 2x in misalignment references, so channel 2 best discriminates misalignment vs normal.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Channel 0 shows low 1x (0.00065) ruling against unbalance/looseness on this channel, with 2x 0.0037 borderline between normal and misalignment references; channels 0 and 2 show elevated 2x in misalignment references, so channel 2 best discriminates misalignment vs normal.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "channels 0 and 2 show low 1x and modest 2x, favoring normal over unbalance/looseness but radial-only data is ambiguous; inspect channel 1 to verify 1x is low on another axis and check 2x pattern before diagnosing",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"channels 0 and 2 show low 1x and modest 2x, favoring normal over unbalance/looseness but radial-only data is ambiguous; inspect channel 1 to verify 1x is low on another axis and check 2x pattern before diagnosing\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Seen channels 0,1,2 show very low 1x (~0.0005) which rules against unbalance and looseness references where 1x is ~0.004-0.018, leaving normal vs misalignment. 2x on 0/2 (~0.0037) is in overlap between normal (~0.0027-0.0064) and low-end misalignment (~0.0048-0.0156). Reference ch3 2x differs: normal ~0.0005-0.0010 vs misalignment ~0.0021-0.0024, so channel 3 is needed to separate them.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":3,\"reason\":\"Seen channels 0,1,2 show very low 1x (~0.0005) which rules against unbalance and looseness references where 1x is ~0.004-0.018, leaving normal vs misalignment. 2x on 0/2 (~0.0037) is in overlap between normal (~0.0027-0.0064) and low-end misalignment (~0.0048-0.0156). Reference ch3 2x differs: normal ~0.0005-0.0010 vs misalignment ~0.0021-0.0024, so channel 3 is needed to separate them.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "All four channels show low 1x (0.00052-0.00092), low 2x (0.00039-0.00375) and low 3x (0.00058-00121), rms 0.039-0.052, crest ~4.1-4.6, kurtosis ~3.0-3.2. This matches labelled normal trials with 1x <~0.0016 and 2x up to ~0.0064 on ch0/ch2. It lacks unbalance signature of high 1x 0.004-0.017 dominating 2x, lacks looseness signature of elevated 1x >0.004 plus elevated 2x/3x up to 0.024, and lacks strong misalignment signature of 2x 0.0048-0.0156 on ch0/ch2 with 1x <0.0012. Query 2x 0.0037 is below all misalignment ch0/ch2 examples and within normal range. Limitation: radial-only short recording, weak misalignment overlaps normal, cannot exclude incipient fault.",
+        "raw_response": "{\"action\":\"diagnose\", \"label\": \"normal\", \"reason\": \"All four channels show low 1x (0.00052-0.00092), low 2x (0.00039-0.00375) and low 3x (0.00058-00121), rms 0.039-0.052, crest ~4.1-4.6, kurtosis ~3.0-3.2. This matches labelled normal trials with 1x <~0.0016 and 2x up to ~0.0064 on ch0/ch2. It lacks unbalance signature of high 1x 0.004-0.017 dominating 2x, lacks looseness signature of elevated 1x >0.004 plus elevated 2x/3x up to 0.024, and lacks strong misalignment signature of 2x 0.0048-0.0156 on ch0/ch2 with 1x <0.0012. Query 2x 0.0037 is below all misalignment ch0/ch2 examples and within normal range. Limitation: radial-only short recording, weak misalignment overlaps normal, cannot exclude incipient fault.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "status": "completed"
+  }
+}

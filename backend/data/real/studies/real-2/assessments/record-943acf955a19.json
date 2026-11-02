@@ -1,0 +1,40 @@
+{
+  "plan_hash": "42dcc3feac403fc0f5ce227c68ebe627abc7ae47ac38a533149b75c2fbb3c912",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "normal",
+    "reason": "All four channels show low 1x (0.0007-0.0018) ruling out unbalance and looseness references which show 1x typically 0.004-0.018 on all channels. RMS 0.033-0.039, crest ~4.5-7.3, kurtosis ~3.2-3.4 are low, no impact signature, matching normal references. 2x is modestly elevated on ch0/ch2 (~0.0041) vs ch1/ch3 (~0.0008/0.0013), but absolute 2x magnitude matches normal trial (e.g. normal 0.00323/0.00271 on ch0/ch2) more closely than typical misalignment references (0.006-0.015 on ch0/ch2). 3x also low. Limitation: single short radial recording cannot uniquely separate normal from mild misalignment; 2x-dominant pattern on ch0/ch2 overlaps with one mild misalignment reference, so mild misalignment cannot be fully excluded.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Query ch0 shows low 1x (0.00097) ruling against unbalance/looseness which have high 1x >0.004, but 2x (0.00413) is ambiguous between normal (~0.003-0.006) and misalignment (0.006-0.015 on ch0). Reference misalignment shows strong 2x on both ch0 and ch2, while normal is low on all channels. Inspecting ch2 tests for coincident elevated 2x to distinguish misalignment from normal.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Query ch0 shows low 1x (0.00097) ruling against unbalance/looseness which have high 1x >0.004, but 2x (0.00413) is ambiguous between normal (~0.003-0.006) and misalignment (0.006-0.015 on ch0). Reference misalignment shows strong 2x on both ch0 and ch2, while normal is low on all channels. Inspecting ch2 tests for coincident elevated 2x to distinguish misalignment from normal.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channels 0 and 2 show low 1x (~0.0007-0.001) with 2x ~0.0041 dominating 1x, ruling against unbalance/looseness which show high 1x in references, but normal and misalignment references both show this 2x>1x pattern on channels 0/2. Need channel 1 to compare 1x/2x/3x balance and crest/kurtosis against labelled trials.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Channels 0 and 2 show low 1x (~0.0007-0.001) with 2x ~0.0041 dominating 1x, ruling against unbalance/looseness which show high 1x in references, but normal and misalignment references both show this 2x>1x pattern on channels 0/2. Need channel 1 to compare 1x/2x/3x balance and crest/kurtosis against labelled trials.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0/ch1/ch2 show low 1x (~0.0007-0.0014) ruling against unbalance/looseness, leaving normal vs misalignment. Ch0 2x ~0.0041 and ch2 2x ~0.0042 overlap low-end misalignment and normal references; ch3 2x differs between references (normal ~0.0005-0.0010 vs misalignment ~0.0021-0.0024) so ch3 is needed to distinguish.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":3,\"reason\":\"Query ch0/ch1/ch2 show low 1x (~0.0007-0.0014) ruling against unbalance/looseness, leaving normal vs misalignment. Ch0 2x ~0.0041 and ch2 2x ~0.0042 overlap low-end misalignment and normal references; ch3 2x differs between references (normal ~0.0005-0.0010 vs misalignment ~0.0021-0.0024) so ch3 is needed to distinguish.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "All four channels show low 1x (0.0007-0.0018) ruling out unbalance and looseness references which show 1x typically 0.004-0.018 on all channels. RMS 0.033-0.039, crest ~4.5-7.3, kurtosis ~3.2-3.4 are low, no impact signature, matching normal references. 2x is modestly elevated on ch0/ch2 (~0.0041) vs ch1/ch3 (~0.0008/0.0013), but absolute 2x magnitude matches normal trial (e.g. normal 0.00323/0.00271 on ch0/ch2) more closely than typical misalignment references (0.006-0.015 on ch0/ch2). 3x also low. Limitation: single short radial recording cannot uniquely separate normal from mild misalignment; 2x-dominant pattern on ch0/ch2 overlaps with one mild misalignment reference, so mild misalignment cannot be fully excluded.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"normal\", \"reason\": \"All four channels show low 1x (0.0007-0.0018) ruling out unbalance and looseness references which show 1x typically 0.004-0.018 on all channels. RMS 0.033-0.039, crest ~4.5-7.3, kurtosis ~3.2-3.4 are low, no impact signature, matching normal references. 2x is modestly elevated on ch0/ch2 (~0.0041) vs ch1/ch3 (~0.0008/0.0013), but absolute 2x magnitude matches normal trial (e.g. normal 0.00323/0.00271 on ch0/ch2) more closely than typical misalignment references (0.006-0.015 on ch0/ch2). 3x also low. Limitation: single short radial recording cannot uniquely separate normal from mild misalignment; 2x-dominant pattern on ch0/ch2 overlaps with one mild misalignment reference, so mild misalignment cannot be fully excluded.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "status": "completed"
+  }
+}

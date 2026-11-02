@@ -1,0 +1,40 @@
+{
+  "plan_hash": "42dcc3feac403fc0f5ce227c68ebe627abc7ae47ac38a533149b75c2fbb3c912",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "misalignment",
+    "reason": "Query shows low 1x on all channels (0.0004-0.0016) ruling out unbalance and looseness references which show 1x ~0.004-0.017. 2x is elevated and dominant on channels 0 (0.00817) and 2 (0.00711), with 2x/1x ratios ~6.9x and ~16x. This matches misalignment references where 2x dominates on ch0/ch2 (e.g., 0.01566/0.01504, 0.01499/0.01175, 0.00611/0.00480) with low 1x, unlike normal references where 2x on ch0/ch2 is typically 0.0004-0.0064. 3x remains low, crest ~4.6-6.9 and kurtosis ~3.1-4.0 similar to normal/misalignment. Limitation: radial-only short recording, 2x elevation is moderate and overlaps upper normal range, so cannot fully exclude normal variability.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Channel 0 shows low 1x with dominant 2x (2x/1x ~6.9), which leans toward misalignment over unbalance/looseness but overlaps normal range; channel 2 best separates misalignment (high 2x in references) from normal.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Channel 0 shows low 1x with dominant 2x (2x/1x ~6.9), which leans toward misalignment over unbalance/looseness but overlaps normal range; channel 2 best separates misalignment (high 2x in references) from normal.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channels 0 and 2 show low 1x with elevated 2x, ruling against unbalance/looseness on those channels but leaving normal vs misalignment ambiguous with overlap in 2x magnitude; need channel 1 to check 1x/2x pattern and rule out faults visible on other radial direction.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":1,\"reason\":\"Channels 0 and 2 show low 1x with elevated 2x, ruling against unbalance/looseness on those channels but leaving normal vs misalignment ambiguous with overlap in 2x magnitude; need channel 1 to check 1x/2x pattern and rule out faults visible on other radial direction.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query shows low 1x on ch0/1/2 with elevated 2x on ch0 and ch2, matching both normal and misalignment references; ch3 2x differs between normal (~0.0005-0.0010) and misalignment (~0.0021-0.0024) and is needed to disambiguate.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query shows low 1x on ch0/1/2 with elevated 2x on ch0 and ch2, matching both normal and misalignment references; ch3 2x differs between normal (~0.0005-0.0010) and misalignment (~0.0021-0.0024) and is needed to disambiguate.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows low 1x on all channels (0.0004-0.0016) ruling out unbalance and looseness references which show 1x ~0.004-0.017. 2x is elevated and dominant on channels 0 (0.00817) and 2 (0.00711), with 2x/1x ratios ~6.9x and ~16x. This matches misalignment references where 2x dominates on ch0/ch2 (e.g., 0.01566/0.01504, 0.01499/0.01175, 0.00611/0.00480) with low 1x, unlike normal references where 2x on ch0/ch2 is typically 0.0004-0.0064. 3x remains low, crest ~4.6-6.9 and kurtosis ~3.1-4.0 similar to normal/misalignment. Limitation: radial-only short recording, 2x elevation is moderate and overlaps upper normal range, so cannot fully exclude normal variability.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"misalignment\", \"reason\": \"Query shows low 1x on all channels (0.0004-0.0016) ruling out unbalance and looseness references which show 1x ~0.004-0.017. 2x is elevated and dominant on channels 0 (0.00817) and 2 (0.00711), with 2x/1x ratios ~6.9x and ~16x. This matches misalignment references where 2x dominates on ch0/ch2 (e.g., 0.01566/0.01504, 0.01499/0.01175, 0.00611/0.00480) with low 1x, unlike normal references where 2x on ch0/ch2 is typically 0.0004-0.0064. 3x remains low, crest ~4.6-6.9 and kurtosis ~3.1-4.0 similar to normal/misalignment. Limitation: radial-only short recording, 2x elevation is moderate and overlaps upper normal range, so cannot fully exclude normal variability.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "status": "completed"
+  }
+}
