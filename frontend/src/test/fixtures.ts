@@ -1,4 +1,6 @@
-import type { Probabilities, Step, Trace } from "../api/types";
+import { vi } from "vitest";
+
+import type { LiveFrame, Probabilities, Step, Trace } from "../api/types";
 
 const HYPS = [
   "healthy",
@@ -75,4 +77,84 @@ export function makeTrace(overrides: Partial<Trace> = {}): Trace {
     ],
     ...overrides,
   };
+}
+
+/** The full live-stream frame sequence the backend sends for `trace`, in order. */
+export function liveFrames(trace: Trace): LiveFrame[] {
+  const base = {
+    investigation_id: trace.investigation_id,
+    case: trace.case,
+    planner: trace.planner,
+    seed: trace.seed,
+  };
+  const frames: LiveFrame[] = [
+    { kind: "prior", ...base, prior: trace.prior },
+    { kind: "alarm", ...base, alarm: trace.alarm },
+  ];
+  for (const s of trace.steps) {
+    frames.push(
+      {
+        kind: "choice",
+        ...base,
+        step: s.index,
+        candidate: { rpm: s.rpm, load_n: s.load_n, cost: s.cost },
+        chosen_by: s.chosen_by,
+        rationale: s.rationale,
+        information_bits: s.information_bits,
+        expectations: s.expectations,
+      },
+      { kind: "predict", ...base, step: s.index, predictions: s.predictions },
+      { kind: "result", ...base, step: s },
+      { kind: "update", ...base, step: s },
+    );
+  }
+  frames.push(
+    {
+      kind: "diagnosis",
+      ...base,
+      diagnosis: trace.diagnosis,
+      stop_reason: trace.stop_reason,
+      experiments: trace.experiments,
+      cost: trace.cost,
+    },
+    { kind: "trace", ...base, trace },
+  );
+  return frames;
+}
+
+/** A controllable stand-in for the browser EventSource. */
+export class FakeEventSource {
+  onmessage: ((event: MessageEvent) => void) | null = null;
+  onerror: ((event: Event) => void) | null = null;
+  closed = false;
+
+  constructor(readonly url: string) {}
+
+  /** Deliver one message; objects are sent as JSON, strings as-is. */
+  emit(data: unknown): void {
+    const text = typeof data === "string" ? data : JSON.stringify(data);
+    this.onmessage?.(new MessageEvent("message", { data: text }));
+  }
+
+  /** Fire `error`, as browsers do when the server ends the stream or the connection drops. */
+  fail(): void {
+    this.onerror?.(new Event("error"));
+  }
+
+  close(): void {
+    this.closed = true;
+  }
+}
+
+/** Replace the global EventSource; the returned list collects every stream opened. */
+export function installFakeEventSource(): FakeEventSource[] {
+  const opened: FakeEventSource[] = [];
+  class Tracked extends FakeEventSource {
+    constructor(url: string) {
+      super(url);
+      opened.push(this);
+    }
+  }
+  vi.stubGlobal("EventSource", Tracked);
+  return opened;
 }

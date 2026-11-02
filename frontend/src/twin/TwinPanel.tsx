@@ -1,18 +1,30 @@
 import { Suspense, lazy, useState } from "react";
 
+import ErrorBoundary from "../ErrorBoundary";
 import { celsius, newtons, rpm, um } from "../format";
 import { ORBIT_EXAGGERATION, SPIN_SLOWDOWN, twinState, type TwinReading } from "./mapping";
 
 const ShaftScene = lazy(() => import("./ShaftScene"));
 
-function webglAvailable(): boolean {
+let webglSupport: boolean | null = null;
+
+function detectWebgl(): boolean {
   if (typeof WebGLRenderingContext === "undefined") return false;
   try {
     const canvas = document.createElement("canvas");
-    return Boolean(canvas.getContext("webgl2") ?? canvas.getContext("webgl"));
+    const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
+    // Release the probe context at once; browsers cap the number of live WebGL contexts.
+    gl?.getExtension("WEBGL_lose_context")?.loseContext();
+    return gl !== null;
   } catch {
     return false;
   }
+}
+
+/** Probed once per page load, not on every mount. */
+function webglAvailable(): boolean {
+  webglSupport ??= detectWebgl();
+  return webglSupport;
 }
 
 /** Twin view plus a text description of everything it shows. */
@@ -25,9 +37,18 @@ export default function TwinPanel({ reading, seed }: { reading: TwinReading; see
     <figure className="space-y-2">
       <div className="h-56 w-full overflow-hidden rounded bg-slate-100 dark:bg-slate-950">
         {canRender ? (
-          <Suspense fallback={<p className="p-3 text-sm">Loading 3D twin…</p>}>
-            <ShaftScene state={state} seed={seed} />
-          </Suspense>
+          <ErrorBoundary
+            label="3D twin"
+            fallback={
+              <p className="p-3 text-sm text-slate-500">
+                3D view failed to load; the description below still applies.
+              </p>
+            }
+          >
+            <Suspense fallback={<p className="p-3 text-sm">Loading 3D twin…</p>}>
+              <ShaftScene state={state} seed={seed} />
+            </Suspense>
+          </ErrorBoundary>
         ) : (
           <p className="p-3 text-sm text-slate-500">3D view unavailable (no WebGL).</p>
         )}

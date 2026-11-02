@@ -51,6 +51,19 @@ describe("player frames", () => {
     expect(update.probabilities).toEqual(trace.steps[0].posterior);
   });
 
+  it("gives before and after probabilities only once the update is shown", () => {
+    expect(viewAt(trace, frames, at("result", 0)).change).toBeNull();
+    expect(viewAt(trace, frames, at("update", 0)).change).toEqual({
+      before: trace.alarm.posterior,
+      after: trace.steps[0].posterior,
+    });
+    expect(viewAt(trace, frames, at("update", 1)).change).toEqual({
+      before: trace.steps[0].posterior,
+      after: trace.steps[1].posterior,
+    });
+    expect(viewAt(trace, frames, frames.length - 1).change).toBeNull();
+  });
+
   it("charges the budget once a measurement is revealed", () => {
     expect(viewAt(trace, frames, at("choice", 1)).budgetRemaining).toBe(7);
     expect(viewAt(trace, frames, at("result", 1)).budgetRemaining).toBe(5);

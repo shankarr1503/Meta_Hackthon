@@ -34,8 +34,21 @@ describe("InvestigationView", () => {
     expect(screen.getAllByText("13.3 µm").length).toBeGreaterThan(0);
     expect(screen.getByText(/Simulated amplitude spectrum/)).toBeInTheDocument();
     expect(screen.getAllByText("50.0%").length).toBeGreaterThan(0);
+    expect(screen.queryByText(/Probability before/)).not.toBeInTheDocument();
     forward(); // update
     expect(screen.getAllByText("70.0%").length).toBeGreaterThan(0);
+    const check = screen.getByRole("table", { name: "Prediction check: experiment 1" });
+    const imbalance = within(check).getByRole("row", { name: /^Imbalance (largest rise )?\d/ });
+    expect(imbalance).toHaveTextContent("50.0% → 70.0%");
+    expect(imbalance).toHaveTextContent("largest rise");
+  });
+
+  it("shows the Meta model's stated expectations with the choice", () => {
+    render(<InvestigationView trace={makeTrace()} />);
+    forward(); // alarm
+    forward(); // choice
+    expect(screen.getByText(/Meta model expects \(stated before the run\)/)).toBeVisible();
+    expect(screen.getByText("Strong 1x at step 1")).toBeVisible();
   });
 
   it("goes back a step", () => {

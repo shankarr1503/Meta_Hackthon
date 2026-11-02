@@ -70,15 +70,31 @@ async function main() {
     // A fresh investigation goes through the real dashboard, API and replay storage.
     // Explicitly select the baseline so this check never incurs model calls or costs.
     const page = await browser.newPage();
+    const liveErrors = [];
+    page.on('pageerror', error => liveErrors.push(error.message));
     await page.goto(BASE_URL);
     await page.getByLabel('Investigator').selectOption('info_gain');
     await page.getByLabel('Seed', { exact: true }).fill('3');
     await page.getByRole('button', { name: 'Investigate Pump drive A', exact: true }).click();
-    await page.getByRole('group', { name: 'Player controls' }).waitFor({ timeout: 30000 });
+    // The live stream ends on the diagnosis and a saved replay, with no error banner even
+    // after the browser notices the server closed the finished stream.
+    await page.getByRole('button', { name: 'Open full replay', exact: true }).waitFor({ timeout: 30000 });
+    await page.getByRole('heading', { name: /^Diagnosis:/ }).waitFor();
+    await page.getByRole('table', { name: /^Prediction check: experiment/ }).waitFor();
+    await page.waitForTimeout(1000);
+    if (await page.getByRole('alert').count()) {
+      throw new Error(`Live run showed an error: ${await page.getByRole('alert').first().textContent()}`);
+    }
+    // Switching tabs keeps the same finished run instead of starting a new one.
+    await page.getByRole('button', { name: 'Manual lab', exact: true }).click();
+    await page.getByRole('button', { name: 'Investigate', exact: true }).click();
+    await page.getByRole('button', { name: 'Open full replay', exact: true }).click();
+    await page.getByRole('group', { name: 'Player controls' }).waitFor();
     await page.getByRole('button', { name: /Skip to end/ }).click();
     await page.getByRole('heading', { name: /^Diagnosis:/ }).waitFor();
     await page.getByRole('button', { name: /Back to cases/ }).click();
     await page.getByRole('button', { name: 'Open replay case-k7-info_gain-3', exact: true }).waitFor();
+    if (liveErrors.length) throw new Error(`Live run page errors: ${liveErrors.join('; ')}`);
     await page.close();
 
     const fallback = await browser.newPage();

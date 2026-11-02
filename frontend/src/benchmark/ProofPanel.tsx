@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import type { ProofReport } from "../api/types";
 import Panel from "../dashboard/Panel";
-import { hypothesisName, percent } from "../format";
+import { count, hypothesisName, percent } from "../format";
 
 const NAMES: Record<string, string> = {
   no_history: "No maintenance history",
@@ -10,17 +10,25 @@ const NAMES: Record<string, string> = {
   injection: "Instruction injection in note",
 };
 
+function firstCondition(report: ProofReport): string {
+  const keys = Object.keys(report.conditions);
+  return keys.includes("no_history") ? "no_history" : (keys[0] ?? "");
+}
+
 export default function ProofPanel({ report }: { report: ProofReport }) {
-  const [condition, setCondition] = useState("no_history");
+  const [condition, setCondition] = useState(() => firstCondition(report));
   const result = report.conditions[condition];
   if (!result) return null;
   const [low, high] = result.paired_cost_saved_ci95;
+  const conditions = Object.keys(report.conditions).length;
+  const confidentErrors = result.meta.confident_errors;
   return (
     <Panel title="Proof of concept: challenge evidence">
       <p className="mb-3 text-sm">
         {report.machines} newly generated simulated machines. {report.paired_runs} paired
-        investigations across three note conditions. Meta and information gain receive the
-        same machine, alarm, sensor-noise seed and experiment budget. Model: {report.model}.
+        investigations across {count(conditions, "note condition")}. Meta and information gain
+        receive the same machine, alarm, sensor-noise seed and experiment budget. Model:{" "}
+        {report.model}.
       </p>
       <label className="mb-4 flex flex-wrap items-center gap-2 text-sm">
         Challenge condition
@@ -36,7 +44,7 @@ export default function ProofPanel({ report }: { report: ProofReport }) {
       </label>
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
-          <caption className="sr-only">Challenge results: {NAMES[condition]}</caption>
+          <caption className="sr-only">Challenge results: {NAMES[condition] ?? condition}</caption>
           <thead className="text-xs text-slate-500">
             <tr>
               <th className="pr-4">Investigator</th><th className="pr-4">Correct</th>
@@ -71,7 +79,8 @@ export default function ProofPanel({ report }: { report: ProofReport }) {
         {condition === "injection" && ` Injection marker in final explanations: ${result.meta.injection_marker_in_explanation}/${result.meta.runs}.`}
       </p>
       <p className="mt-2 text-sm">
-        Wrong Meta diagnoses above 90% confidence: {result.meta.confident_errors ?? 0}.
+        Wrong Meta diagnoses above 90% confidence:{" "}
+        {confidentErrors ?? "not recorded"}.
       </p>
       {report.runs && (
         <details className="mt-4 text-sm">

@@ -63,17 +63,40 @@ export const runInvestigation = (body: InvestigationRequest) =>
 export const simulateLab = (body: LabRequest) => post<LabResult>("/api/lab/simulate", body);
 export const getBenchmark = () => request<BenchmarkResult>("/api/benchmark");
 
+/** Shown when the stream ends before the final trace. EventSource cannot see the HTTP status. */
+export const STREAM_INTERRUPTED =
+  "The live investigation stream was interrupted before it finished. " +
+  "Check that the server is running, the Meta model is configured and its hourly run limit " +
+  "has not been reached.";
+export const STREAM_UNREADABLE =
+  "The live investigation sent a frame that could not be read, so the stream was stopped.";
+
+function parseFrame(data: unknown): LiveFrame | null {
+  if (typeof data !== "string") return null;
+  try {
+    const frame: unknown = JSON.parse(data);
+    if (frame && typeof frame === "object" && typeof (frame as { kind?: unknown }).kind === "string") {
+      return frame as LiveFrame;
+    }
+  } catch {
+    // Not JSON: reported by the caller.
+  }
+  return null;
+}
+
 /** Open a Server-Sent Events stream for a live investigation.
  *
- * The backend streams one frame per investigation phase as it is computed. Call
- * `onFrame` for every frame and `onTrace` when the final complete trace arrives.
- * Returns the EventSource; call `.close()` to abort.
+ * The backend streams one frame per investigation phase as it is computed. Calls
+ * `onFrame` for every frame and `onTrace` once the final complete trace arrives; the
+ * stream is closed first, so the browser's end-of-stream `error` event is ignored.
+ * Any earlier error or unreadable frame closes the stream and calls `onError` once with
+ * a readable message. Returns the EventSource; call `.close()` to abort.
  */
 export function streamInvestigation(
   body: InvestigationRequest,
   onFrame: (frame: LiveFrame) => void,
   onTrace: (trace: Trace) => void,
-  onError: (e: unknown) => void,
+  onError: (message: string) => void,
 ): EventSource {
   const params = new URLSearchParams({
     case_id: body.case_id,
@@ -81,21 +104,28 @@ export function streamInvestigation(
     seed: String(body.seed),
   });
   const source = new EventSource(`/api/investigations/stream?${params}`);
+  let done = false;
+  const finish = () => {
+    done = true;
+    source.close();
+  };
   source.onmessage = (event: MessageEvent) => {
-    try {
-      const frame: LiveFrame = JSON.parse(event.data);
-      if (frame.kind === "trace") {
-        onTrace(frame.trace);
-      } else {
-        onFrame(frame);
-      }
-    } catch (error) {
-      onError(error);
+    if (done) return;
+    const frame = parseFrame(event.data);
+    if (frame === null) {
+      finish();
+      onError(STREAM_UNREADABLE);
+    } else if (frame.kind === "trace") {
+      finish();
+      onTrace(frame.trace);
+    } else {
+      onFrame(frame);
     }
   };
-  source.onerror = (error: unknown) => {
-    source.close();
-    onError(error);
+  source.onerror = () => {
+    if (done) return;
+    finish();
+    onError(STREAM_INTERRUPTED);
   };
   return source;
 }

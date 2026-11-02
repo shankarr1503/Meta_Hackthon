@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import type { CaseView, PlannerName, TraceSummary } from "../api/types";
-import { count, hypothesisName, percent, plannerName } from "../format";
+import { count, plannerName } from "../format";
 
 const PLANNERS: PlannerName[] = ["meta", "info_gain", "sweep", "random"];
 
@@ -101,9 +101,9 @@ export default function CasePicker({
                       demo
                     </span>
                   )}
-                  <span className="font-mono">{r.investigation_id}</span> ·{" "}
-                  {plannerName(r.planner)} → {hypothesisName(r.top)} {percent(r.probability)} in{" "}
-                  {count(r.experiments, "experiment")}
+                  {/* No diagnosis here: it would reveal the hidden fault next to the case cards. */}
+                  <span className="font-mono">{r.investigation_id}</span> · {plannerName(r.planner)}{" "}
+                  · seed {r.seed} · {count(r.experiments, "experiment")} · {count(r.cost, "point")}
                 </span>
                 <button
                   type="button"

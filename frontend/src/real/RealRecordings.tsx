@@ -31,8 +31,8 @@ export default function RealRecordings() {
   if (error) return <p role="alert">{error}</p>;
   if (!report) return <p role="status">Loading real machine recordings…</p>;
   const records = report.records.filter(r => r.split === "held_out");
-  const record = records[selected];
-  const reading = record.channels[channel];
+  const record = records[selected] ?? records[0];
+  const reading = record?.channels[channel] ?? record?.channels[0];
   return (
     <div className="space-y-5">
       <header>
@@ -69,6 +69,9 @@ export default function RealRecordings() {
             Meta may inspect fewer. This is not evidence of industrial reliability or a controlled superiority claim.</p>
         </Panel>
       </div>
+      {!record || !reading ? (
+        <p className="text-sm">This report contains no held-out recordings to show.</p>
+      ) : <>
       <div className="flex flex-wrap gap-4 text-sm">
         <label className="flex flex-col gap-1">Held-out recording
           <select aria-label="Held-out recording" value={selected} onChange={e => { setSelected(Number(e.target.value)); setRevealed(false); setChannel(0); }}
@@ -125,7 +128,7 @@ export default function RealRecordings() {
               <span className="font-medium">{event.action === "inspect" ? `Inspect sensor ${(event.channel ?? 0) + 1}` : event.action === "diagnose" ? "State assessment" : "Model error"}: </span>
               {event.reason}
               {event.channel !== undefined && <button type="button" className="ml-2 text-indigo-700 underline dark:text-indigo-300"
-                onClick={() => setChannel(event.channel ?? 0)}>Show this sensor</button>}
+                onClick={() => setChannel(event.channel ?? 0)}>Show sensor {(event.channel ?? 0) + 1}</button>}
             </li>)}
           </ol>
         </> : <p className="text-sm">The real recordings are available; live Meta assessment has not been recorded yet.</p>}
@@ -140,6 +143,7 @@ export default function RealRecordings() {
             className="rounded bg-indigo-600 px-3 py-2 text-sm font-medium text-white">Reveal dataset label and source file</button>}
         </div>
       </Panel>
+      </>}
       <details className="text-sm">
         <summary className="cursor-pointer font-medium">What these real examples establish</summary>
         <ul className="mt-3 list-disc space-y-2 pl-5">{report.limitations.map(limit => <li key={limit}>{limit}</li>)}</ul>

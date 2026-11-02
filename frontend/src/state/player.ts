@@ -27,6 +27,30 @@ export function buildFrames(trace: Trace): Frame[] {
   return frames;
 }
 
+/** What is known about an experiment as soon as it is chosen. */
+export type Experiment = Pick<
+  Step,
+  "index" | "rpm" | "load_n" | "cost" | "chosen_by" | "rationale" | "information_bits" | "expectations"
+>;
+
+/** Engine probabilities just before and just after one experiment's update. */
+export interface ProbabilityChange {
+  before: Probabilities;
+  after: Probabilities;
+}
+
+/**
+ * The engine's probabilities before the experiment at `position` (0-based): the previous
+ * step's posterior, or the alarm posterior for the first experiment. Nothing is computed.
+ */
+export function posteriorBefore(
+  steps: Step[],
+  position: number,
+  alarmPosterior: Probabilities,
+): Probabilities {
+  return position > 0 ? steps[position - 1].posterior : alarmPosterior;
+}
+
 export interface View {
   frame: Frame;
   /** Probabilities to display: they change only once an update is shown. */
@@ -38,6 +62,8 @@ export interface View {
   current: Step | null;
   showPredictions: boolean;
   showMeasurement: boolean;
+  /** Before/after probabilities for the current experiment, once its update is shown. */
+  change: ProbabilityChange | null;
   showDiagnosis: boolean;
 }
 
@@ -65,6 +91,13 @@ export function viewAt(trace: Trace, frames: Frame[], index: number): View {
     current,
     showPredictions: frame.kind === "predict" || measured,
     showMeasurement: measured,
+    change:
+      frame.kind === "update"
+        ? {
+            before: posteriorBefore(trace.steps, frame.step, trace.alarm.posterior),
+            after: trace.steps[frame.step].posterior,
+          }
+        : null,
     showDiagnosis: frame.kind === "diagnosis",
   };
 }

@@ -1,4 +1,7 @@
-/** Mirrors backend/app/schemas (contract version 1). All data is simulated. */
+/**
+ * Mirrors backend/app/schemas (contract version 1). Every type here carries simulator data;
+ * the measured laboratory recordings have their own types in src/real/types.ts.
+ */
 export interface HealthResponse {
   status: "ok";
   service: string;

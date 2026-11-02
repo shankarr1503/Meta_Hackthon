@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   getCases,
@@ -11,6 +11,7 @@ import BenchmarkView from "./benchmark/BenchmarkView";
 import CasePicker from "./dashboard/CasePicker";
 import InvestigationView from "./dashboard/InvestigationView";
 import LiveInvestigationView from "./dashboard/LiveInvestigationView";
+import ErrorBoundary from "./ErrorBoundary";
 import ManualLab from "./lab/ManualLab";
 import RealRecordings from "./real/RealRecordings";
 import SimulatedLabel from "./SimulatedLabel";
@@ -29,6 +30,26 @@ interface Loaded {
   cases: CaseView[];
 }
 
+/** One live investigation; `runId` is new for every run, so each run gets a fresh view. */
+interface LiveRun {
+  runId: number;
+  caseView: CaseView;
+  planner: PlannerName;
+  seed: number;
+}
+
+function BackToCases({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      className="text-sm text-indigo-700 underline dark:text-indigo-300"
+      onClick={onClick}
+    >
+      ← Back to cases
+    </button>
+  );
+}
+
 function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
@@ -38,13 +59,8 @@ export default function App() {
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [replays, setReplays] = useState<TraceSummary[]>([]);
   const [trace, setTrace] = useState<Trace | null>(null);
-  const [live, setLive] = useState<{
-    caseId: string;
-    caseTitle: string;
-    caseNote: string;
-    planner: PlannerName;
-    seed: number;
-  } | null>(null);
+  const [live, setLive] = useState<LiveRun | null>(null);
+  const runs = useRef(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,21 +98,25 @@ export default function App() {
     }
   };
 
-  const onRun = (
-    caseView: CaseView,
-    planner: PlannerName,
-    seed: number,
-  ) => {
+  const onRun = (caseView: CaseView, planner: PlannerName, seed: number) => {
+    runs.current += 1;
     setBusy(false);
     setError(null);
     setTrace(null);
-    setLive({
-      caseId: caseView.case_id,
-      caseTitle: caseView.title,
-      caseNote: caseView.note,
-      planner,
-      seed,
-    });
+    setLive({ runId: runs.current, caseView, planner, seed });
+  };
+
+  /** Leaves a live run (closing its stream) or a replay, and lists the saved replays again. */
+  const backToCases = () => {
+    setLive(null);
+    setTrace(null);
+    refreshReplays();
+  };
+
+  const openLiveReplay = (finished: Trace) => {
+    setLive(null);
+    setTrace(finished);
+    refreshReplays();
   };
 
   return (
@@ -130,49 +150,64 @@ export default function App() {
           ))}
         </nav>
 
-        {tab === "real" && <RealRecordings />}
-        {tab === "lab" && <ManualLab />}
-        {tab === "benchmark" && <BenchmarkView />}
-
-        {tab === "investigate" && error && (
-          <p role="alert" className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
-            {error}
-          </p>
+        {tab === "real" && (
+          <ErrorBoundary label="real recordings">
+            <RealRecordings />
+          </ErrorBoundary>
         )}
-        {tab === "investigate" && busy && (
-          <p role="status">Running the simulated investigation…</p>
+        {tab === "lab" && (
+          <ErrorBoundary label="manual lab">
+            <ManualLab />
+          </ErrorBoundary>
+        )}
+        {tab === "benchmark" && (
+          <ErrorBoundary label="benchmark">
+            <BenchmarkView />
+          </ErrorBoundary>
         )}
 
-        {tab !== "investigate" ? null : live ? (
-          <LiveInvestigationView
-            caseId={live.caseId}
-            caseTitle={live.caseTitle}
-            caseNote={live.caseNote}
-            planner={live.planner}
-            seed={live.seed}
-          />
-        ) : trace ? (
-          <div className="space-y-4">
-            <button
-              type="button"
-              className="text-sm text-indigo-700 underline dark:text-indigo-300"
-              onClick={() => setTrace(null)}
-            >
-              ← Back to cases
-            </button>
-            <InvestigationView key={trace.investigation_id} trace={trace} />
+        {live && (
+          // Stays mounted (only hidden) on other tabs, so switching tabs never restarts the
+          // stream, which would start a new investigation and new Meta model calls.
+          <div hidden={tab !== "investigate"} className="space-y-4">
+            <BackToCases onClick={backToCases} />
+            <ErrorBoundary key={live.runId} label="live investigation">
+              <LiveInvestigationView
+                caseView={live.caseView}
+                planner={live.planner}
+                seed={live.seed}
+                onOpenReplay={openLiveReplay}
+              />
+            </ErrorBoundary>
           </div>
-        ) : loaded ? (
-          <CasePicker
-            cases={loaded.cases}
-            replays={replays}
-            metaConfigured={loaded.ready.meta_model_configured}
-            busy={busy}
-            onRun={onRun}
-            onOpenReplay={(id) => open(() => getInvestigation(id))}
-          />
-        ) : (
-          !error && <p role="status">Loading cases…</p>
+        )}
+
+        {tab === "investigate" && !live && (
+          <ErrorBoundary key={trace?.investigation_id ?? "cases"} label="investigation">
+            {error && (
+              <p role="alert" className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
+                {error}
+              </p>
+            )}
+            {busy && <p role="status">Running the simulated investigation…</p>}
+            {trace ? (
+              <div className="space-y-4">
+                <BackToCases onClick={backToCases} />
+                <InvestigationView key={trace.investigation_id} trace={trace} />
+              </div>
+            ) : loaded ? (
+              <CasePicker
+                cases={loaded.cases}
+                replays={replays}
+                metaConfigured={loaded.ready.meta_model_configured}
+                busy={busy}
+                onRun={onRun}
+                onOpenReplay={(id) => open(() => getInvestigation(id))}
+              />
+            ) : (
+              !error && <p role="status">Loading cases…</p>
+            )}
+          </ErrorBoundary>
         )}
       </div>
     </main>

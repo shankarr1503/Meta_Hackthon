@@ -36,9 +36,18 @@ describe("RealRecordings", () => {
     fireEvent.click(screen.getByRole("button", { name: /Reveal dataset label/ }));
     expect(screen.getByText(/Dataset label:/)).toBeVisible();
     expect(screen.getByText(/Test 13_Misalignment.zip/)).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Show this sensor" }));
+    fireEvent.click(screen.getByRole("button", { name: "Show sensor 3" }));
     expect(screen.getByLabelText("Measured sensor")).toHaveValue("2");
     expect(screen.getByText("2.5000")).toBeVisible();
+  });
+
+  it("explains an empty held-out list instead of crashing", async () => {
+    const empty = { ...report, records: [{ ...report.records[0], split: "reference" }] };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify(empty))));
+    render(<RealRecordings />);
+    expect(await screen.findByText(/no held-out recordings/)).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Real machine recordings" })).toBeVisible();
+    expect(screen.queryByLabelText("Held-out recording")).not.toBeInTheDocument();
   });
 
   it("reports unavailable real evidence instead of substituting simulated measurements", async () => {

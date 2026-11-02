@@ -39,6 +39,19 @@ describe("ProofPanel", () => {
     expect(screen.getByText("Simulated measurements; no real-world validation.")).toBeVisible();
   });
 
+  it("says a missing confident-error count was not recorded instead of showing zero", () => {
+    render(<ProofPanel report={report} />);
+    expect(screen.getByText(/Wrong Meta diagnoses above 90% confidence: not recorded/)).toBeVisible();
+    expect(screen.getByText(/across 3 note conditions/)).toBeVisible();
+  });
+
+  it("shows a recorded confident-error count and the conditions the report contains", () => {
+    const recorded = { ...condition, meta: { ...metric, confident_errors: 1 } };
+    render(<ProofPanel report={{ ...report, conditions: { misleading: recorded } }} />);
+    expect(screen.getByText(/Wrong Meta diagnoses above 90% confidence: 1\./)).toBeVisible();
+    expect(screen.getByText(/across 1 note condition\./)).toBeVisible();
+  });
+
   it("retains an incorrect individual diagnosis for audit", () => {
     const outcome = { top: "healthy", correct: false, probability: 0.96, cost: 2, fallbacks: 0 };
     render(<ProofPanel report={{ ...report, runs: [{

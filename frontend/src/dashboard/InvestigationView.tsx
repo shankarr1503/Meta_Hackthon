@@ -6,12 +6,11 @@ import { useInvestigation } from "../state/useInvestigation";
 import TwinPanel from "../twin/TwinPanel";
 import BudgetMeter from "./BudgetMeter";
 import DiagnosisCard from "./DiagnosisCard";
+import ExperimentCard from "./ExperimentCard";
 import ExperimentLog from "./ExperimentLog";
 import Panel from "./Panel";
 import PlayerControls from "./PlayerControls";
-import PredictionTable from "./PredictionTable";
 import ProbabilityBars from "./ProbabilityBars";
-import SpectrumChart from "./SpectrumChart";
 
 export default function InvestigationView({ trace }: { trace: Trace }) {
   const player = useInvestigation(trace);
@@ -67,30 +66,13 @@ export default function InvestigationView({ trace }: { trace: Trace }) {
             </p>
           )}
           {view.current && (
-            <div className="space-y-3">
-              <div className="text-sm">
-                <p className="font-semibold">
-                  Experiment {view.current.index}: {rpm(view.current.rpm)},{" "}
-                  {newtons(view.current.load_n)} (cost {view.current.cost})
-                </p>
-                <p className="text-xs text-slate-500">
-                  Chosen by {plannerName(view.current.chosen_by)}
-                  {view.current.information_bits !== null &&
-                    ` · expected information ${view.current.information_bits.toFixed(2)} bits`}
-                </p>
-                <p className="mt-1">{view.current.rationale}</p>
-              </div>
-              {view.showPredictions && (
-                <PredictionTable step={view.current} showMeasurement={view.showMeasurement} />
-              )}
-              {view.showMeasurement && (
-                <SpectrumChart
-                  freq={view.current.signals.spectrum_freq_hz}
-                  amp={view.current.signals.spectrum_amp_um}
-                  rpm={view.current.rpm}
-                />
-              )}
-            </div>
+            <ExperimentCard
+              experiment={view.current}
+              predictions={view.showPredictions ? view.current.predictions : null}
+              measured={view.showMeasurement ? view.current.measured : null}
+              signals={view.showMeasurement ? view.current.signals : null}
+              change={view.change}
+            />
           )}
           {view.showDiagnosis && (
             <p className="text-sm">

@@ -30,6 +30,15 @@ export function hypothesisName(hypothesis: string): string {
   return NAMES[hypothesis] ?? hypothesis;
 }
 
+/** The given hypothesis keys in the standard display order; unknown keys go last. */
+export function orderedHypotheses(keys: string[]): string[] {
+  const known: readonly string[] = HYPOTHESES;
+  return [
+    ...known.filter((h) => keys.includes(h)),
+    ...keys.filter((h) => !known.includes(h)),
+  ];
+}
+
 export function plannerName(planner: string): string {
   return PLANNER_NAMES[planner] ?? planner;
 }
