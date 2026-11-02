@@ -7,7 +7,7 @@ VENV := backend/.venv
 VENV_BIN := $(if $(wildcard $(VENV)/Scripts/python.exe),$(VENV)/Scripts,$(VENV)/bin)
 PY := $(CURDIR)/$(VENV_BIN)/python
 
-.PHONY: setup backend frontend test lint build check benchmark benchmark-meta
+.PHONY: setup backend frontend serve test lint build check benchmark benchmark-meta proof real-data
 
 setup:
 	cd backend && $(PYTHON) -m venv .venv
@@ -24,6 +24,9 @@ backend:
 
 frontend:
 	cd frontend && npm run dev
+
+serve:
+	$(PYTHON) scripts/tasks.py serve
 
 test:
 	cd backend && $(PY) -m pytest
@@ -43,3 +46,9 @@ benchmark:
 
 benchmark-meta:
 	cd backend && $(PY) scripts/benchmark.py --planner meta
+
+proof:
+	cd backend && $(PY) scripts/proof.py --max-calls 500
+
+real-data:
+	$(PYTHON) scripts/tasks.py real-data

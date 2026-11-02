@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
     replays_dir: Path = BACKEND_DIR / "replays"
     results_dir: Path = BACKEND_DIR / "results"
+    frontend_dir: Path | None = None
 
     @property
     def llm_configured(self) -> bool:

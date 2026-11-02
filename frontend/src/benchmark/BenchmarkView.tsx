@@ -6,6 +6,7 @@ import Panel from "../dashboard/Panel";
 import { hypothesisName, percent, plannerName } from "../format";
 import SimulatedLabel from "../SimulatedLabel";
 import { casesLabel } from "./cases";
+import ProofPanel from "./ProofPanel";
 
 const PLANNER_ORDER = ["meta", "info_gain_meta_cases", "info_gain", "sweep", "random"];
 function groupLabel(group: string): string {
@@ -93,6 +94,7 @@ export default function BenchmarkView() {
         <SimulatedLabel />
       </header>
 
+      {result.proof && <ProofPanel report={result.proof} />}
       <Panel title="Planner comparison">
         <label className="mb-3 flex items-center gap-2 text-sm">
           Cases

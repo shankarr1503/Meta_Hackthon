@@ -22,3 +22,4 @@ class Benchmark(Closed):
     rules: dict[str, float]
     protocols: dict[str, dict[str, Any]]
     planners: dict[str, dict[str, PlannerMetrics]]
+    proof: dict[str, Any] | None = None

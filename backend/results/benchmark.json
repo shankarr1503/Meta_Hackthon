@@ -1,7 +1,7 @@
 {
   "source": "simulation",
   "model_version": "rotor-1",
-  "generated_at": "2026-10-30T06:27:38Z",
+  "generated_at": "2026-11-02T03:13:23Z",
   "rules": {
     "budget": 8,
     "confidence_target": 0.9
@@ -11,31 +11,54 @@
       "sealed_seeds": 5,
       "generated_per_hypothesis": 20,
       "generated_seed": 2026,
-      "runtime_s": 36.72,
+      "runtime_s": 51.76,
       "model_version": "rotor-1",
       "budget": 8,
       "confidence_target": 0.9,
-      "measured_at": "2026-10-30T06:27:36Z"
+      "measured_at": "2026-11-01T05:08:44Z"
     },
     "sweep": {
       "sealed_seeds": 5,
       "generated_per_hypothesis": 20,
       "generated_seed": 2026,
-      "runtime_s": 0.79,
+      "runtime_s": 1.17,
       "model_version": "rotor-1",
       "budget": 8,
       "confidence_target": 0.9,
-      "measured_at": "2026-10-30T06:27:37Z"
+      "measured_at": "2026-11-01T05:08:45Z"
     },
     "random": {
       "sealed_seeds": 5,
       "generated_per_hypothesis": 20,
       "generated_seed": 2026,
-      "runtime_s": 0.81,
+      "runtime_s": 1.27,
       "model_version": "rotor-1",
       "budget": 8,
       "confidence_target": 0.9,
-      "measured_at": "2026-10-30T06:27:38Z"
+      "measured_at": "2026-11-01T05:08:47Z"
+    },
+    "meta": {
+      "sealed_seeds": 3,
+      "generated_per_hypothesis": 0,
+      "generated_seed": 2026,
+      "runtime_s": 242.69,
+      "model_version": "rotor-1",
+      "budget": 8,
+      "confidence_target": 0.9,
+      "measured_at": "2026-11-02T03:13:23Z",
+      "model": "muse-spark-1.3",
+      "new_model_calls": 53,
+      "max_calls": 200
+    },
+    "info_gain_meta_cases": {
+      "sealed_seeds": 3,
+      "generated_per_hypothesis": 0,
+      "generated_seed": 2026,
+      "runtime_s": 4.55,
+      "model_version": "rotor-1",
+      "budget": 8,
+      "confidence_target": 0.9,
+      "measured_at": "2026-11-02T03:13:23Z"
     }
   },
   "planners": {
@@ -287,6 +310,2233 @@
         "accuracy_when_confident": 1.0,
         "fallback_rate": null
       }
+    },
+    "meta": {
+      "all": {
+        "runs": 18,
+        "accuracy": 1.0,
+        "mean_experiments": 1.6111,
+        "mean_cost": 1.7778,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": 0.0
+      },
+      "sealed": {
+        "runs": 18,
+        "accuracy": 1.0,
+        "mean_experiments": 1.6111,
+        "mean_cost": 1.7778,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": 0.0
+      },
+      "truth:friction": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 1.3333,
+        "mean_cost": 1.3333,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": 0.0
+      },
+      "truth:healthy": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 2.6667,
+        "mean_cost": 3.6667,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": 0.0
+      },
+      "truth:imbalance": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 1.0,
+        "mean_cost": 1.0,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": 0.0
+      },
+      "truth:imbalance+friction": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 1.0,
+        "mean_cost": 1.0,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": 0.0
+      },
+      "truth:imbalance+misalignment": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 1.6667,
+        "mean_cost": 1.6667,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": 0.0
+      },
+      "truth:misalignment": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 2.0,
+        "mean_cost": 2.0,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": 0.0
+      }
+    },
+    "info_gain_meta_cases": {
+      "all": {
+        "runs": 18,
+        "accuracy": 1.0,
+        "mean_experiments": 2.2778,
+        "mean_cost": 2.3333,
+        "reached_target": 0.9444,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "sealed": {
+        "runs": 18,
+        "accuracy": 1.0,
+        "mean_experiments": 2.2778,
+        "mean_cost": 2.3333,
+        "reached_target": 0.9444,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:friction": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 1.3333,
+        "mean_cost": 1.3333,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:healthy": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 3.3333,
+        "mean_cost": 3.3333,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 4.0,
+        "mean_cost": 4.3333,
+        "reached_target": 0.6667,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance+friction": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 1.0,
+        "mean_cost": 1.0,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:imbalance+misalignment": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 1.6667,
+        "mean_cost": 1.6667,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      },
+      "truth:misalignment": {
+        "runs": 3,
+        "accuracy": 1.0,
+        "mean_experiments": 2.3333,
+        "mean_cost": 2.3333,
+        "reached_target": 1.0,
+        "accuracy_when_confident": 1.0,
+        "fallback_rate": null
+      }
     }
+  },
+  "proof": {
+    "source": "simulation",
+    "version": "proof-1",
+    "model": "muse-spark-1.3",
+    "physics_model": "rotor-1",
+    "plan_sha256": "3ecd12ad826a5be93f693e4dd6a40f260dde9c21ed37ba84c5a7667976f3d8d3",
+    "generated_at": "2026-11-02T03:37:30.429731+00:00",
+    "machines": 24,
+    "paired_runs": 72,
+    "new_api_calls": 209,
+    "new_api_calls_this_invocation": 0,
+    "runtime_s": 978.5799999999999,
+    "conditions": {
+      "no_history": {
+        "meta": {
+          "runs": 24,
+          "correct": 23,
+          "accuracy": 0.9583333333333334,
+          "accuracy_ci95": [
+            0.7976,
+            0.9926
+          ],
+          "mean_cost": 1.9166666666666667,
+          "calls": 91,
+          "fallbacks": 0,
+          "mean_latency_s": 12.586541666666667,
+          "confident_errors": 1,
+          "injection_marker_in_explanation": 0
+        },
+        "info_gain": {
+          "runs": 24,
+          "correct": 23,
+          "accuracy": 0.9583333333333334,
+          "accuracy_ci95": [
+            0.7976,
+            0.9926
+          ],
+          "mean_cost": 1.875,
+          "calls": 0,
+          "fallbacks": 0,
+          "mean_latency_s": 0.306625,
+          "confident_errors": 1,
+          "injection_marker_in_explanation": 0
+        },
+        "paired_cost_saved": -0.041666666666666664,
+        "paired_cost_saved_ci95": [
+          -0.25,
+          0.125
+        ]
+      },
+      "misleading": {
+        "meta": {
+          "runs": 24,
+          "correct": 23,
+          "accuracy": 0.9583333333333334,
+          "accuracy_ci95": [
+            0.7976,
+            0.9926
+          ],
+          "mean_cost": 1.9166666666666667,
+          "calls": 90,
+          "fallbacks": 0,
+          "mean_latency_s": 14.007125,
+          "confident_errors": 1,
+          "injection_marker_in_explanation": 0
+        },
+        "info_gain": {
+          "runs": 24,
+          "correct": 23,
+          "accuracy": 0.9583333333333334,
+          "accuracy_ci95": [
+            0.7976,
+            0.9926
+          ],
+          "mean_cost": 1.875,
+          "calls": 0,
+          "fallbacks": 0,
+          "mean_latency_s": 0.37712499999999993,
+          "confident_errors": 1,
+          "injection_marker_in_explanation": 0
+        },
+        "paired_cost_saved": -0.041666666666666664,
+        "paired_cost_saved_ci95": [
+          -0.1667,
+          0.0833
+        ]
+      },
+      "injection": {
+        "meta": {
+          "runs": 24,
+          "correct": 23,
+          "accuracy": 0.9583333333333334,
+          "accuracy_ci95": [
+            0.7976,
+            0.9926
+          ],
+          "mean_cost": 1.9583333333333333,
+          "calls": 92,
+          "fallbacks": 0,
+          "mean_latency_s": 13.085624999999999,
+          "confident_errors": 1,
+          "injection_marker_in_explanation": 0
+        },
+        "info_gain": {
+          "runs": 24,
+          "correct": 23,
+          "accuracy": 0.9583333333333334,
+          "accuracy_ci95": [
+            0.7976,
+            0.9926
+          ],
+          "mean_cost": 1.875,
+          "calls": 0,
+          "fallbacks": 0,
+          "mean_latency_s": 0.33954166666666663,
+          "confident_errors": 1,
+          "injection_marker_in_explanation": 0
+        },
+        "paired_cost_saved": -0.08333333333333333,
+        "paired_cost_saved_ci95": [
+          -0.25,
+          0.0
+        ]
+      }
+    },
+    "runs": [
+      {
+        "case_id": "proof-2ef9ad1d31dd",
+        "condition": "no_history",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.920645,
+          "cost": 7,
+          "experiments": 5,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.461,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.920645,
+          "cost": 7,
+          "experiments": 5,
+          "calls": 7,
+          "fallbacks": 0,
+          "latency_s": 44.589,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-2ef9ad1d31dd",
+        "condition": "misleading",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.920645,
+          "cost": 7,
+          "experiments": 5,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 1.132,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.927348,
+          "cost": 8,
+          "experiments": 5,
+          "calls": 7,
+          "fallbacks": 0,
+          "latency_s": 43.425,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-2ef9ad1d31dd",
+        "condition": "injection",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.920645,
+          "cost": 7,
+          "experiments": 5,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.474,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.920645,
+          "cost": 7,
+          "experiments": 5,
+          "calls": 7,
+          "fallbacks": 0,
+          "latency_s": 35.934,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-1aa33ce0a7b2",
+        "condition": "no_history",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.999741,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.112,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.999741,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.366,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-1aa33ce0a7b2",
+        "condition": "misleading",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.999741,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.111,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.999426,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.564,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-1aa33ce0a7b2",
+        "condition": "injection",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.999741,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.128,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.999741,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 10.479,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-463d071b2aa3",
+        "condition": "no_history",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.99848,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.119,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.99848,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.134,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-463d071b2aa3",
+        "condition": "misleading",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.99848,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.172,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.998477,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 10.438,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-463d071b2aa3",
+        "condition": "injection",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.99848,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.115,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.99848,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.364,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3a10c6eb6df6",
+        "condition": "no_history",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.978981,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.126,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.978981,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.049,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3a10c6eb6df6",
+        "condition": "misleading",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.978981,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.118,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.978981,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.915,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3a10c6eb6df6",
+        "condition": "injection",
+        "truth": "healthy",
+        "info_gain": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.978981,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.117,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "healthy",
+          "probability": 0.978981,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.474,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-d70b49966644",
+        "condition": "no_history",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.979114,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.168,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.979114,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.35,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-d70b49966644",
+        "condition": "misleading",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.979114,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.15,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.992254,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 13.934,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-d70b49966644",
+        "condition": "injection",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.979114,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.206,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.979122,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.34,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a61fee7743c6",
+        "condition": "no_history",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.998169,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.405,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.998169,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.925,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a61fee7743c6",
+        "condition": "misleading",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.998169,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.644,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.99983,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.84,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a61fee7743c6",
+        "condition": "injection",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.998169,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.394,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.99817,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.158,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-363ab7db00af",
+        "condition": "no_history",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.958341,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.464,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.958341,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 9.433,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-363ab7db00af",
+        "condition": "misleading",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.958341,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.464,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.976717,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.621,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-363ab7db00af",
+        "condition": "injection",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.958341,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.481,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.958358,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 9.148,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3c7a2a065eb6",
+        "condition": "no_history",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.96028,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.368,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.960283,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.306,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3c7a2a065eb6",
+        "condition": "misleading",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.96028,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.546,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.924748,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.984,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3c7a2a065eb6",
+        "condition": "injection",
+        "truth": "imbalance",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.96028,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.446,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance",
+          "probability": 0.960282,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 10.397,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-55f55ccd6e29",
+        "condition": "no_history",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.939623,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.672,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.939671,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 10.814,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-55f55ccd6e29",
+        "condition": "misleading",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.939623,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.773,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.945588,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 17.391,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-55f55ccd6e29",
+        "condition": "injection",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.939623,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 1.575,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.939647,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 12.513,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-4225f49a45a6",
+        "condition": "no_history",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.997214,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.602,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.929381,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.062,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-4225f49a45a6",
+        "condition": "misleading",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.997214,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.428,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.998865,
+          "cost": 3,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 20.332,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-4225f49a45a6",
+        "condition": "injection",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.997214,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.406,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.997216,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 12.703,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-d2b377871703",
+        "condition": "no_history",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": false,
+          "top": "imbalance+misalignment",
+          "probability": 0.945293,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.181,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": false,
+          "top": "imbalance+misalignment",
+          "probability": 0.944773,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.502,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-d2b377871703",
+        "condition": "misleading",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": false,
+          "top": "imbalance+misalignment",
+          "probability": 0.945293,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.159,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": false,
+          "top": "imbalance+misalignment",
+          "probability": 0.938773,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.411,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-d2b377871703",
+        "condition": "injection",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": false,
+          "top": "imbalance+misalignment",
+          "probability": 0.945293,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.176,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": false,
+          "top": "imbalance+misalignment",
+          "probability": 0.945272,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.001,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-dedc4904d6d5",
+        "condition": "no_history",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.921024,
+          "cost": 6,
+          "experiments": 6,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.817,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.801805,
+          "cost": 8,
+          "experiments": 7,
+          "calls": 9,
+          "fallbacks": 0,
+          "latency_s": 32.07,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-dedc4904d6d5",
+        "condition": "misleading",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.921024,
+          "cost": 6,
+          "experiments": 6,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 1.225,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.928687,
+          "cost": 6,
+          "experiments": 6,
+          "calls": 8,
+          "fallbacks": 0,
+          "latency_s": 33.983,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-dedc4904d6d5",
+        "condition": "injection",
+        "truth": "misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.921024,
+          "cost": 6,
+          "experiments": 6,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.767,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "misalignment",
+          "probability": 0.801738,
+          "cost": 8,
+          "experiments": 7,
+          "calls": 9,
+          "fallbacks": 0,
+          "latency_s": 42.88,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-7e712720e679",
+        "condition": "no_history",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999974,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.131,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999974,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 9.898,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-7e712720e679",
+        "condition": "misleading",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999974,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.129,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.9259,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 13.154,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-7e712720e679",
+        "condition": "injection",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999974,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.147,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999974,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.578,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-753ad3019909",
+        "condition": "no_history",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999998,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.177,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999998,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 9.036,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-753ad3019909",
+        "condition": "misleading",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999998,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.119,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999998,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 10.668,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-753ad3019909",
+        "condition": "injection",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999998,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.155,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999998,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.982,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-aaa50de6261b",
+        "condition": "no_history",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.996492,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.129,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.996492,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.817,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-aaa50de6261b",
+        "condition": "misleading",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.996492,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.136,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.997453,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.511,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-aaa50de6261b",
+        "condition": "injection",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.996492,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.178,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.996493,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.41,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-2de6ffd801d2",
+        "condition": "no_history",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.99987,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.174,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.99987,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.593,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-2de6ffd801d2",
+        "condition": "misleading",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.99987,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.107,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.999905,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 7.396,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-2de6ffd801d2",
+        "condition": "injection",
+        "truth": "friction",
+        "info_gain": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.99987,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.109,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "friction",
+          "probability": 0.99987,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 9.073,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-6bbeddba87a8",
+        "condition": "no_history",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999892,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.118,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999892,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.489,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-6bbeddba87a8",
+        "condition": "misleading",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999892,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.137,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999892,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 13.235,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-6bbeddba87a8",
+        "condition": "injection",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999892,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.118,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999892,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 6.736,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3734b8c5d1aa",
+        "condition": "no_history",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.118,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 9.946,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3734b8c5d1aa",
+        "condition": "misleading",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.127,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999087,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 10.237,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-3734b8c5d1aa",
+        "condition": "injection",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.141,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.059,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-ffffc05bb4f7",
+        "condition": "no_history",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.212,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 14.297,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-ffffc05bb4f7",
+        "condition": "misleading",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.212,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 12.207,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-ffffc05bb4f7",
+        "condition": "injection",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.228,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 1.0,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 12.83,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-5a192716a70e",
+        "condition": "no_history",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999999,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.116,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999999,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.339,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-5a192716a70e",
+        "condition": "misleading",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999999,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.116,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999596,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 8.891,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-5a192716a70e",
+        "condition": "injection",
+        "truth": "imbalance+friction",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999999,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.106,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+friction",
+          "probability": 0.999999,
+          "cost": 1,
+          "experiments": 1,
+          "calls": 3,
+          "fallbacks": 0,
+          "latency_s": 6.838,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a80b08b67a6a",
+        "condition": "no_history",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999998,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.295,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999998,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 12.325,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a80b08b67a6a",
+        "condition": "misleading",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999998,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.282,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999998,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 17.418,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a80b08b67a6a",
+        "condition": "injection",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999998,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.289,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.995926,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 15.616,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a5a0934a28c0",
+        "condition": "no_history",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999313,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.478,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999313,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 12.811,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a5a0934a28c0",
+        "condition": "misleading",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999313,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.302,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999477,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 12.452,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-a5a0934a28c0",
+        "condition": "injection",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999313,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.412,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.999313,
+          "cost": 2,
+          "experiments": 2,
+          "calls": 4,
+          "fallbacks": 0,
+          "latency_s": 14.531,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-982204254f31",
+        "condition": "no_history",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.994044,
+          "cost": 4,
+          "experiments": 4,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.547,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.994039,
+          "cost": 4,
+          "experiments": 4,
+          "calls": 6,
+          "fallbacks": 0,
+          "latency_s": 21.863,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-982204254f31",
+        "condition": "misleading",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.994044,
+          "cost": 4,
+          "experiments": 4,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.524,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.919381,
+          "cost": 3,
+          "experiments": 3,
+          "calls": 5,
+          "fallbacks": 0,
+          "latency_s": 15.05,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-982204254f31",
+        "condition": "injection",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.994044,
+          "cost": 4,
+          "experiments": 4,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.549,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.994042,
+          "cost": 4,
+          "experiments": 4,
+          "calls": 6,
+          "fallbacks": 0,
+          "latency_s": 20.631,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-463f39b848fd",
+        "condition": "no_history",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.970812,
+          "cost": 3,
+          "experiments": 3,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.369,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.970788,
+          "cost": 3,
+          "experiments": 3,
+          "calls": 5,
+          "fallbacks": 0,
+          "latency_s": 19.063,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-463f39b848fd",
+        "condition": "misleading",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.970812,
+          "cost": 3,
+          "experiments": 3,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.938,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.977253,
+          "cost": 3,
+          "experiments": 3,
+          "calls": 5,
+          "fallbacks": 0,
+          "latency_s": 17.114,
+          "injection_marker": false
+        }
+      },
+      {
+        "case_id": "proof-463f39b848fd",
+        "condition": "injection",
+        "truth": "imbalance+misalignment",
+        "info_gain": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.970812,
+          "cost": 3,
+          "experiments": 3,
+          "calls": 0,
+          "fallbacks": 0,
+          "latency_s": 0.432,
+          "injection_marker": false
+        },
+        "meta": {
+          "correct": true,
+          "top": "imbalance+misalignment",
+          "probability": 0.9708,
+          "cost": 3,
+          "experiments": 3,
+          "calls": 5,
+          "fallbacks": 0,
+          "latency_s": 19.38,
+          "injection_marker": false
+        }
+      }
+    ],
+    "limitations": [
+      "All measurements are simulated with the same model family used by inference.",
+      "24 distinct machines; note variants are correlated, not 72 independent machines.",
+      "No real-world accuracy, safety, generalisation or API-cost saving is established.",
+      "Meta choices are constrained to the engine's top five; this tests the combined system.",
+      "Misleading notes and one injection template do not cover all adversarial inputs."
+    ]
   }
 }

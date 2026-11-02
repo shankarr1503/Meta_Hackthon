@@ -10,7 +10,7 @@ interface Props {
   replays: TraceSummary[];
   metaConfigured: boolean;
   busy: boolean;
-  onRun: (caseId: string, planner: PlannerName, seed: number) => void;
+  onRun: (caseView: CaseView, planner: PlannerName, seed: number) => void;
   onOpenReplay: (id: string) => void;
 }
 
@@ -52,7 +52,7 @@ export default function CasePicker({
             max={10000}
             className="w-24 rounded border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
             value={seed}
-            onChange={(e) => setSeed(Math.max(0, Math.min(10000, Number(e.target.value) || 0)))}
+            onChange={(e) => setSeed(Math.trunc(Math.max(0, Math.min(10000, Number(e.target.value) || 0))))}
           />
         </label>
         {metaUnavailable && (
@@ -76,7 +76,7 @@ export default function CasePicker({
             <button
               type="button"
               disabled={busy || metaUnavailable}
-              onClick={() => onRun(c.case_id, planner, seed)}
+              onClick={() => onRun(c, planner, seed)}
               className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
             >
               Investigate {c.title}
@@ -107,6 +107,7 @@ export default function CasePicker({
                 </span>
                 <button
                   type="button"
+                  disabled={busy}
                   className="rounded border border-slate-300 px-2 py-0.5 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
                   onClick={() => onOpenReplay(r.investigation_id)}
                   aria-label={`Open replay ${r.investigation_id}`}

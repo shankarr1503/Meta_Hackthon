@@ -9,6 +9,8 @@ half-written replay.
 import json
 import os
 import re
+import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -73,9 +75,36 @@ class ReplayStore:
     def save(self, trace: dict[str, Any]) -> Path:
         path = self.path_for(trace["investigation_id"])
         self.root.mkdir(parents=True, exist_ok=True)
-        temporary = path.with_suffix(".json.tmp")
-        temporary.write_text(json.dumps(trace, ensure_ascii=False), encoding="utf-8")
-        os.replace(temporary, path)
+        # Rule runs can share an id. Each writer needs its own temporary file so
+        # concurrent saves cannot overwrite or rename another writer's work.
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=self.root,
+            prefix=f".{path.stem}-",
+            suffix=".tmp",
+            delete=False,
+        ) as stream:
+            temporary = Path(stream.name)
+            try:
+                json.dump(trace, stream, ensure_ascii=False)
+            except Exception:
+                stream.close()
+                temporary.unlink(missing_ok=True)
+                raise
+        try:
+            for attempt in range(5):
+                try:
+                    os.replace(temporary, path)
+                    break
+                except PermissionError:
+                    # Windows can briefly deny replacement while another writer
+                    # is replacing the same destination.
+                    if os.name != "nt" or attempt == 4:
+                        raise
+                    time.sleep(0.01 * (attempt + 1))
+        finally:
+            temporary.unlink(missing_ok=True)
         return path
 
     def load(self, investigation_id: str) -> dict[str, Any] | None:

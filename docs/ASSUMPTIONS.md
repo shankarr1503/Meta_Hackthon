@@ -85,9 +85,33 @@ behaviour changes.
 
 ## API and frontend
 
+- The UI normalises seeds to integers within each endpoint's range (investigations
+  0–10,000; manual lab 0–2,147,483,647). The backend remains the validation authority.
+- Simultaneous saves to one replay id use unique temporary files and atomic replacement.
+  The last successful replacement wins; readers see one complete trace.
+- On Windows, replacement permission errors are retried up to five times, with short
+  delays, because simultaneous replacements can briefly deny access.
+- Production dashboard hosting is opt-in through `FAILURELAB_FRONTEND_DIR`; it exposes
+  only the built frontend directory. The API-only development mode stays the default.
+
 - The 3D twin is an illustration, not a second simulator: every motion comes from a
   measured feature. The shaft is drawn as a 0.8 m rotor; whirl is exaggerated 1,000×
   (1 µm shown as 1 mm) and capped; spin is shown 20× slower than the true RPM; a figure-eight
   is drawn when 2x is at least 1x and above the 2 µm noise floor; bearing tint saturates at
   a 40 °C rise; jitter is seeded, so a replay looks the same each time.
 - Recommended checks and explanations are for the simulated machine only.
+
+## Proof challenge
+
+The paired proof challenge uses 24 newly generated machines under three note
+conditions. Notes are correlated variants of each machine, not independent samples.
+The inference and simulator still share a model family. See PROOF_OF_CONCEPT.md
+for the frozen protocol, uncertainty estimates and limits.
+
+## Measured-data scope (2 November 2026)
+
+Real recordings are from a physical test rig with deliberately introduced faults.
+They are not simulated numbers or naturally occurring factory failures. The
+measured path has four different classes and no calibrated probability model.
+Only eight held-out trials from one rig were evaluated; the 6/8 result has wide
+uncertainty. Absolute amplitude units are unverified. See REAL_DATA.md.

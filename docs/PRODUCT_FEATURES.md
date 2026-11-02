@@ -3,7 +3,7 @@
 28 Oct 2026 · Meta Global AI Developer Hackathon 2026
 
 This document defines what FailureLab AI will do and how we will know each feature
-works. Build started on 28 October 2026 (the date of the first commit); nothing here
+works. Build started on 28 October 2026; the first commit was on 30 October (D-34). Nothing here
 describes code written before the event. Converted from the original PDF plan, with the
 resolutions in [DECISIONS.md](DECISIONS.md) applied.
 
@@ -27,7 +27,7 @@ recommends the next physical check. The investigator never sees the true fault.
 | Team | Up to 4; one person submits with every member added |
 | Build window | 26 October – 4 November 2026; build started 28 October |
 | Deadline | Wednesday 4 November, 9:00 PM ET |
-| Status | Planning complete; code being written from scratch in the public repo `failurelab-ai` |
+| Status | Core implementation built; live Meta verification and public submission pending. See README and VERIFICATION.md. |
 
 **Why it is not a generic project.** It is not a chatbot, RAG app, image analyser or advice tool.
 The model acts: it chooses experiments, commits to predictions before seeing results,
@@ -157,9 +157,10 @@ the event.
 
 ## 7. Demo story
 
-The 3-minute video uses `case-b6`, the compressor coupling with a combined fault,
-because it needs several experiments and shows belief shifting more than once. The
-exact numbers will come from our own run during the event.
+The rehearsal uses `case-r2-info_gain-0`, the conveyor gearbox case, because its saved
+baseline run has two experiments. The compressor replay `case-b6-info_gain-0` finishes
+after one experiment. The final video must use an inspected real Meta replay once API
+access is available; adapt the narration to that run. See [DEMO.md](DEMO.md).
 
 1. **0:00–0:20 — Hook.** "This compressor is shaking. Unbalanced, misaligned, a dry bearing,
    or two at once? Watch the Meta model decide which tests to run."
@@ -181,7 +182,7 @@ event.
 
 | Rule | How we comply | Check |
 |---|---|---|
-| New work only (26 Oct – 4 Nov) | All code written from scratch in a repo whose first commit is 28 October; no code from earlier experiments | [ ] |
+| New work only (26 Oct – 4 Nov) | Build started 28 October; first commit 30 October (D-34); no code from earlier experiments | [ ] |
 | Identify contributions | README section "Built during the hackathon" with dated features; small dated commits; demo captions | [ ] |
 | Public repo | Repository `failurelab-ai` public before submission | [ ] |
 | Rights to code, data, assets | Permissive or compatible licenses only, listed in the README (see DECISIONS.md); simulated data; MIT license on our code | [ ] |

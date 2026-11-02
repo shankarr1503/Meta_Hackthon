@@ -1,0 +1,311 @@
+{
+  "source": "measured_laboratory",
+  "dataset_url": "https://data.mendeley.com/datasets/zx8pfhdtnb/1",
+  "doi": "10.17632/zx8pfhdtnb.1",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Lucas Brito, Gian Antonio Susto, Jorge Nei Brito, Marcus Duarte (2022)",
+  "selection": "First naturally sorted .npy file from every one of the 20 test archives.",
+  "recordings": [
+    {
+      "test": 1,
+      "archive": "Test 01_Normal Condition.zip",
+      "archive_id": "fb46b812-cbef-49c6-b066-6b954a1fc5ff",
+      "archive_sha256_advertised": "6ea390ef16ffdb8e4c254d6b390cd4163143540d201393f93211c06dc2e9a26f",
+      "archive_hash_verified": false,
+      "member": "Test 01_Normal Condition/20220428-145045.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/fb46b812-cbef-49c6-b066-6b954a1fc5ff/file_downloaded",
+      "recording_sha256": "257c3db0248963fe77e97de51ad480336f066bf6cf30a1616af28749e0b6e2b3",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 2,
+      "archive": "Test 02_Misalignment.zip",
+      "archive_id": "139266c1-f6da-491e-bf54-f03b0fd5a2cb",
+      "archive_sha256_advertised": "56ee67438d1f6596b7d9f9ee8406eaf0f061da03ab1c872d712f9add6fe60cdc",
+      "archive_hash_verified": false,
+      "member": "Test 02_Misalignment/20220428-170827.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/139266c1-f6da-491e-bf54-f03b0fd5a2cb/file_downloaded",
+      "recording_sha256": "cd61ce8601e90da62a5ea6490ecbeef658851077dfdc571bde3b7701cf44228c",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 3,
+      "archive": "Test 03_Normal Condition.zip",
+      "archive_id": "edde4bfe-0535-40c7-858d-549ff79aa65e",
+      "archive_sha256_advertised": "7cc6b824d6aead6082fc9d0e13a8be4cf2ee9c486343c14e3d138e55892561d7",
+      "archive_hash_verified": false,
+      "member": "Test 03_Normal Condition/20220428-174059.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/edde4bfe-0535-40c7-858d-549ff79aa65e/file_downloaded",
+      "recording_sha256": "ac276d6db91b4f6a7ee5011533076bdcb26ece517f5314d822f067a6764d59a9",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 4,
+      "archive": "Test 04_Unbalance.zip",
+      "archive_id": "16cb928d-7f6e-4e9c-9eae-b54345ec5a18",
+      "archive_sha256_advertised": "de7df6b236fa150106474e734ce99e3c83b7e7c6038d1ecb1539b425511435e5",
+      "archive_hash_verified": false,
+      "member": "Test 04_Unbalance/20220428-175523.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/16cb928d-7f6e-4e9c-9eae-b54345ec5a18/file_downloaded",
+      "recording_sha256": "c5d1ac6d3a5d6a281ec8416839927d1044d218c02095d9da3c12a91d6643802e",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 5,
+      "archive": "Test 05_Looseness.zip",
+      "archive_id": "dff0906c-718e-4712-aac5-af973e4bfe09",
+      "archive_sha256_advertised": "bdab9adf894316133cc0f28d627d027c45b991b70e96b3a89990028d66b460a3",
+      "archive_hash_verified": false,
+      "member": "Test 05_Looseness/20220429-083427.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/dff0906c-718e-4712-aac5-af973e4bfe09/file_downloaded",
+      "recording_sha256": "d6b6170a2513ce9955c5361af7895c3afb07fc3026494260157b9f17dc6d0687",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 6,
+      "archive": "Test 06_Normal Condition.zip",
+      "archive_id": "1c653d9a-61a8-48bb-a2d9-889d12bc2d3a",
+      "archive_sha256_advertised": "21bd613afddd141814cf8d99200a6fea55d69e4b78ff8ed0f4e38f7146ad552c",
+      "archive_hash_verified": false,
+      "member": "Test 06_Normal Condition/20220429-092643.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/1c653d9a-61a8-48bb-a2d9-889d12bc2d3a/file_downloaded",
+      "recording_sha256": "7504dca10256f48a156dff1a08f0c8d6cefd0cc490eec4b41e6afd83cbdfae2c",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 7,
+      "archive": "Test 07_Unbalance.zip",
+      "archive_id": "2922e160-7555-4551-9c84-f8ad893a44f8",
+      "archive_sha256_advertised": "344cc755c8b4aa0e9b3e92bf9bf84c8e728ed3eb2376f23e0bc0517a24a9d323",
+      "archive_hash_verified": false,
+      "member": "Test 07_Unbalance/20220429-095119.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/2922e160-7555-4551-9c84-f8ad893a44f8/file_downloaded",
+      "recording_sha256": "cc9d7e628235babd1d79a77ed665f896f723a51e8e5cea47ff879785ea8ca100",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 8,
+      "archive": "Test 08_Looseness.zip",
+      "archive_id": "23543420-0c32-4c58-b8d7-f231901b6574",
+      "archive_sha256_advertised": "8b857b703fa8f5ac25f9cda5291513d6ad133892d3c0218f47974312d3d2b35c",
+      "archive_hash_verified": false,
+      "member": "Test 08_Looseness/20220429-101807.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/23543420-0c32-4c58-b8d7-f231901b6574/file_downloaded",
+      "recording_sha256": "5a3ffbae7698cd201acdddf23fd5177d352b26d6d9ae826d3e546b658e9dcc3d",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 9,
+      "archive": "Test 09_Normal Condition.zip",
+      "archive_id": "4fca93ea-c3b5-402a-8122-f720f1ffe3fd",
+      "archive_sha256_advertised": "eeaa5d747aaa1eebe9ea06da769cdfe025f8b3b20a68d9aee590a011818bb8ce",
+      "archive_hash_verified": false,
+      "member": "Test 09_Normal Condition/20220429-103508.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/4fca93ea-c3b5-402a-8122-f720f1ffe3fd/file_downloaded",
+      "recording_sha256": "0d126ea3c43cbb247d9c351a5d91da87231b781a4cf7f5b9502448d53010d005",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 10,
+      "archive": "Test 10_Misalignment.zip",
+      "archive_id": "3010da8d-839a-460c-b111-b058ba879314",
+      "archive_sha256_advertised": "3fe42f1ddbc4822a207967ec93160ad616384c5209c27b2f7348b123ccc06458",
+      "archive_hash_verified": false,
+      "member": "Test 10_Misalignment/20220429-105041.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/3010da8d-839a-460c-b111-b058ba879314/file_downloaded",
+      "recording_sha256": "e44089d828e7131cfffb5900a17ce0760141fbde22a2705d4495102df1b9a99f",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 11,
+      "archive": "Test 11_Misalignment.zip",
+      "archive_id": "2f9ab342-05af-452b-9d5a-98624fe481a4",
+      "archive_sha256_advertised": "0fe7bccbd7dcfb1bd729f4fb990a6154ffd4f64ab75180168178f9798a05b868",
+      "archive_hash_verified": false,
+      "member": "Test 11_Misalignment/20220506-101830.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/2f9ab342-05af-452b-9d5a-98624fe481a4/file_downloaded",
+      "recording_sha256": "f4e2327560a39cc6b2aec24fdec0b0f5aa57d6256ff1029cd59ff3b9a27faa1c",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 12,
+      "archive": "Test 12_Looseness.zip",
+      "archive_id": "2ef8fdac-caf3-46ac-9580-2f6ad19c6904",
+      "archive_sha256_advertised": "364e83a091c24641f9d71f988852e47c9cd527ddf8bb690ce8874dd7ef4ce089",
+      "archive_hash_verified": false,
+      "member": "Test 12_Looseness/20220506-104843.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/2ef8fdac-caf3-46ac-9580-2f6ad19c6904/file_downloaded",
+      "recording_sha256": "0d97c4c805ef160c4bd30b1ece948899155f4df51118bd71a8d5170f5094e177",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 13,
+      "archive": "Test 13_Misalignment.zip",
+      "archive_id": "c84a5d5f-844b-4c5e-8afc-2ecc0a794e8a",
+      "archive_sha256_advertised": "d760265eb0a68f8ad4c24e970f1dc01eb268d886f13f5c01d136e5f721418569",
+      "archive_hash_verified": false,
+      "member": "Test 13_Misalignment/20220506-124403.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/c84a5d5f-844b-4c5e-8afc-2ecc0a794e8a/file_downloaded",
+      "recording_sha256": "b0e6c8b2f966f2a3e4afe53a706484b3840857412c2bafc615baa5cc930f0958",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 14,
+      "archive": "Test 14_Looseness.zip",
+      "archive_id": "8e1259f3-a134-40be-98f2-4b38bb88325f",
+      "archive_sha256_advertised": "0993bd8e4beac37cc176c06297c0d5327a12920e9c5e932c795cf3141cc7c741",
+      "archive_hash_verified": false,
+      "member": "Test 14_Looseness/20220506-130155.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/8e1259f3-a134-40be-98f2-4b38bb88325f/file_downloaded",
+      "recording_sha256": "b6ac62ee0e90c5f75195ab6ec3e90bfb6468ea09e2e65c2a0daed4fc0f76da50",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 15,
+      "archive": "Test 15_Unbalance.zip",
+      "archive_id": "6d1b1eef-93c0-49d6-aefe-47eb396ebb26",
+      "archive_sha256_advertised": "b6beda3cdf9633d606a915347b1df101ca9f384371a80622ea40fbb1d3add84a",
+      "archive_hash_verified": false,
+      "member": "Test 15_Unbalance/20220506-131902.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/6d1b1eef-93c0-49d6-aefe-47eb396ebb26/file_downloaded",
+      "recording_sha256": "6418bd8699cb68484c7b1a2cae64a369fa6568f13308c4848ac8cb91740c63b6",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 16,
+      "archive": "Test 16_Misalignment.zip",
+      "archive_id": "c8af8a31-21f3-4bd4-ac9f-3fe247860318",
+      "archive_sha256_advertised": "1db52dfee117be12c84fefefc46a5fa78de3d6ec001bc398a35eb0486b075807",
+      "archive_hash_verified": false,
+      "member": "Test 16_Misalignment/20220506-135933.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/c8af8a31-21f3-4bd4-ac9f-3fe247860318/file_downloaded",
+      "recording_sha256": "644a6c348f42996764e666d4e00b884f9bf270158960bc05674c206e8573e708",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 17,
+      "archive": "Test 17_Normal Condition.zip",
+      "archive_id": "49ecbd50-ed6c-49be-b5bf-cc8d20a5370b",
+      "archive_sha256_advertised": "6a27b9bd183fe95a72fc7752e240e60de5fe481b68e83694fc49a12df95b3dec",
+      "archive_hash_verified": false,
+      "member": "Test 17_Normal Condition/20220506-142305.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/49ecbd50-ed6c-49be-b5bf-cc8d20a5370b/file_downloaded",
+      "recording_sha256": "943acf955a1990fcd4543b17ab4cb00ca3c81c106152fa9e78c31586d4738b01",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 18,
+      "archive": "Test 18_Unbalance.zip",
+      "archive_id": "5fcc7085-b1ee-41b8-8289-161d3847d9e8",
+      "archive_sha256_advertised": "b6b995428aef9f9739fd8fe3264e1b2b1c84081857216e5e99d6d101c211ed77",
+      "archive_hash_verified": false,
+      "member": "Test 18_Unbalance/20220506-143452.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/5fcc7085-b1ee-41b8-8289-161d3847d9e8/file_downloaded",
+      "recording_sha256": "877cfc1d921a39092cc6cb733885f3a548e5baba9f8b34be8545f821a11fba5b",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 19,
+      "archive": "Test 19_Looseness.zip",
+      "archive_id": "406b05e7-2101-4854-b7ee-9b51f3c9c8ac",
+      "archive_sha256_advertised": "95b8864c4e2b42a4d626a4a1bd0c23e37f6623ee58cf5886ac84961be4ba9ff2",
+      "archive_hash_verified": false,
+      "member": "Test 19_Looseness/20220506-144951.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/406b05e7-2101-4854-b7ee-9b51f3c9c8ac/file_downloaded",
+      "recording_sha256": "91c04ce65078bf661b53021f38a2eb7e347ec28ff63a2e9abcc400ff84ca119e",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    },
+    {
+      "test": 20,
+      "archive": "Test 20_Unbalance.zip",
+      "archive_id": "3a09d0b2-3e1b-4f7c-900a-c74693478b04",
+      "archive_sha256_advertised": "da72526033a3e939fe4ff020134561c58ae9943aa0bf1ecc77028465353fe466",
+      "archive_hash_verified": false,
+      "member": "Test 20_Unbalance/20220506-150715.npy",
+      "download_url": "https://data.mendeley.com/public-files/datasets/zx8pfhdtnb/files/3a09d0b2-3e1b-4f7c-900a-c74693478b04/file_downloaded",
+      "recording_sha256": "de01d5c01c15c621200aed8466f8fd733917df2fab4567bf80a3bb3b589ceba9",
+      "shape": [
+        4,
+        25000
+      ],
+      "sample_rate_hz": 25000
+    }
+  ]
+}

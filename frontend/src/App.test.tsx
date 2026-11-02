@@ -38,6 +38,34 @@ function stubBackend(metaConfigured = false) {
   return fetchMock;
 }
 
+function stubEventSource() {
+  let capturedUrl: string | null = null;
+  class FakeEventSource {
+    onmessage: ((e: { data: string }) => void) | null = null;
+    constructor(url: string) {
+      capturedUrl = url;
+      queueMicrotask(() => {
+        this.onmessage?.({
+          data: JSON.stringify({
+            kind: "prior",
+            investigation_id: "case-k7-info_gain-0",
+            case: CASES[0],
+            planner: "info_gain",
+            seed: 0,
+            prior: { probabilities: {}, reason: "prior" },
+          }),
+        });
+        this.onmessage?.({
+          data: JSON.stringify({ kind: "trace", trace: makeTrace() }),
+        });
+      });
+    }
+    close() {}
+  }
+  vi.stubGlobal("EventSource", FakeEventSource as unknown as typeof EventSource);
+  return { url: () => capturedUrl };
+}
+
 describe("App", () => {
   it("lists cases with the Simulated label", async () => {
     stubBackend();
@@ -57,17 +85,13 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: "Investigate Pump drive A" })).toBeDisabled();
   });
 
-  it("runs an investigation and opens the player", async () => {
-    const fetchMock = stubBackend(true);
+  it("opens a live investigation stream when a case is investigated", async () => {
+    stubBackend(true);
+    const { url } = stubEventSource();
     render(<App />);
     fireEvent.click(await screen.findByRole("button", { name: "Investigate Pump drive A" }));
-    expect(await screen.findByRole("group", { name: "Player controls" })).toBeInTheDocument();
-    const post = fetchMock.mock.calls.find(([, init]) => init?.method === "POST");
-    expect(JSON.parse(String(post?.[1]?.body))).toEqual({
-      case_id: "case-k7",
-      planner: "meta",
-      seed: 0,
-    });
+    await screen.findByText("Pump drive A");
+    expect(url()).toBe("/api/investigations/stream?case_id=case-k7&planner=meta&seed=0");
   });
 
   it("shows an error when the backend is unreachable", async () => {
@@ -75,6 +99,16 @@ describe("App", () => {
     render(<App />);
     expect(await screen.findByRole("alert")).toHaveTextContent("HTTP 503");
     expect(screen.getByText("Simulated")).toBeVisible();
+  });
+
+  it("sends a valid integer seed when a fractional seed is entered", async () => {
+    stubBackend();
+    const { url } = stubEventSource();
+    render(<App />);
+    fireEvent.change(await screen.findByLabelText("Seed"), { target: { value: "2.7" } });
+    fireEvent.click(screen.getByRole("button", { name: "Investigate Pump drive A" }));
+    await screen.findByText("Pump drive A");
+    expect(url()).toBe("/api/investigations/stream?case_id=case-k7&planner=info_gain&seed=2");
   });
 });
 

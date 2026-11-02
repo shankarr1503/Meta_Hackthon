@@ -10,7 +10,11 @@ permissions:
 jobs:
   check:
     name: Lint, test and build
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
@@ -28,7 +32,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Setup
-        run: make setup PYTHON=python
+        run: python scripts/tasks.py setup
 
       - name: Check (lint + tests + build)
-        run: make check
+        run: python scripts/tasks.py check

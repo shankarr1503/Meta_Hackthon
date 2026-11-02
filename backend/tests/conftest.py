@@ -20,6 +20,7 @@ def make_settings(tmp_path: Path) -> Callable[..., Settings]:
             "llm_base_url": "",
             "replays_dir": tmp_path / "replays",
             "results_dir": tmp_path / "results",
+            "frontend_dir": None,
         }
         return Settings(_env_file=None, **(values | overrides))  # type: ignore[call-arg]
 

@@ -12,7 +12,7 @@ export default function ProbabilityBars({ probabilities }: { probabilities: Prob
         const p = probabilities[h] ?? 0;
         const leading = p === top;
         return (
-          <li key={h} className="grid grid-cols-[11rem_1fr_4rem] items-center gap-3 text-sm">
+          <li key={h} className="grid grid-cols-[minmax(0,9rem)_minmax(1rem,1fr)_3rem] items-center gap-2 text-sm sm:grid-cols-[11rem_minmax(1rem,1fr)_4rem] sm:gap-3">
             <span className={leading ? "font-semibold" : undefined}>{hypothesisName(h)}</span>
             <span
               className="relative h-3 overflow-hidden rounded bg-slate-200 dark:bg-slate-800"

@@ -122,6 +122,87 @@ export interface InvestigationRequest {
   seed: number;
 }
 
+/** One live-investigation frame streamed from the backend as a Server-Sent Event. */
+export type LiveFrame =
+  | {
+      kind: "prior";
+      investigation_id: string;
+      case: CaseView;
+      planner: PlannerName;
+      seed: number;
+      prior: { probabilities: Probabilities; reason: string };
+    }
+  | {
+      kind: "alarm";
+      investigation_id: string;
+      case: CaseView;
+      planner: PlannerName;
+      seed: number;
+      alarm: {
+        rpm: number;
+        load_n: number;
+        overall_rms_um: number;
+        posterior: Probabilities;
+      };
+    }
+  | {
+      kind: "choice";
+      investigation_id: string;
+      case: CaseView;
+      planner: PlannerName;
+      seed: number;
+      step: number;
+      candidate: { rpm: number; load_n: number; cost: number };
+      chosen_by: string;
+      rationale: string;
+      information_bits: number | null;
+      expectations: Record<string, string> | null;
+    }
+  | {
+      kind: "predict";
+      investigation_id: string;
+      case: CaseView;
+      planner: PlannerName;
+      seed: number;
+      step: number;
+      predictions: Record<string, Prediction>;
+    }
+  | {
+      kind: "result";
+      investigation_id: string;
+      case: CaseView;
+      planner: PlannerName;
+      seed: number;
+      step: Step;
+    }
+  | {
+      kind: "update";
+      investigation_id: string;
+      case: CaseView;
+      planner: PlannerName;
+      seed: number;
+      step: Step;
+    }
+  | {
+      kind: "diagnosis";
+      investigation_id: string;
+      case: CaseView;
+      planner: PlannerName;
+      seed: number;
+      diagnosis: Diagnosis;
+      stop_reason: Trace["stop_reason"];
+      experiments: number;
+      cost: number;
+    }
+  | {
+      kind: "trace";
+      investigation_id: string;
+      case: CaseView;
+      planner: PlannerName;
+      seed: number;
+      trace: Trace;
+    };
+
 export interface LabRequest {
   imbalance: number;
   misalignment: number;
@@ -160,4 +241,42 @@ export interface BenchmarkResult {
   rules: Record<string, number>;
   protocols: Record<string, Record<string, unknown>>;
   planners: Record<string, Record<string, PlannerMetrics>>;
+  proof?: ProofReport | null;
+}
+
+export interface ProofMetrics {
+  runs: number;
+  correct: number;
+  accuracy: number;
+  accuracy_ci95: [number, number];
+  mean_cost: number;
+  calls: number;
+  fallbacks: number;
+  mean_latency_s: number;
+  injection_marker_in_explanation: number;
+  confident_errors?: number;
+}
+
+export interface ProofReport {
+  source: "simulation";
+  version: string;
+  model: string;
+  machines: number;
+  paired_runs: number;
+  plan_sha256: string;
+  generated_at: string;
+  conditions: Record<string, {
+    meta: ProofMetrics;
+    info_gain: ProofMetrics;
+    paired_cost_saved: number;
+    paired_cost_saved_ci95: [number, number];
+  }>;
+  limitations: string[];
+  runs?: {
+    case_id: string;
+    condition: string;
+    truth: string;
+    meta: { top: string; correct: boolean; probability: number; cost: number; fallbacks: number };
+    info_gain: { top: string; correct: boolean; probability: number; cost: number; fallbacks: number };
+  }[];
 }

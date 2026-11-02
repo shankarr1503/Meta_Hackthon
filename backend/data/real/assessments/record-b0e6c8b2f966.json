@@ -1,0 +1,40 @@
+{
+  "plan_hash": "2c7feea992373f3193fc8c76a267f60603fc2b116dfa80d50a6fc8d18d666b4c",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "misalignment",
+    "reason": "Query shows low 1X (~0.0004-0.0015) on all channels with elevated 2X on channels 0 (0.00808) and 2 (0.00692) and low 2X on channels 1 (0.00075) and 3 (0.00135). This matches labelled misalignment trials which show 2X dominance on ch0/ch2 (e.g., 0.014-0.015 and 0.011-0.014) with 1X ~0.0003-0.0011, unlike unbalance/looseness references which show high 1X ~0.004-0.015 on all channels, and unlike normal references which show lower 2X. Limitation: radial signals and one short recording may not uniquely distinguish faults; assessment based only on supplied features.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Query ch0 shows low 1x (0.00104) with elevated 2x (0.00808), ratio ~7.8, matching misalignment reference pattern of 2x-dominant on even channels vs normal with lower 2x and vs unbalance/looseness with high 1x; need ch2 to confirm paired even-channel 2x elevation characteristic of misalignment.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Query ch0 shows low 1x (0.00104) with elevated 2x (0.00808), ratio ~7.8, matching misalignment reference pattern of 2x-dominant on even channels vs normal with lower 2x and vs unbalance/looseness with high 1x; need ch2 to confirm paired even-channel 2x elevation characteristic of misalignment.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0 and ch2 show low 1X (~0.0010, 0.00038) with elevated 2X (~0.0081, 0.0069), favoring misalignment over unbalance/looseness which show high 1X >0.004, but 2X overlaps upper-normal vs lower-misalignment range. Ch3 2X separates references best: normal ~0.0004-0.0007 vs misalignment ~0.0020-0.0023, so inspect ch3 to confirm.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0 and ch2 show low 1X (~0.0010, 0.00038) with elevated 2X (~0.0081, 0.0069), favoring misalignment over unbalance/looseness which show high 1X >0.004, but 2X overlaps upper-normal vs lower-misalignment range. Ch3 2X separates references best: normal ~0.0004-0.0007 vs misalignment ~0.0020-0.0023, so inspect ch3 to confirm.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Query ch0 and ch2 show low 1x (~0.001, 0.00037) with elevated 2x (~0.00808, 0.00692) and ch3 shows low 1x/2x, matching misalignment reference pattern of 2x dominance on channels 0/2, but channel 1 is unseen and needed to confirm low 1x/low 2x on that channel and rule out normal/unbalance/looseness variants.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":1,\"reason\":\"Query ch0 and ch2 show low 1x (~0.001, 0.00037) with elevated 2x (~0.00808, 0.00692) and ch3 shows low 1x/2x, matching misalignment reference pattern of 2x dominance on channels 0/2, but channel 1 is unseen and needed to confirm low 1x/low 2x on that channel and rule out normal/unbalance/looseness variants.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows low 1X (~0.0004-0.0015) on all channels with elevated 2X on channels 0 (0.00808) and 2 (0.00692) and low 2X on channels 1 (0.00075) and 3 (0.00135). This matches labelled misalignment trials which show 2X dominance on ch0/ch2 (e.g., 0.014-0.015 and 0.011-0.014) with 1X ~0.0003-0.0011, unlike unbalance/looseness references which show high 1X ~0.004-0.015 on all channels, and unlike normal references which show lower 2X. Limitation: radial signals and one short recording may not uniquely distinguish faults; assessment based only on supplied features.",
+        "raw_response": "{\"action\":\"diagnose\",\"label\":\"misalignment\",\"reason\":\"Query shows low 1X (~0.0004-0.0015) on all channels with elevated 2X on channels 0 (0.00808) and 2 (0.00692) and low 2X on channels 1 (0.00075) and 3 (0.00135). This matches labelled misalignment trials which show 2X dominance on ch0/ch2 (e.g., 0.014-0.015 and 0.011-0.014) with 1X ~0.0003-0.0011, unlike unbalance/looseness references which show high 1X ~0.004-0.015 on all channels, and unlike normal references which show lower 2X. Limitation: radial signals and one short recording may not uniquely distinguish faults; assessment based only on supplied features.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      3,
+      1
+    ],
+    "status": "completed"
+  }
+}

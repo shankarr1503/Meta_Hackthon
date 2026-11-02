@@ -30,9 +30,16 @@ backend/replays/*
 
 # Cached Meta model responses from the benchmark
 backend/results/llm_cache.json
+backend/results/proof-cache.json
+backend/results/proof-traces/
+backend/data/real/raw/
 
 # OS / editor
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+
+# Local verification tools and screenshots
+.tmp/
+debug.log

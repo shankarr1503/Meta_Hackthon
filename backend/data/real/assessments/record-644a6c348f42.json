@@ -1,0 +1,40 @@
+{
+  "plan_hash": "2c7feea992373f3193fc8c76a267f60603fc2b116dfa80d50a6fc8d18d666b4c",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "misalignment",
+    "reason": "Query shows low 1x (~0.0009-0.0013) on all 4 channels, similar to normal and misalignment references, not the elevated 1x (~0.004-0.015) seen in unbalance and looseness references. Query shows elevated 2x on channels 0 (0.00989) and 2 (0.00828) with lower 2x on channels 1 (0.00240) and 3 (0.00153). This channel-selective 2x dominance matches labelled misalignment trials (e.g., 2x ~0.014-0.015 on ch0/ch2 with 1x <0.0011, and 2x ~0.001-0.002 on ch1/ch3) and exceeds 2x seen in normal trials. Kurtosis ~3.2-3.8 and crest ~4.5-5.5 are non-impulsive, consistent with misalignment/normal, not diagnostic alone. Limitation: radial signals and one short recording may not uniquely distinguish faults; assessment based only on supplied features vs same-rig references.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "query ch0 shows low 1x (0.00109) with elevated 2x (0.00989), ratio ~9, matching misalignment reference ch0 pattern (1x ~0.0003-0.0005, 2x 0.006-0.015) over normal/unbalance/looseness; need ch2 to test misalignment expectation of high 2x on both 0 and 2 vs low on 1/3",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"query ch0 shows low 1x (0.00109) with elevated 2x (0.00989), ratio ~9, matching misalignment reference ch0 pattern (1x ~0.0003-0.0005, 2x 0.006-0.015) over normal/unbalance/looseness; need ch2 to test misalignment expectation of high 2x on both 0 and 2 vs low on 1/3\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channels 0 and 2 show dominant 2x over 1x suggesting misalignment, but need to check channel 1 pattern to compare to reference misalignment vs normal on odd channels before diagnosing.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Channels 0 and 2 show dominant 2x over 1x suggesting misalignment, but need to check channel 1 pattern to compare to reference misalignment vs normal on odd channels before diagnosing.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Channels 0 and 2 show low 1x with dominant 2x, consistent with misalignment reference trials, but channel 1 2x is borderline and channel 3 is needed to check 1x elevation vs 2x pattern before diagnosing.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Channels 0 and 2 show low 1x with dominant 2x, consistent with misalignment reference trials, but channel 1 2x is borderline and channel 3 is needed to check 1x elevation vs 2x pattern before diagnosing.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows low 1x (~0.0009-0.0013) on all 4 channels, similar to normal and misalignment references, not the elevated 1x (~0.004-0.015) seen in unbalance and looseness references. Query shows elevated 2x on channels 0 (0.00989) and 2 (0.00828) with lower 2x on channels 1 (0.00240) and 3 (0.00153). This channel-selective 2x dominance matches labelled misalignment trials (e.g., 2x ~0.014-0.015 on ch0/ch2 with 1x <0.0011, and 2x ~0.001-0.002 on ch1/ch3) and exceeds 2x seen in normal trials. Kurtosis ~3.2-3.8 and crest ~4.5-5.5 are non-impulsive, consistent with misalignment/normal, not diagnostic alone. Limitation: radial signals and one short recording may not uniquely distinguish faults; assessment based only on supplied features vs same-rig references.",
+        "raw_response": "{\"action\":\"diagnose\",\"label\":\"misalignment\",\"reason\":\"Query shows low 1x (~0.0009-0.0013) on all 4 channels, similar to normal and misalignment references, not the elevated 1x (~0.004-0.015) seen in unbalance and looseness references. Query shows elevated 2x on channels 0 (0.00989) and 2 (0.00828) with lower 2x on channels 1 (0.00240) and 3 (0.00153). This channel-selective 2x dominance matches labelled misalignment trials (e.g., 2x ~0.014-0.015 on ch0/ch2 with 1x <0.0011, and 2x ~0.001-0.002 on ch1/ch3) and exceeds 2x seen in normal trials. Kurtosis ~3.2-3.8 and crest ~4.5-5.5 are non-impulsive, consistent with misalignment/normal, not diagnostic alone. Limitation: radial signals and one short recording may not uniquely distinguish faults; assessment based only on supplied features vs same-rig references.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "status": "completed"
+  }
+}

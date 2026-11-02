@@ -191,3 +191,48 @@ decision changes, add a new entry that supersedes the old one instead of editing
   Meta training rights). Muse Spark always reasons, so requests send
   `max_completion_tokens: 4000` and `reasoning_effort` (default `low`), and the timeout is
   60 s. Temperature 0.2 is kept (allowed range 0–2).
+
+- **D-56 · 1 Nov 2026 · Concurrent replay writes.** Rule investigations intentionally
+  reuse deterministic ids. Each save now uses a unique temporary file in the replay
+  directory, then atomically replaces the destination. Concurrent writers cannot share
+  or remove one another's temporary file; the last successful replacement wins.
+- **D-57 · 1 Nov 2026 · Valid UI seeds.** Investigation and lab controls truncate
+  fractional seeds and clamp to their respective API ranges. Replay-open buttons are
+  disabled while a request is active to prevent overlapping loads from the picker.
+- **D-58 · 1 Nov 2026 · Demo evidence.** All six cases now have baseline demo replays.
+  The rehearsal uses `case-r2-info_gain-0` (two experiments): the compressor seed-0
+  replay has one experiment, so the original multi-round narration was inaccurate.
+  A Meta recording must use a real, inspected Meta trace after API access is configured.
+- **D-59 · 1 Nov 2026 · Small phone layout.** Shared panels have `min-width: 0` and
+  mobile grids use one explicit shrinkable column, so charts and tables do not expand
+  the page. Probability labels use narrower columns on phones. Browser checks cover
+  320-pixel and 390-pixel widths as well as desktop light and dark themes.
+- **D-60 · 1 Nov 2026 · Single-process demo.** An optional frontend build directory is
+  mounted after the API routes. `python scripts/tasks.py serve` selects `frontend/dist`
+  and runs Uvicorn on localhost without reload. Builds are explicit and missing builds
+  fail at startup. The production runtime does not need Node. CI now uses the cross-platform
+  task runner on Windows and Linux; no hosted deployment has been created.
+- **D-61 · 1 Nov 2026 · Windows replacement contention.** The concurrent-save test
+  exposed transient permission errors during simultaneous Windows file replacement.
+  Retry only `PermissionError` on Windows, up to five attempts with 10–40 ms delays.
+  Exhausted retries and other errors propagate; temporary files are cleaned up.
+
+## Paired proof challenge (2 November 2026)
+
+Add a separate frozen challenge using seed 731904: four generated machines per
+hypothesis, each under no-history, misleading-note and injection-note conditions.
+Preserve all outcomes and compare Meta against information gain on the same
+machine and sensor seed. Display Wilson accuracy intervals and paired bootstrap
+cost intervals per condition; retain latency and fallbacks. Publish compact model
+evidence and support exact offline replay. Keep the original 18-run results
+separate. This is a simulation proof of concept, not real-machine validation.
+
+## Real machine measurements (2 November 2026)
+
+User requested real examples. Add a separate attributed measured-laboratory path,
+not a conversion of the simulator to a claimed real-world model. Use Brito et al.
+(2022), DOI 10.17632/zx8pfhdtnb.1, CC BY 4.0; first window per source trial.
+Keep 12 reference trials separate from eight held-out trials. Hide query labels
+and filenames from Meta; allow inspection only of already recorded sensors.
+Preserve native amplitude units until calibration is verified. Keep the physical
+rig photograph and source attribution visible. All code is original.

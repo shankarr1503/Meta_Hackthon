@@ -1,0 +1,40 @@
+{
+  "plan_hash": "2c7feea992373f3193fc8c76a267f60603fc2b116dfa80d50a6fc8d18d666b4c",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "unbalance",
+    "reason": "Query shows dominant shaft 1x on all 4 channels (0.0126, 0.00788, 0.01073, 0.00730) with low 2x (0.0009-0.0033) and very low 3x (0.00012-0.00035). This matches labelled unbalance trials where 1x is ~0.004-0.015 and >>2x, e.g. unbalance reference with 1x 0.0154/0.0089/0.0129/0.0085, vs normal/misalignment where 1x is ~0.0003-0.0015 and misalignment shows dominant 2x ~0.011-0.015 on ch0/ch2. RMS ~0.034-0.038, crest ~4.7-7.3, kurtosis ~3.0-3.8 also align with unbalance references and not the high kurtosis/crest normal examples. Limitation: looseness references also show elevated 1x of similar magnitude, and radial signals plus one short recording cannot fully exclude looseness; 3x is low which favors unbalance over the looseness example with high 3x, but distinction remains imperfect.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channel 0 shows dominant 1x (0.0126 >> 2x/3x) ruling out normal/misalignment, but unbalance vs looseness both show high 1x on ch0 in references; need second radial channel to check 1x dominance across directions and harmonic pattern.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Channel 0 shows dominant 1x (0.0126 >> 2x/3x) ruling out normal/misalignment, but unbalance vs looseness both show high 1x on ch0 in references; need second radial channel to check 1x dominance across directions and harmonic pattern.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Channels 0-1 show dominant 1x with low 2x/3x, consistent with both unbalance and looseness references; need another channel to check 2x/3x pattern before diagnosing.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Channels 0-1 show dominant 1x with low 2x/3x, consistent with both unbalance and looseness references; need another channel to check 2x/3x pattern before diagnosing.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0-2 show dominant shaft_1x (~0.008-0.013) with low 2x/3x, matching both unbalance and looseness references and ruling out normal/misalignment; ch3 1x/2x/3x needed to distinguish unbalance vs looseness.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0-2 show dominant shaft_1x (~0.008-0.013) with low 2x/3x, matching both unbalance and looseness references and ruling out normal/misalignment; ch3 1x/2x/3x needed to distinguish unbalance vs looseness.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows dominant shaft 1x on all 4 channels (0.0126, 0.00788, 0.01073, 0.00730) with low 2x (0.0009-0.0033) and very low 3x (0.00012-0.00035). This matches labelled unbalance trials where 1x is ~0.004-0.015 and >>2x, e.g. unbalance reference with 1x 0.0154/0.0089/0.0129/0.0085, vs normal/misalignment where 1x is ~0.0003-0.0015 and misalignment shows dominant 2x ~0.011-0.015 on ch0/ch2. RMS ~0.034-0.038, crest ~4.7-7.3, kurtosis ~3.0-3.8 also align with unbalance references and not the high kurtosis/crest normal examples. Limitation: looseness references also show elevated 1x of similar magnitude, and radial signals plus one short recording cannot fully exclude looseness; 3x is low which favors unbalance over the looseness example with high 3x, but distinction remains imperfect.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"unbalance\", \"reason\": \"Query shows dominant shaft 1x on all 4 channels (0.0126, 0.00788, 0.01073, 0.00730) with low 2x (0.0009-0.0033) and very low 3x (0.00012-0.00035). This matches labelled unbalance trials where 1x is ~0.004-0.015 and >>2x, e.g. unbalance reference with 1x 0.0154/0.0089/0.0129/0.0085, vs normal/misalignment where 1x is ~0.0003-0.0015 and misalignment shows dominant 2x ~0.011-0.015 on ch0/ch2. RMS ~0.034-0.038, crest ~4.7-7.3, kurtosis ~3.0-3.8 also align with unbalance references and not the high kurtosis/crest normal examples. Limitation: looseness references also show elevated 1x of similar magnitude, and radial signals plus one short recording cannot fully exclude looseness; 3x is low which favors unbalance over the looseness example with high 3x, but distinction remains imperfect.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "status": "completed"
+  }
+}

@@ -150,7 +150,7 @@ export default function ManualLab() {
         <SimulatedLabel />
       </header>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <Panel title="Controls">
           <div className="space-y-3">
             {SLIDERS.map((s) => (
@@ -175,10 +175,14 @@ export default function ManualLab() {
               <input
                 type="number"
                 min={0}
+                max={2147483647}
                 className="w-24 rounded border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
                 value={params.seed}
                 onChange={(e) =>
-                  setParams((p) => ({ ...p, seed: Math.max(0, Number(e.target.value) || 0) }))
+                  setParams((p) => ({
+                    ...p,
+                    seed: Math.trunc(Math.max(0, Math.min(2147483647, Number(e.target.value) || 0))),
+                  }))
                 }
               />
             </label>
@@ -205,7 +209,7 @@ export default function ManualLab() {
       </div>
 
       {result && (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <Panel title="Response curve">
             <ResponseCurve result={result} currentRpm={readingRpm} />
           </Panel>

@@ -5,18 +5,20 @@ import {
   getInvestigation,
   getReady,
   listInvestigations,
-  runInvestigation,
 } from "./api/client";
 import type { CaseView, PlannerName, ReadyResponse, Trace, TraceSummary } from "./api/types";
 import BenchmarkView from "./benchmark/BenchmarkView";
 import CasePicker from "./dashboard/CasePicker";
 import InvestigationView from "./dashboard/InvestigationView";
+import LiveInvestigationView from "./dashboard/LiveInvestigationView";
 import ManualLab from "./lab/ManualLab";
+import RealRecordings from "./real/RealRecordings";
 import SimulatedLabel from "./SimulatedLabel";
 
-type Tab = "investigate" | "lab" | "benchmark";
+type Tab = "investigate" | "lab" | "benchmark" | "real";
 
 const TABS: { id: Tab; label: string }[] = [
+  { id: "real", label: "Real recordings" },
   { id: "investigate", label: "Investigate" },
   { id: "lab", label: "Manual lab" },
   { id: "benchmark", label: "Benchmark" },
@@ -32,10 +34,17 @@ function message(error: unknown): string {
 }
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>("investigate");
+  const [tab, setTab] = useState<Tab>(new URLSearchParams(window.location.search).get("view") === "real" ? "real" : "investigate");
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [replays, setReplays] = useState<TraceSummary[]>([]);
   const [trace, setTrace] = useState<Trace | null>(null);
+  const [live, setLive] = useState<{
+    caseId: string;
+    caseTitle: string;
+    caseNote: string;
+    planner: PlannerName;
+    seed: number;
+  } | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -73,8 +82,22 @@ export default function App() {
     }
   };
 
-  const onRun = (caseId: string, planner: PlannerName, seed: number) =>
-    open(() => runInvestigation({ case_id: caseId, planner, seed }));
+  const onRun = (
+    caseView: CaseView,
+    planner: PlannerName,
+    seed: number,
+  ) => {
+    setBusy(false);
+    setError(null);
+    setTrace(null);
+    setLive({
+      caseId: caseView.case_id,
+      caseTitle: caseView.title,
+      caseNote: caseView.note,
+      planner,
+      seed,
+    });
+  };
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
@@ -83,14 +106,13 @@ export default function App() {
           <div>
             <h1 className="text-2xl font-bold">FailureLab AI</h1>
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              A Meta-model investigator that designs experiments on a simulated rotating machine.
-              All data is simulated.
+              A Meta-model investigator for rotating machines. Explore real recordings and simulated experiments.
             </p>
           </div>
-          <SimulatedLabel />
+          {tab === "real" ? <span className="rounded border border-emerald-500 bg-emerald-50 px-2 py-1 text-xs font-semibold uppercase text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">Measured laboratory data</span> : <SimulatedLabel />}
         </header>
 
-        <nav aria-label="Sections" className="flex gap-1 border-b border-slate-200 dark:border-slate-800">
+        <nav aria-label="Sections" className="flex flex-wrap gap-1 border-b border-slate-200 dark:border-slate-800">
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -108,6 +130,7 @@ export default function App() {
           ))}
         </nav>
 
+        {tab === "real" && <RealRecordings />}
         {tab === "lab" && <ManualLab />}
         {tab === "benchmark" && <BenchmarkView />}
 
@@ -120,7 +143,15 @@ export default function App() {
           <p role="status">Running the simulated investigation…</p>
         )}
 
-        {tab !== "investigate" ? null : trace ? (
+        {tab !== "investigate" ? null : live ? (
+          <LiveInvestigationView
+            caseId={live.caseId}
+            caseTitle={live.caseTitle}
+            caseNote={live.caseNote}
+            planner={live.planner}
+            seed={live.seed}
+          />
+        ) : trace ? (
           <div className="space-y-4">
             <button
               type="button"

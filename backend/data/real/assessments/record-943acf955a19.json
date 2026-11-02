@@ -1,0 +1,40 @@
+{
+  "plan_hash": "2c7feea992373f3193fc8c76a267f60603fc2b116dfa80d50a6fc8d18d666b4c",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "normal",
+    "reason": "Query 1x amplitudes 0.00068-0.00168 across ch0-3 match normal reference trials (0.0004-0.0015) and are ~5-10x below unbalance (0.004-0.015) and looseness (0.004-0.013) references. 2x pattern 0.0029-0.0031 on ch0/ch2 with low 0.0005-0.0006 on ch1/ch3 matches normal (ch0/2 ~0.0025-0.0054, ch1/3 <0.001) and is well below misalignment references which show elevated 2x on ch0/ch2 0.0047-0.0154. 3x low, rms 0.032-0.038, kurtosis ~3.2-3.4 and crest ~4.5-7.3 consistent with normal. Limitation: radial-only short record cannot fully exclude early looseness/misalignment, but no fault signature present vs labelled trials.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Channel 0 shows low 1X (~0.0009) and modest 2X (~0.0031) matching normal reference, but misalignment is defined by high 2X on channels 0/2; need channel 2 to confirm 2X level before diagnosing.",
+        "raw_response": "Channel 0 looks normal-like, but one radial channel can't rule out faults \u2014 I'll inspect another channel to confirm.{\"action\":\"inspect\",\"channel\":2,\"reason\":\"Channel 0 shows low 1X (~0.0009) and modest 2X (~0.0031) matching normal reference, but misalignment is defined by high 2X on channels 0/2; need channel 2 to confirm 2X level before diagnosing.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Query ch0 and ch2 show low 1x (~0.0009, 0.00068) and modest 2x (~0.0031, 0.0029), matching normal reference and below misalignment 2x elevation on ch0/2, and well below unbalance/looseness 1x elevation; need ch1 to verify 1x remains low and 2x/3x pattern across axes before diagnosing.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":1,\"reason\":\"Query ch0 and ch2 show low 1x (~0.0009, 0.00068) and modest 2x (~0.0031, 0.0029), matching normal reference and below misalignment 2x elevation on ch0/2, and well below unbalance/looseness 1x elevation; need ch1 to verify 1x remains low and 2x/3x pattern across axes before diagnosing.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Channels 0,2,1 show low 1x (~0.0007-0.0012) and modest 2x (~0.003 on 0/2), matching normal reference trials and below misalignment 2x levels, but channel 3 is unseen and needed to confirm 1x remains low and no elevated 2x/3x indicating misalignment or looseness.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Channels 0,2,1 show low 1x (~0.0007-0.0012) and modest 2x (~0.003 on 0/2), matching normal reference trials and below misalignment 2x levels, but channel 3 is unseen and needed to confirm 1x remains low and no elevated 2x/3x indicating misalignment or looseness.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query 1x amplitudes 0.00068-0.00168 across ch0-3 match normal reference trials (0.0004-0.0015) and are ~5-10x below unbalance (0.004-0.015) and looseness (0.004-0.013) references. 2x pattern 0.0029-0.0031 on ch0/ch2 with low 0.0005-0.0006 on ch1/ch3 matches normal (ch0/2 ~0.0025-0.0054, ch1/3 <0.001) and is well below misalignment references which show elevated 2x on ch0/ch2 0.0047-0.0154. 3x low, rms 0.032-0.038, kurtosis ~3.2-3.4 and crest ~4.5-7.3 consistent with normal. Limitation: radial-only short record cannot fully exclude early looseness/misalignment, but no fault signature present vs labelled trials.",
+        "raw_response": "{\"action\":\"diagnose\",\"label\":\"normal\",\"reason\":\"Query 1x amplitudes 0.00068-0.00168 across ch0-3 match normal reference trials (0.0004-0.0015) and are ~5-10x below unbalance (0.004-0.015) and looseness (0.004-0.013) references. 2x pattern 0.0029-0.0031 on ch0/ch2 with low 0.0005-0.0006 on ch1/ch3 matches normal (ch0/2 ~0.0025-0.0054, ch1/3 <0.001) and is well below misalignment references which show elevated 2x on ch0/ch2 0.0047-0.0154. 3x low, rms 0.032-0.038, kurtosis ~3.2-3.4 and crest ~4.5-7.3 consistent with normal. Limitation: radial-only short record cannot fully exclude early looseness/misalignment, but no fault signature present vs labelled trials.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "status": "completed"
+  }
+}

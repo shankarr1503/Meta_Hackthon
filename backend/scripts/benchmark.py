@@ -161,6 +161,7 @@ def merge_results(path: Path, entries: dict[str, Any], protocols: dict[str, Any]
     model version, rules and time it was measured with, so older entries keep theirs."""
     existing = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
     result = {
+        **existing,
         "source": "simulation",
         "model_version": MODEL_VERSION,
         "generated_at": _now(),

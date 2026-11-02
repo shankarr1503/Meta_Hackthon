@@ -1,9 +1,10 @@
 """Cross-platform task runner mirroring the Makefile, for machines without make.
 
-Usage: python scripts/tasks.py <setup|backend|frontend|test|lint|build|check|benchmark|benchmark-meta>
+Usage: python scripts/tasks.py <setup|backend|frontend|serve|test|lint|build|check|benchmark|benchmark-meta|proof|real-data>
 Run `setup` with the interpreter you want in the venv (Python 3.11+, e.g. python3.12).
 """
 
+import os
 import shutil
 import subprocess
 import sys
@@ -55,6 +56,14 @@ def frontend() -> None:
     run([npm(), "run", "dev"], FRONTEND)
 
 
+def serve() -> None:
+    """Serve the production dashboard and API together, without a Node runtime."""
+    if not (FRONTEND / "dist" / "index.html").is_file():
+        sys.exit("Frontend build missing; run: python scripts/tasks.py build")
+    os.environ["FAILURELAB_FRONTEND_DIR"] = str(FRONTEND / "dist")
+    run([venv_python(), "-m", "uvicorn", "app.main:app", "--port", "8000"], BACKEND)
+
+
 def test() -> None:
     run([venv_python(), "-m", "pytest"], BACKEND)
     run([npm(), "test"], FRONTEND)
@@ -79,6 +88,15 @@ def benchmark_meta() -> None:
     run([venv_python(), "scripts/benchmark.py", "--planner", "meta"], BACKEND)
 
 
+def proof() -> None:
+    run([venv_python(), "scripts/proof.py", "--max-calls", "500"], BACKEND)
+
+
+def real_data() -> None:
+    run([venv_python(), "scripts/fetch_real.py"], BACKEND)
+    run([venv_python(), "scripts/real_examples.py", "--live"], BACKEND)
+
+
 def check() -> None:
     lint()
     test()
@@ -89,12 +107,15 @@ TASKS: dict[str, Callable[[], None]] = {
     "setup": setup,
     "backend": backend,
     "frontend": frontend,
+    "serve": serve,
     "test": test,
     "lint": lint,
     "build": build,
     "check": check,
     "benchmark": benchmark,
     "benchmark-meta": benchmark_meta,
+    "proof": proof,
+    "real-data": real_data,
 }
 
 

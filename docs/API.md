@@ -118,3 +118,24 @@ also writes `info_gain_meta_cases`: `info_gain` on exactly the Meta runs. Each
 planner maps groups (`all`, `sealed`, `generated`, `truth:<hypothesis>`) to `{runs,
 accuracy, mean_experiments, mean_cost, reached_target, accuracy_when_confident,
 fallback_rate}`. `404` until the benchmark has been run.
+
+## Proof challenge evidence
+
+After `python scripts/tasks.py proof`, `/api/benchmark` includes an optional `proof`
+summary with the frozen plan hash, per-condition metrics, confidence intervals and
+per-machine paired results. Note variants are correlated observations of the same
+machine. Original benchmark planner rows are preserved separately.
+
+`GET /api/proof/download` downloads `backend/results/proof.json` as a JSON attachment.
+It contains every scored pair and compact investigation traces with raw model replies,
+choices, predictions and measured features; signal arrays are omitted. `404` if the
+challenge has not completed. This is retrospective simulated evidence and includes
+truth labels used only by the evaluator, never by the investigator.
+
+## Real recordings (2 November 2026)
+
+GET `/api/real-recordings` returns the attributed measured-laboratory report: source
+manifest, trial split, measured previews/features, recorded Meta sensor-inspection
+actions and per-trial published labels for retrospective inspection. 404 if absent,
+503 if the source is not measured_laboratory. GET `/api/real-recordings/photo` serves
+the original CC BY 4.0 test-rig photograph. Neither route calls the model.

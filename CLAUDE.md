@@ -23,14 +23,16 @@ that override them: docs/DECISIONS.md. Treat them as plans, not code.
 - **Rights.** Allowed: permissive licenses (MIT, BSD, Apache-2.0, ISC), weak
   copyleft used unmodified (MPL-2.0, e.g. certifi), CC-BY-4.0 data
   (caniuse-lite) and OFL fonts (Google Fonts). Not allowed: GPL, AGPL, or
-  anything without a license. No copied assets, datasets or code. Our code is
+  anything without a license. Third-party real recordings and the source photograph are attributed under
+  CC BY 4.0 (see docs/REAL_DATA.md); analysis code remains original. Our code is
   MIT-licensed.
 - **Public repo.** No secrets, ever. Keys live only in `backend/.env`, which is
   git-ignored. `backend/.env.example` holds blank placeholders.
 - **Meta model at the centre.** The Meta model is the main investigator.
   Rule-based planners are the fallback and the baselines to beat.
-- **Honesty.** All data is simulated. Label it in code, API, UI and docs.
-  Never claim validated real-world accuracy.
+- **Honesty.** Label simulator data as simulated and the attributed real-data path
+  as measured laboratory recordings. Never relabel generated signals as measured,
+  or claim industrial reliability from the small real-data sample.
 - **Deadline.** Submit by Wednesday 4 November, 9:00 PM ET.
 
 ## Architecture
@@ -111,3 +113,12 @@ and the API read Scenario objects; the frontend talks only to /api.
 - [ ] ASSUMPTIONS.md / DECISIONS.md updated if behaviour changed
 - [ ] No secrets in the diff
 - [ ] No claim in docs or UI that tests or the benchmark do not support
+
+## Real recordings extension (user-authorized)
+
+The real-data path in app/measured.py computes features from original accelerometer
+recordings and never uses simulator probabilities. scripts/fetch_real.py downloads
+attributed CC BY 4.0 samples; scripts/real_examples.py evaluates trial-disjoint
+references and held-out recordings. Source file names and query labels are never
+sent with held-out queries. Preserve all measured results and errors. The recorded
+examples are not a live factory connection. See docs/REAL_DATA.md.

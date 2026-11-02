@@ -1,0 +1,40 @@
+{
+  "plan_hash": "2c7feea992373f3193fc8c76a267f60603fc2b116dfa80d50a6fc8d18d666b4c",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "unbalance",
+    "reason": "All four channels show elevated shaft 1x 0.0105-0.0143 with 1x>>2x>>3x (ratios ~3.9-7.3) and low 3x <0.001. Reference normal trials have 1x ~0.0004-0.0015; reference misalignment trials have low 1x ~0.0003-0.0011 with dominant 2x ~0.011-0.015 on ch0/2, opposite to query. Query matches reference unbalance trials with 1x 0.004-0.015 dominating 2x 0.0005-0.005 and low kurtosis ~3.1-4.0, crest ~4.7-6.7 indicating largely sinusoidal. Limitation: reference looseness can also show high 1x ~0.006-0.012 with low harmonics in one trial, and radial-only short recording cannot fully exclude looseness or combined faults; assessment based only on supplied features.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Channel 0 shows high 1X with low 2X, against misalignment but overlapping unbalance and looseness; channel 2 best separates misalignment 2X elevation from 1X-dominant faults in references.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":2,\"reason\":\"Channel 0 shows high 1X with low 2X, against misalignment but overlapping unbalance and looseness; channel 2 best separates misalignment 2X elevation from 1X-dominant faults in references.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channels 0 and 2 show dominant 1x with low 2x/3x, consistent with both unbalance and looseness references; need channel 1 to compare 1x amplitude and harmonic pattern before diagnosing.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Channels 0 and 2 show dominant 1x with low 2x/3x, consistent with both unbalance and looseness references; need channel 1 to compare 1x amplitude and harmonic pattern before diagnosing.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query channels 0,1,2 show dominant shaft_1x (~0.010-0.014) with much smaller 2x/3x, matching both unbalance and looseness references; channel 3 is needed to check 1x consistency and 3x/harmonic pattern before diagnosing.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query channels 0,1,2 show dominant shaft_1x (~0.010-0.014) with much smaller 2x/3x, matching both unbalance and looseness references; channel 3 is needed to check 1x consistency and 3x/harmonic pattern before diagnosing.\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "All four channels show elevated shaft 1x 0.0105-0.0143 with 1x>>2x>>3x (ratios ~3.9-7.3) and low 3x <0.001. Reference normal trials have 1x ~0.0004-0.0015; reference misalignment trials have low 1x ~0.0003-0.0011 with dominant 2x ~0.011-0.015 on ch0/2, opposite to query. Query matches reference unbalance trials with 1x 0.004-0.015 dominating 2x 0.0005-0.005 and low kurtosis ~3.1-4.0, crest ~4.7-6.7 indicating largely sinusoidal. Limitation: reference looseness can also show high 1x ~0.006-0.012 with low harmonics in one trial, and radial-only short recording cannot fully exclude looseness or combined faults; assessment based only on supplied features.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"unbalance\", \"reason\": \"All four channels show elevated shaft 1x 0.0105-0.0143 with 1x>>2x>>3x (ratios ~3.9-7.3) and low 3x <0.001. Reference normal trials have 1x ~0.0004-0.0015; reference misalignment trials have low 1x ~0.0003-0.0011 with dominant 2x ~0.011-0.015 on ch0/2, opposite to query. Query matches reference unbalance trials with 1x 0.004-0.015 dominating 2x 0.0005-0.005 and low kurtosis ~3.1-4.0, crest ~4.7-6.7 indicating largely sinusoidal. Limitation: reference looseness can also show high 1x ~0.006-0.012 with low harmonics in one trial, and radial-only short recording cannot fully exclude looseness or combined faults; assessment based only on supplied features.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "status": "completed"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "plan_hash": "2c7feea992373f3193fc8c76a267f60603fc2b116dfa80d50a6fc8d18d666b4c",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "unbalance",
+    "reason": "Query shows dominant shaft 1x on all channels vs references: ch0 0.0096, ch1 0.0058, ch2 0.0145, ch3 0.0035 with 1x>>2x (2x 0.0010-0.0032) and very low 3x (<0.0007). This matches unbalance references where 1x ~0.004-0.015 and 1x>>2x, e.g. 0.0130/0.0023, 0.0097/0.0017, 0.0154/0.0051. It rejects normal (reference 1x ~0.0004-0.0015) and misalignment (reference 2x dominant ~0.011-0.015 on ch0/ch2 with 1x <0.0011). Looseness also has high 1x but reference looseness typically shows higher 2x and 3x (e.g. ch0 0.0068/0.0070, ch0 0.0068/0.0034/0.0042, ch3 0.0128/0.0046/0.0022) unlike query low 2x/3x. Limitation: radial-only short record, rms ~0.028-0.032 lower than most unbalance refs ~0.040-0.048 and overlapping looseness low-rms trial, so unbalance vs looseness not uniquely separable, unknown allowed but unbalance best fit.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channel 0 shows dominant 1x (0.0096) over 2x (0.00319) with low 3x, consistent with both unbalance and looseness references, while rms is low. One radial channel cannot separate unbalance (1x dominant on all channels) from looseness (1x high with variable 2x/3x) or rule out misalignment. Need another channel to compare 1x/2x/3x pattern.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":1,\"reason\":\"Channel 0 shows dominant 1x (0.0096) over 2x (0.00319) with low 3x, consistent with both unbalance and looseness references, while rms is low. One radial channel cannot separate unbalance (1x dominant on all channels) from looseness (1x high with variable 2x/3x) or rule out misalignment. Need another channel to compare 1x/2x/3x pattern.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Query ch0-1 show elevated 1X with low 3X, consistent with both unbalance and looseness references; need ch2 1X/2X pattern and rms to distinguish, as radial channels differ between misalignment (high 2X on ch0/2) vs unbalance/looseness.",
+        "raw_response": "{\"action\":\"inspect\",\"channel\":2,\"reason\":\"Query ch0-1 show elevated 1X with low 3X, consistent with both unbalance and looseness references; need ch2 1X/2X pattern and rms to distinguish, as radial channels differ between misalignment (high 2X on ch0/2) vs unbalance/looseness.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0-2 show dominant 1x (~0.006-0.015) over 2x, matching both unbalance and looseness references; rms is low (~0.028-0.032) similar to one looseness trial and lower than unbalance trials. Channel 3 1x/2x/3x pattern is needed to distinguish unbalance (1x dominant, low 2x/3x) from looseness (elevated 2x/3x).",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0-2 show dominant 1x (~0.006-0.015) over 2x, matching both unbalance and looseness references; rms is low (~0.028-0.032) similar to one looseness trial and lower than unbalance trials. Channel 3 1x/2x/3x pattern is needed to distinguish unbalance (1x dominant, low 2x/3x) from looseness (elevated 2x/3x).\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "Query shows dominant shaft 1x on all channels vs references: ch0 0.0096, ch1 0.0058, ch2 0.0145, ch3 0.0035 with 1x>>2x (2x 0.0010-0.0032) and very low 3x (<0.0007). This matches unbalance references where 1x ~0.004-0.015 and 1x>>2x, e.g. 0.0130/0.0023, 0.0097/0.0017, 0.0154/0.0051. It rejects normal (reference 1x ~0.0004-0.0015) and misalignment (reference 2x dominant ~0.011-0.015 on ch0/ch2 with 1x <0.0011). Looseness also has high 1x but reference looseness typically shows higher 2x and 3x (e.g. ch0 0.0068/0.0070, ch0 0.0068/0.0034/0.0042, ch3 0.0128/0.0046/0.0022) unlike query low 2x/3x. Limitation: radial-only short record, rms ~0.028-0.032 lower than most unbalance refs ~0.040-0.048 and overlapping looseness low-rms trial, so unbalance vs looseness not uniquely separable, unknown allowed but unbalance best fit.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"unbalance\", \"reason\": \"Query shows dominant shaft 1x on all channels vs references: ch0 0.0096, ch1 0.0058, ch2 0.0145, ch3 0.0035 with 1x>>2x (2x 0.0010-0.0032) and very low 3x (<0.0007). This matches unbalance references where 1x ~0.004-0.015 and 1x>>2x, e.g. 0.0130/0.0023, 0.0097/0.0017, 0.0154/0.0051. It rejects normal (reference 1x ~0.0004-0.0015) and misalignment (reference 2x dominant ~0.011-0.015 on ch0/ch2 with 1x <0.0011). Looseness also has high 1x but reference looseness typically shows higher 2x and 3x (e.g. ch0 0.0068/0.0070, ch0 0.0068/0.0034/0.0042, ch3 0.0128/0.0046/0.0022) unlike query low 2x/3x. Limitation: radial-only short record, rms ~0.028-0.032 lower than most unbalance refs ~0.040-0.048 and overlapping looseness low-rms trial, so unbalance vs looseness not uniquely separable, unknown allowed but unbalance best fit.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "status": "completed"
+  }
+}

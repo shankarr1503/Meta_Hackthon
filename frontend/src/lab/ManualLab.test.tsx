@@ -89,4 +89,18 @@ describe("ManualLab", () => {
     await flush();
     expect(screen.getByRole("alert")).toHaveTextContent("bad input");
   });
+
+  it("keeps the noise seed inside the backend integer range", async () => {
+    vi.useFakeTimers();
+    const fetchMock = stubLab();
+    render(<ManualLab />);
+    await flush();
+    const seed = screen.getByLabelText("Noise seed");
+    fireEvent.change(seed, { target: { value: "2.7" } });
+    await flush();
+    expect(JSON.parse(fetchMock.mock.calls.at(-1)![1].body).seed).toBe(2);
+    fireEvent.change(seed, { target: { value: "999999999999" } });
+    await flush();
+    expect(JSON.parse(fetchMock.mock.calls.at(-1)![1].body).seed).toBe(2147483647);
+  });
 });

@@ -6,7 +6,12 @@ from datetime import datetime
 
 import pytest
 
-from app.agent.investigate import investigate, investigation_id, recommended_check
+from app.agent.investigate import (
+    investigate,
+    investigate_frames,
+    investigation_id,
+    recommended_check,
+)
 from app.agent.planners import rule_planner
 from app.cases import SEALED_CASES, get_scenario
 from app.inference.engine import BUDGET, CONFIDENCE_TARGET
@@ -103,3 +108,40 @@ def test_investigation_ids() -> None:
 def test_recommended_check_for_combined_fault() -> None:
     text = recommended_check("imbalance+friction")
     assert "balance" in text and "lubrication" in text
+
+
+def test_frame_sequence_matches_phases() -> None:
+    frames = list(
+        investigate_frames(
+            get_scenario("case-t4").view(),
+            make_runner(get_scenario("case-t4"), 0),
+            rule_planner("info_gain"),
+            0,
+        )
+    )
+    kinds = [f["kind"] for f in frames]
+    assert kinds[0] == "prior"
+    assert kinds[1] == "alarm"
+    assert kinds[-2] == "diagnosis"
+    assert kinds[-1] == "trace"
+    step_kinds = [k for k in kinds if k in {"choice", "predict", "result", "update"}]
+    # phases repeat in groups of 4 per experiment
+    assert len(step_kinds) % 4 == 0
+    # every choice/predict/result/update carries a step number and the case id
+    for f in frames:
+        assert f["investigation_id"] == "case-t4-info_gain-0"
+        assert f["case"]["case_id"] == "case-t4"
+        if f["kind"] in {"choice", "predict", "result", "update"}:
+            assert "step" in f
+
+
+def test_investigate_matches_frame_collection() -> None:
+    """investigate() returns the same trace as the final frame of investigate_frames()."""
+    scenario = get_scenario("case-b6")
+    direct = investigate(scenario.view(), make_runner(scenario, 7), rule_planner("sweep"), 7)
+    frames = list(
+        investigate_frames(scenario.view(), make_runner(scenario, 7), rule_planner("sweep"), 7)
+    )
+    traced = frames[-1]
+    assert traced["kind"] == "trace"
+    assert json.dumps(traced["trace"], sort_keys=True) == json.dumps(direct, sort_keys=True)

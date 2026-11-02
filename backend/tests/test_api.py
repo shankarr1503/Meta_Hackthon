@@ -103,6 +103,55 @@ def test_rule_investigation_round_trip(client: TestClient) -> None:
     assert listed[0]["demo"] is False
 
 
+def test_stream_returns_frames_in_order(client: TestClient) -> None:
+    response = client.get("/api/investigations/stream?case_id=case-m9&planner=info_gain&seed=2")
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/event-stream")
+    frames: list[dict] = []
+    for line in response.iter_lines():
+        if line.startswith("data: "):
+            frames.append(json.loads(line[len("data: ") :]))
+    kinds = [f["kind"] for f in frames]
+    assert kinds[0] == "prior"
+    assert kinds[1] == "alarm"
+    assert kinds[-2] == "diagnosis"
+    assert kinds[-1] == "trace"
+    assert set(kinds) == {
+        "prior",
+        "alarm",
+        "choice",
+        "predict",
+        "result",
+        "update",
+        "diagnosis",
+        "trace",
+    }
+    trace = frames[-1]["trace"]
+    assert trace["investigation_id"] == "case-m9-info_gain-2"
+    assert trace["source"] == "simulation"
+    assert trace["diagnosis"]["top"] in {
+        "healthy",
+        "imbalance",
+        "misalignment",
+        "friction",
+        "imbalance+friction",
+        "imbalance+misalignment",
+    }
+    # the trace saved to disk matches the streamed final frame
+    saved = client.get("/api/investigations/case-m9-info_gain-2").json()
+    assert saved == trace
+
+
+def test_stream_meta_without_model_returns_503(client: TestClient) -> None:
+    response = client.get("/api/investigations/stream?case_id=case-k7&planner=meta&seed=0")
+    assert response.status_code == 503
+
+
+def test_stream_unknown_case_returns_404(client: TestClient) -> None:
+    response = client.get("/api/investigations/stream?case_id=nope&planner=info_gain&seed=0")
+    assert response.status_code == 404
+
+
 def test_investigation_trace_has_no_hidden_values(client: TestClient) -> None:
     request = {"case_id": "case-b6", "planner": "sweep", "seed": 0}
     text = client.post("/api/investigations", json=request).text

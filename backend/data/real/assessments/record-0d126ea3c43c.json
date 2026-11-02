@@ -1,0 +1,40 @@
+{
+  "plan_hash": "2c7feea992373f3193fc8c76a267f60603fc2b116dfa80d50a6fc8d18d666b4c",
+  "model": "muse-spark-1.3",
+  "assessment": {
+    "label": "normal",
+    "reason": "All four channels show low shaft_1x (0.00041-0.00081), unlike unbalance references (1x ~0.004-0.015 on all channels) and looseness references (1x ~0.004-0.013 on all channels). Shaft_2x on ch0/ch2 is 0.00344/0.00335, within normal reference range (~0.0026-0.0054) and below misalignment references on same channels (~0.006-0.015). Crest ~4.1-4.6 and kurtosis ~3.0-3.2 match normal/misalignment baseline, with no elevated impulsiveness. Best match is normal. Limitation: radial signals and one short recording cannot fully exclude early misalignment; assessment based only on supplied features vs labelled trials from same rig.",
+    "events": [
+      {
+        "action": "inspect",
+        "channel": 2,
+        "reason": "Channel 0 shows low 1X ruling against unbalance/looseness, but 2X alone cannot separate normal vs misalignment; channel 2 carries the discriminative high 2X in misalignment references.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 2, \"reason\": \"Channel 0 shows low 1X ruling against unbalance/looseness, but 2X alone cannot separate normal vs misalignment; channel 2 carries the discriminative high 2X in misalignment references.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 1,
+        "reason": "Channels 0 and 2 show low 1x (~0.0004-0.0006) ruling against unbalance/looseness patterns which show high 1x on all channels, leaving normal vs misalignment. Both share low 1x with higher 2x on 0/2, so need channel 1 to compare 2x magnitude and 1x level to references.",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 1, \"reason\": \"Channels 0 and 2 show low 1x (~0.0004-0.0006) ruling against unbalance/looseness patterns which show high 1x on all channels, leaving normal vs misalignment. Both share low 1x with higher 2x on 0/2, so need channel 1 to compare 2x magnitude and 1x level to references.\"}"
+      },
+      {
+        "action": "inspect",
+        "channel": 3,
+        "reason": "Query ch0/ch1/ch2 show very low shaft_1x (~0.0004-0.0006) with modest shaft_2x ~0.0034 on ch0/ch2, matching normal reference trials and unlike unbalance/looseness which show elevated 1x >0.004 across channels. Channel 3 is needed to confirm low 1x across all sensors and to check 2x level to separate normal (~0.0004-0.0007) from misalignment (~0.002).",
+        "raw_response": "{\"action\": \"inspect\", \"channel\": 3, \"reason\": \"Query ch0/ch1/ch2 show very low shaft_1x (~0.0004-0.0006) with modest shaft_2x ~0.0034 on ch0/ch2, matching normal reference trials and unlike unbalance/looseness which show elevated 1x >0.004 across channels. Channel 3 is needed to confirm low 1x across all sensors and to check 2x level to separate normal (~0.0004-0.0007) from misalignment (~0.002).\"}"
+      },
+      {
+        "action": "diagnose",
+        "reason": "All four channels show low shaft_1x (0.00041-0.00081), unlike unbalance references (1x ~0.004-0.015 on all channels) and looseness references (1x ~0.004-0.013 on all channels). Shaft_2x on ch0/ch2 is 0.00344/0.00335, within normal reference range (~0.0026-0.0054) and below misalignment references on same channels (~0.006-0.015). Crest ~4.1-4.6 and kurtosis ~3.0-3.2 match normal/misalignment baseline, with no elevated impulsiveness. Best match is normal. Limitation: radial signals and one short recording cannot fully exclude early misalignment; assessment based only on supplied features vs labelled trials from same rig.",
+        "raw_response": "{\"action\": \"diagnose\", \"label\": \"normal\", \"reason\": \"All four channels show low shaft_1x (0.00041-0.00081), unlike unbalance references (1x ~0.004-0.015 on all channels) and looseness references (1x ~0.004-0.013 on all channels). Shaft_2x on ch0/ch2 is 0.00344/0.00335, within normal reference range (~0.0026-0.0054) and below misalignment references on same channels (~0.006-0.015). Crest ~4.1-4.6 and kurtosis ~3.0-3.2 match normal/misalignment baseline, with no elevated impulsiveness. Best match is normal. Limitation: radial signals and one short recording cannot fully exclude early misalignment; assessment based only on supplied features vs labelled trials from same rig.\"}"
+      }
+    ],
+    "observed_channels": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "status": "completed"
+  }
+}
