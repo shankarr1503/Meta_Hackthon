@@ -10,6 +10,7 @@ import TwinPanel from "../twin/TwinPanel";
 import AskPanel from "./AskPanel";
 import BudgetMeter from "./BudgetMeter";
 import DiagnosisCard from "./DiagnosisCard";
+import EvidenceTrail from "./EvidenceTrail";
 import ExperimentCard from "./ExperimentCard";
 import ExperimentLog from "./ExperimentLog";
 import Panel from "./Panel";
@@ -161,6 +162,13 @@ export default function LiveInvestigationView({
                 hypothesis {hypothesisName(diagnosis.diagnosis.top)} at{" "}
                 {probability(diagnosis.diagnosis.probability)}.
               </p>
+            )}
+            {diagnosis && state.alarm && (
+              <EvidenceTrail
+                steps={state.steps}
+                alarmPosterior={state.alarm.posterior}
+                top={diagnosis.diagnosis.top}
+              />
             )}
           </div>
         </Panel>

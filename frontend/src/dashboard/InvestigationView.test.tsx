@@ -66,6 +66,20 @@ describe("InvestigationView", () => {
     expect(screen.getByText("Check rotor balance.")).toBeInTheDocument();
   });
 
+  it("shows how the evidence built up once the diagnosis is reached", () => {
+    render(<InvestigationView trace={makeTrace()} />);
+    expect(screen.queryByRole("region", { name: "Evidence trail" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /Skip to end/ }));
+    const trail = screen.getByRole("region", { name: "Evidence trail" });
+    const items = within(trail).getAllByRole("listitem");
+    expect(items).toHaveLength(2);
+    expect(items[0]).toHaveTextContent("Experiment 1: 1,500 RPM, 1,000 N");
+    expect(items[0]).toHaveTextContent("Imbalance rose 50.0% → 70.0%");
+    expect(items[0]).toHaveTextContent("Imbalance at 70.0% after this step");
+    expect(items[1]).toHaveTextContent("Imbalance rose 70.0% → 95.0%");
+    expect(items[1]).toHaveTextContent("14.3 µm");
+  });
+
   it("plays automatically and stops at the end", () => {
     vi.useFakeTimers();
     render(<InvestigationView trace={makeTrace()} />);

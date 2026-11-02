@@ -51,6 +51,23 @@ export function posteriorBefore(
   return position > 0 ? steps[position - 1].posterior : alarmPosterior;
 }
 
+/** Changes smaller than the 0.1% display resolution read as unchanged. */
+export const UNCHANGED = 0.0005;
+
+/** The hypothesis whose engine probability rose the most, if any rose visibly. */
+export function largestRise(hypotheses: string[], change: ProbabilityChange): string | null {
+  let best: string | null = null;
+  let bestRise = 0;
+  for (const h of hypotheses) {
+    const rise = (change.after[h] ?? 0) - (change.before[h] ?? 0);
+    if (rise >= UNCHANGED && (best === null || rise > bestRise)) {
+      best = h;
+      bestRise = rise;
+    }
+  }
+  return best;
+}
+
 export interface View {
   frame: Frame;
   /** Probabilities to display: they change only once an update is shown. */

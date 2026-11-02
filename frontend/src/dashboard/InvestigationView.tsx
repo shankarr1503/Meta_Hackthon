@@ -7,6 +7,7 @@ import TwinPanel from "../twin/TwinPanel";
 import AskPanel from "./AskPanel";
 import BudgetMeter from "./BudgetMeter";
 import DiagnosisCard from "./DiagnosisCard";
+import EvidenceTrail from "./EvidenceTrail";
 import ExperimentCard from "./ExperimentCard";
 import ExperimentLog from "./ExperimentLog";
 import Panel from "./Panel";
@@ -82,10 +83,17 @@ export default function InvestigationView({ trace, metaConfigured = false }: Pro
             />
           )}
           {view.showDiagnosis && (
-            <p className="text-sm">
-              Investigation finished after {count(trace.experiments, "experiment")}: leading hypothesis{" "}
-              {hypothesisName(trace.diagnosis.top)} at {probability(trace.diagnosis.probability)}.
-            </p>
+            <div className="space-y-3">
+              <p className="text-sm">
+                Investigation finished after {count(trace.experiments, "experiment")}: leading hypothesis{" "}
+                {hypothesisName(trace.diagnosis.top)} at {probability(trace.diagnosis.probability)}.
+              </p>
+              <EvidenceTrail
+                steps={trace.steps}
+                alarmPosterior={trace.alarm.posterior}
+                top={trace.diagnosis.top}
+              />
+            </div>
           )}
         </Panel>
       </div>

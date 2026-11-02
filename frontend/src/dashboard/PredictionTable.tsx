@@ -1,29 +1,12 @@
 import type { Measured, Prediction } from "../api/types";
 import { celsius, hypothesisName, orderedHypotheses, probability, um } from "../format";
-import type { ProbabilityChange } from "../state/player";
-
-/** Changes smaller than the 0.1% display resolution read as unchanged. */
-const UNCHANGED = 0.0005;
+import { largestRise, UNCHANGED, type ProbabilityChange } from "../state/player";
 
 type Direction = "up" | "down" | "same";
 
 function direction(before: number, after: number): Direction {
   if (Math.abs(after - before) < UNCHANGED) return "same";
   return after > before ? "up" : "down";
-}
-
-/** The hypothesis whose engine probability rose the most, if any rose visibly. */
-function largestRise(hypotheses: string[], change: ProbabilityChange): string | null {
-  let best: string | null = null;
-  let bestRise = 0;
-  for (const h of hypotheses) {
-    const rise = (change.after[h] ?? 0) - (change.before[h] ?? 0);
-    if (rise >= UNCHANGED && (best === null || rise > bestRise)) {
-      best = h;
-      bestRise = rise;
-    }
-  }
-  return best;
 }
 
 const ARROWS: Record<Direction, { glyph: string; text: string; className: string }> = {

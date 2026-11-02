@@ -272,7 +272,7 @@ investigator) and D-76 (container).
   **303 passed** (45 new tests: fresh-machine generation, canonical ids, no hidden values,
   bit-identical round trip; grounded answers, prompt without hidden values, caps, four
   fallback shapes, question passed as data, 503/404/400/422/403/429 paths and the separate
-  hourly cap); frontend **80 passed** in 15 files (8 new: Ask panel not-configured note,
+  hourly cap); frontend **81 passed** in 15 files (9 new: evidence trail at the diagnosis; Ask panel not-configured note,
   typed and suggested questions, fallback labelling, server error; fresh-machine flow via
   `/api/cases/fresh-77`, lookup failure, header model chip); ESLint, TypeScript and the
   production build passed.
@@ -298,3 +298,7 @@ investigator) and D-76 (container).
   for a question without a key.
 - Not verified here: CI on GitHub (no remote yet), the Render blueprint on Render itself,
   browsers other than Chromium.
+- Evidence trail and README walkthrough (later the same evening): the trail test passed with
+  the suite above; the 13-frame GIF (`docs/images/walkthrough.gif`, 0.87 MB) was captured
+  from the production dashboard with Playwright, including one live answer, with no page
+  errors.

@@ -25,7 +25,11 @@ attributed accelerometer recordings from a physical laboratory rig
 ([Real data](docs/REAL_DATA.md)). Built for the Meta Global AI Developer Hackathon 2026
 (theme: Push the Frontier, manufacturing; track: Indie Developer).
 
-![Live investigation: the Meta model states its expectations, then the measurement arrives and the probabilities update](docs/images/live-investigation.png)
+![Walkthrough of one investigation: the note becomes a prior, the Meta model states six expected readings, the measurement lands, the engine updates the beliefs, the diagnosis is explained and a question is answered from the evidence](docs/images/walkthrough.gif)
+
+*One investigation of the saved conveyor-gearbox replay, frame by frame, ending with a live
+answer from the Meta model. Still image of the live view:
+[live-investigation.png](docs/images/live-investigation.png).*
 
 ## Results at a glance
 
@@ -331,6 +335,9 @@ All code in this repository was written from scratch during the event. Work star
 - Header status chip showing the configured model, and a one-command container
   (`Dockerfile`, `.dockerignore`, `render.yaml`; D-76) with a CI job that builds and
   smoke-tests the image on Linux.
+- Evidence trail at the diagnosis (replay and live views): each experiment's readings, the
+  hypothesis it lifted most and where the diagnosis stood after it, all from the trace.
+  README walkthrough GIF captured from the production dashboard with Playwright.
 
 ## Benchmark results (simulated)
 

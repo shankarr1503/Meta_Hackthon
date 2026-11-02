@@ -56,7 +56,7 @@ Fiber), all written during the hackathon. The Meta Model API is called through a
 OpenAI-compatible chat-completions adapter with timeouts, length caps and validation.
 Investigations stream live to the dashboard as Server-Sent Events. Studies are
 pre-registered: a frozen plan (hashes of code, prompts and splits) is written before the
-first model call. 303 backend and 80 frontend tests, an architecture test that blocks any
+first model call. 303 backend and 81 frontend tests, an architecture test that blocks any
 path from the investigator to the hidden fault, a CI workflow for Linux and Windows plus a
 container build, and a one-command Docker image with a Render blueprint.
 
@@ -89,7 +89,7 @@ Weights as reported publicly for this hackathon; confirm them in the participant
 | Impact (30%) | A general pattern for diagnosis under a test budget: an AI that decides what to measure, commits to predictions, and shows its work. Built for rotating machinery, the most common industrial asset class; the same loop applies to any domain with a simulator and a hypothesis set. |
 | Use of Meta AI tooling (25%) | Muse Spark 1.3 is the investigator at six points: prior from the note, experiment choice, stated expectations, explanation, grounded question answering, and sensor-by-sensor assessment of real recordings. Every call is validated, capped, logged and replayable. |
 | Demo (25%) | Live stream of each decision and measurement, a 3D twin driven by measured features, the Ask panel, unseen machines by seed, the benchmark and challenge evidence, and real recordings with the rig photograph. One command or one container to run. |
-| Technical depth and execution (20%) | Vectorised physics and a 990-particle Bayesian engine with expected information gain; architecture test that isolates the hidden truth; pre-registered, replayable studies with intervals; 383 tests; CI on Linux and Windows plus a container build. |
+| Technical depth and execution (20%) | Vectorised physics and a 990-particle Bayesian engine with expected information gain; architecture test that isolates the hidden truth; pre-registered, replayable studies with intervals; 384 tests; CI on Linux and Windows plus a container build. |
 
 ## What's next
 
