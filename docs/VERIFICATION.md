@@ -302,3 +302,16 @@ investigator) and D-76 (container).
   the suite above; the 13-frame GIF (`docs/images/walkthrough.gif`, 0.87 MB) was captured
   from the production dashboard with Playwright, including one live answer, with no page
   errors.
+
+## Live Meta replays and ask-audit – 2 November 2026 (night)
+
+- `scripts/demo_replays.py --planner meta` on case-k7, case-m9, case-t4, case-b6, case-x1,
+  fresh-4242 and fresh-77: 8 investigations, 28 model calls,
+  0 fallbacks, 8/8 correct (2/2
+  on the unseen machines). Committed under `backend/replays/demo/`; the demo-replay test
+  reproduces each one through its recorded replies.
+- `scripts/ask_audit.py`: 10/10 questions answered (`ok: true`),
+  0 fallbacks, 194/194 quoted numbers found in the evidence
+  record, injection marker in no answer, mean latency 3.25 s. The entries, including
+  the unanswerable question and the injection attempt, are recorded unchanged in
+  `backend/results/ask-audit.json`; every quoted number was found in the record.

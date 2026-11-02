@@ -31,7 +31,9 @@ selects information gain. Saved replays need only the local backend.
 
 ## Three-minute recording script
 
-Record at desktop width in a clean browser window. The script below uses one live Meta
+Every sealed case and the unseen machines `fresh-4242` and `fresh-77` have a committed
+live Meta replay (ids ending in a timestamp), so any case can be shown as a real Meta
+investigation without a key. Record at desktop width in a clean browser window. The script below uses one live Meta
 run and one live question (two to six model calls in total, a few seconds each); keep the
 saved replay `case-r2-meta-0-20261102030032` open in a second tab as the fallback.
 

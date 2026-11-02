@@ -318,3 +318,13 @@ A full code review on 2 November found the issues below; each fix ships with tes
   downloads and runtime replays out of the image; secrets are injected as environment
   variables by the host. CI builds the image on Linux so a broken Dockerfile fails the
   push. No hosted instance is created by the repository itself.
+- **D-77 · 2 Nov 2026 · Meta replays for every case and a grounding audit.** Live Meta
+  demo replays for all six sealed cases and two unseen machines are committed (replayed
+  bit-identically by the demo test through their recorded replies), so the dashboard shows
+  real Meta investigations without a key. `scripts/ask_audit.py` asks the live model a fixed
+  list of 10 questions about those replays (including an instruction-injection
+  attempt and a question the record cannot answer), records every answer unchanged in
+  `backend/results/ask-audit.json`, and checks each number an answer quotes against the
+  evidence record the model saw (numeric fields, numbers inside text fields, probabilities
+  as percentages; display rounding allowed). A test re-runs that check offline. The audit is
+  a spot check that numbers come from the record; it cannot judge whether a sentence is true.

@@ -24,6 +24,9 @@ Everything the repository can verify on its own is done and recorded in
    build; browser check of 25 views plus the new card and panel on desktop and phone.
 6. README, API reference, decisions, assumptions, product features, technical design,
    demo script and submission draft updated.
+7. Live Meta demo replays committed for all six sealed cases and two unseen machines
+   (8/8 correct, 0 fallbacks); grounding audit of the question feature recorded
+   (10/10 answered, 194/194 numbers traced to the evidence) and re-checked by a test.
 
 ## Owner and external items
 

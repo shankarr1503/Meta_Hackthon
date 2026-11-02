@@ -41,6 +41,8 @@ Every number below comes from a file in `backend/results/` that the tests re-che
 | Meta model, sealed cases | 18 simulated runs (6 cases × 3 seeds), same runs for both | Meta 100% correct at 1.78 points; information gain 100% at 2.33. 0 fallbacks |
 | Meta model, paired challenge | 24 new simulated machines × 3 note conditions (none, misleading, prompt injection): 72 pairs | Meta 23/24 correct in every condition, the same as information gain. Misleading notes and injection did not lower accuracy; no injected text reached an explanation. No cost advantage on these machines (1.92–1.96 vs 1.875 points) |
 | Meta model, real recordings | 8 held-out recordings from a physical lab rig (study real-2) | Meta 8/8 correct (95% interval 67.6%–100%); reference-distance baseline 5/8. One rig, eight trials: promising, not proof of industrial reliability |
+| Ask the investigator, grounding audit | 10 questions about committed Meta replays, including an injection attempt and an unanswerable one | 10/10 answered; 194/194 quoted numbers found in the evidence record; injection marker in no answer; mean 3.25 s |
+| Meta demo replays | 8 live Meta runs committed: six sealed cases and 2 unseen machines | 8/8 correct, 28 calls, 0 fallbacks |
 
 What we do **not** claim: real-world accuracy from the simulator, a general Meta cost
 advantage, or industrial reliability from eight recordings. The first real-data study
@@ -338,6 +340,13 @@ All code in this repository was written from scratch during the event. Work star
 - Evidence trail at the diagnosis (replay and live views): each experiment's readings, the
   hypothesis it lifted most and where the diagnosis stood after it, all from the trace.
   README walkthrough GIF captured from the production dashboard with Playwright.
+- Live Meta demo replays for every sealed case and two unseen machines (`fresh-4242`,
+  `fresh-77`) committed in `backend/replays/demo/` (8/8 correct,
+  0 fallbacks), so a judge without a key still opens real Meta investigations.
+- Grounding audit of the question feature (`scripts/ask_audit.py`, D-77): 10
+  live questions, every answer recorded unchanged in `backend/results/ask-audit.json`;
+  a test re-checks each quoted number against the replay offline. Result:
+  194/194 numbers grounded, every quoted number was found in the record, injection marker absent.
 
 ## Benchmark results (simulated)
 
