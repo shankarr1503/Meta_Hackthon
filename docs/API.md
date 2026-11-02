@@ -10,12 +10,14 @@ changes. Every request model rejects unknown keys with `422`.
 | GET | `/api/health` | Service liveness | — |
 | GET | `/api/ready` | Physics model version and whether the Meta model is configured | — |
 | GET | `/api/cases` | Public fields of the six sealed cases | — |
+| GET | `/api/cases/{case_id}` | Public fields of one case: sealed, or a fresh machine `fresh-<seed>` | 404 |
 | POST | `/api/experiments` | One simulated experiment on a sealed case | 404, 422 |
 | POST | `/api/lab/simulate` | One simulated experiment on the public preset lab machine | 422 |
 | POST | `/api/investigations` | Run and save an investigation | 403, 404, 422, 429, 503 |
 | GET | `/api/investigations/stream` | Run an investigation live as Server-Sent Events | 403, 404, 422, 429, 503 |
 | GET | `/api/investigations` | List saved replays | — |
 | GET | `/api/investigations/{id}` | Load a replay | 400, 404 |
+| POST | `/api/investigations/{id}/ask` | Ask the Meta model about a finished investigation | 400, 403, 404, 422, 429, 503 |
 | GET | `/api/benchmark` | Latest benchmark results | 404 if not yet run |
 | GET | `/api/proof/download` | Proof challenge evidence as a JSON attachment | 404 |
 | GET | `/api/real-recordings` | Measured laboratory recordings report | 404, 503 |
@@ -35,6 +37,18 @@ URLs are never returned.
 
 A list of objects with exactly `case_id`, `title`, `note`, `initial_rpm` (2950) and
 `initial_load_n` (500).
+
+## `GET /api/cases/{case_id}`
+
+The same five public fields for one case. `case_id` is a sealed case id or a fresh
+machine id `fresh-<seed>` with seed 0–10,000 written without leading zeros
+(`fresh-7`, not `fresh-07`); anything else is `404`. A fresh machine (D-74) is a new
+hidden simulated machine derived from its seed alone: the fault label, severities,
+critical speed and thermal factor all come from one generator seeded by the id, so the id
+and title reveal nothing about the fault. Its note states that it is generated and has no
+maintenance history. Fresh ids work everywhere a sealed `case_id` does: experiments,
+investigations and the live stream. Rule-planner replays of a fresh machine are named
+`fresh-<seed>-<planner>-<seed>`.
 
 ## `POST /api/experiments`
 
@@ -137,6 +151,33 @@ loading. Unreadable files are skipped.
 
 The saved trace. `400` if the id does not match `^[a-z0-9_-]{1,80}$`; `404` if no replay
 has that id, or if the file is unreadable or from an older trace format. Looks in `backend/replays/` and then `backend/replays/demo/`.
+
+## `POST /api/investigations/{id}/ask`
+
+Request: `{question}` (3–300 characters; extra keys are `422`). Loads the saved replay
+first (`400` for a malformed id, `404` if missing or unreadable), then requires the Meta
+model (`503` when not configured, same message as a Meta run). Capped at
+`FAILURELAB_META_QUESTIONS_PER_HOUR` (default 120) questions per server process per
+rolling hour (`429`); this budget is separate from the investigation cap. Browser requests
+marked cross-site get `403`.
+
+The model receives the question and an evidence record built from the public trace only:
+title and note, prior, alarm, each experiment's operating point, rationale, stated
+expectations, engine predictions, measured features and probabilities after it, and the
+diagnosis. It answers in at most 120 words. Response (`Answer`):
+
+| Field | Meaning |
+|---|---|
+| `investigation_id`, `question` | The replay and the cleaned question (whitespace collapsed, capped at 300 characters) |
+| `answer` | The model's answer, capped at 900 characters; on failure a fallback that repeats the recorded explanation |
+| `model` | Model name |
+| `ok`, `fallback` | `true, false` for a usable reply; `false, true` after a timeout, HTTP error or unusable JSON |
+| `usage` | Token counts or null |
+| `error_kind`, `error` | `model_error` or `invalid_output` and the message; null when `ok` |
+| `source` | `"simulation"` |
+
+Answers are returned only; they are never written into the replay, and they cannot change
+a measurement, a probability or the diagnosis (D-75).
 
 ## `GET /api/benchmark`
 

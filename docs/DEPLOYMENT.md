@@ -18,7 +18,36 @@ and origin, with no Vite server or reload watcher. Stop it with Ctrl+C. Rebuild 
 after frontend changes. The command fails with a clear message when the build is missing.
 Do not run the development backend on port 8000 at the same time.
 
-## Hosting the same build
+## One-command container (recommended for hosting)
+
+The repository ships a two-stage `Dockerfile` (D-76): Node 22 builds the dashboard, then
+Python 3.12-slim serves it together with the API on one origin, as a non-root user, with
+a health check on `/api/health`. From the repository root:
+
+```sh
+docker build -t failurelab .
+docker run --rm -p 8000:8000 --env-file backend/.env failurelab
+```
+
+Open http://127.0.0.1:8000. Omit `--env-file` to run without a model key: the baseline
+planners, saved replays, lab, benchmark and real recordings still work and the dashboard
+says so. The container reads `PORT` when a host sets one. `.dockerignore` keeps `.env`,
+caches, raw downloads and runtime replays out of the image, and the image contains no
+tests, scripts or Node runtime.
+
+**Render.** `render.yaml` is a Blueprint for one Docker web service with the health
+probe and the `FAILURELAB_*` variables declared; the API key is marked `sync: false`, so
+Render asks for it in the dashboard and never reads it from the repository. Create a
+Blueprint from the public repository, paste the key, deploy. Any other container host
+(Fly.io, Railway, Cloud Run, a VM with Docker) works the same way: build the Dockerfile,
+set the same variables, point the health probe at `/api/health`.
+
+Keep the hourly caps (`FAILURELAB_META_RUNS_PER_HOUR`, `FAILURELAB_META_QUESTIONS_PER_HOUR`)
+when the key is set: a public demo can be scripted, and these bound what one server process
+will spend per hour. Runtime replays written inside a container are lost on redeploy unless
+the replay directory is a mounted volume; the curated demo replays are in the image.
+
+## Hosting the same build without a container
 
 Build on a machine with Node 22.12+ and Python 3.11+ (3.12 recommended). Keep the repository
 layout, including `frontend/dist`, `backend/replays/demo`, the whole `backend/results/`

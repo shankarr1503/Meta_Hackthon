@@ -1,0 +1,36 @@
+# Keep the image small and free of secrets, caches and local artefacts.
+.git
+.github
+.tmp
+.pytest_cache
+.ruff_cache
+debug.log
+*.pdf
+docs
+
+# Secrets: the host injects FAILURELAB_* variables instead.
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Local Python state
+backend/.venv
+backend/**/__pycache__
+backend/*.egg-info
+backend/tests
+backend/scripts
+
+# Runtime replays (only the curated demo folder ships)
+backend/replays/*
+!backend/replays/demo
+
+# Model-response caches, full checkpoints and raw downloads
+backend/results/llm_cache.json
+backend/results/proof-cache.json
+backend/results/proof-traces
+backend/data/real/raw
+
+# Frontend build inputs the first stage does not need
+frontend/node_modules
+frontend/dist
+frontend/coverage

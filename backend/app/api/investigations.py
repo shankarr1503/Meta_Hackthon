@@ -10,6 +10,8 @@ from fastapi.responses import StreamingResponse
 from pydantic import ValidationError
 
 from app.agent.investigate import investigate_frames, investigation_id
+from app.agent.llm_client import ChatCompletionsClient
+from app.agent.meta_planner import answer_question
 from app.api.deps import reject_cross_site, scenario_or_404, settings_of
 from app.api.runs import (
     META_NOT_CONFIGURED,
@@ -24,8 +26,10 @@ from app.config import Settings
 from app.physics.model import MODEL_VERSION
 from app.runner import make_runner
 from app.schemas.investigation import (
+    Answer,
     InvestigationRequest,
     PlannerName,
+    QuestionRequest,
     Ready,
     Trace,
     TraceSummary,
@@ -36,6 +40,10 @@ SettingsDep = Annotated[Settings, Depends(settings_of)]
 META_LIMIT_REACHED = (
     "The hourly limit of Meta model investigations for this server has been reached. "
     "Try again later, replay a saved investigation, or use planner 'info_gain'."
+)
+QUESTION_LIMIT_REACHED = (
+    "The hourly limit of questions to the Meta model for this server has been reached. "
+    "The recorded explanation and evidence remain available in the replay."
 )
 
 
@@ -155,8 +163,8 @@ def list_investigations(settings: SettingsDep) -> list[TraceSummary]:
     return [s for s in summaries if s is not None]
 
 
-@router.get("/investigations/{investigation_id}", response_model=Trace)
-def load_investigation(investigation_id: str, settings: SettingsDep) -> Trace:
+def _stored_trace(investigation_id: str, settings: Settings) -> Trace:
+    """The saved, validated trace, or 400 (bad id) / 404 (missing or unreadable)."""
     try:
         trace = ReplayStore(settings.replays_dir).load(investigation_id)
     except InvalidIdError as error:
@@ -168,3 +176,33 @@ def load_investigation(investigation_id: str, settings: SettingsDep) -> Trace:
     except ValidationError as error:
         detail = f"Replay {investigation_id!r} is unreadable or from an older version"
         raise HTTPException(status_code=404, detail=detail) from error
+
+
+@router.get("/investigations/{investigation_id}", response_model=Trace)
+def load_investigation(investigation_id: str, settings: SettingsDep) -> Trace:
+    return _stored_trace(investigation_id, settings)
+
+
+@router.post(
+    "/investigations/{investigation_id}/ask",
+    response_model=Answer,
+    dependencies=[Depends(reject_cross_site)],
+)
+def ask_investigation(
+    investigation_id: str, body: QuestionRequest, request: Request, settings: SettingsDep
+) -> Answer:
+    """Ask the Meta model a question about a finished investigation (D-75).
+
+    The model sees only the saved trace's public evidence and the question. Its answer is
+    returned, never written into the trace, and cannot change a measurement, probability
+    or diagnosis. Any model failure returns a fallback answer with `ok: false`.
+    """
+    trace = _stored_trace(investigation_id, settings)
+    if not settings.llm_configured:
+        raise HTTPException(status_code=503, detail=META_NOT_CONFIGURED)
+    limiter: MetaRunLimiter = request.app.state.question_limiter
+    if not limiter.try_start():
+        raise HTTPException(status_code=429, detail=QUESTION_LIMIT_REACHED)
+    with ChatCompletionsClient.from_settings(settings) as client:
+        result = answer_question(client, trace.model_dump(mode="json"), body.question)
+    return Answer(investigation_id=trace.investigation_id, **result)

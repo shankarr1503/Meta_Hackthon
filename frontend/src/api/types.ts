@@ -125,6 +125,24 @@ export interface InvestigationRequest {
   seed: number;
 }
 
+export interface QuestionRequest {
+  question: string;
+}
+
+/** The Meta model's answer to a question about a finished investigation (never saved). */
+export interface Answer {
+  investigation_id: string;
+  question: string;
+  answer: string;
+  model: string;
+  ok: boolean;
+  fallback: boolean;
+  usage: Record<string, number> | null;
+  error_kind: string | null;
+  error: string | null;
+  source: "simulation";
+}
+
 /** One live-investigation frame streamed from the backend as a Server-Sent Event. */
 export type LiveFrame =
   | {

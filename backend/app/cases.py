@@ -5,6 +5,7 @@ read Scenario objects; the investigation receives a `CaseView` and a run callabl
 are simulated.
 """
 
+import re
 from dataclasses import dataclass
 
 import numpy as np
@@ -34,6 +35,16 @@ RANDOM_SEVERITY = (0.15, 0.8)
 RANDOM_WN_RPM = (3300.0, 3900.0)
 RANDOM_THERMAL = (0.7, 1.4)
 RANDOM_NOTE = "No maintenance history is available for this machine."
+
+# Fresh machines: a hidden case derived from a seed alone (D-74). The id carries only the
+# seed; the fault label is drawn from the seeded generator, so the id reveals nothing.
+FRESH_PREFIX = "fresh-"
+FRESH_MAX_SEED = 10_000
+FRESH_NOTE = (
+    "No maintenance history is available for this machine. It is a new simulated machine "
+    "generated from its seed, not one of the sealed cases."
+)
+_FRESH_ID = re.compile(r"^fresh-(0|[1-9][0-9]{0,4})$")
 
 
 @dataclass(frozen=True)
@@ -130,8 +141,46 @@ SEALED_CASES: tuple[Scenario, ...] = (
 _SEALED_BY_ID = {case.case_id: case for case in SEALED_CASES}
 
 
+def fresh_seed(case_id: str) -> int | None:
+    """The seed of a fresh-machine id (`fresh-<seed>`, 0-10,000), or None for any other id."""
+    match = _FRESH_ID.match(case_id)
+    if match is None:
+        return None
+    seed = int(match.group(1))
+    return seed if seed <= FRESH_MAX_SEED else None
+
+
+def fresh_scenario(seed: int) -> Scenario:
+    """A hidden machine nobody has seen, reproducible from its seed alone.
+
+    The fault label, severities and machine values all come from one generator seeded by
+    the id, so neither the id nor the public title orders cases by label (unlike the
+    numbered benchmark cases, D-70). Values fall off the engine's grid like generated cases.
+    """
+    if not 0 <= seed <= FRESH_MAX_SEED:
+        raise ValueError(f"fresh seed must be 0-{FRESH_MAX_SEED}, got {seed}")
+    rng = np.random.default_rng([seed, 0x46524553])
+    label = TRUTH_LABELS[int(rng.integers(len(TRUTH_LABELS)))]
+    machine = Machine(
+        wn_rpm=float(rng.uniform(*RANDOM_WN_RPM)),
+        thermal=float(rng.uniform(*RANDOM_THERMAL)),
+    )
+    return Scenario(
+        f"{FRESH_PREFIX}{seed}",
+        f"Unseen machine {seed}",
+        FRESH_NOTE,
+        _random_faults(label, rng),
+        machine,
+    )
+
+
 def get_scenario(case_id: str) -> Scenario | None:
-    return _SEALED_BY_ID.get(case_id)
+    """A sealed case by id, or a fresh machine for a `fresh-<seed>` id; None otherwise."""
+    sealed = _SEALED_BY_ID.get(case_id)
+    if sealed is not None:
+        return sealed
+    seed = fresh_seed(case_id)
+    return fresh_scenario(seed) if seed is not None else None
 
 
 def public_cases() -> list[CaseView]:

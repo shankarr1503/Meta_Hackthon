@@ -1,27 +1,29 @@
 # FailureLab AI
 
-**An AI investigator that finds out why a machine vibrates by running experiments, and
-states what it expects to see before every result.**
+**An AI investigator that finds out why a machine vibrates by running experiments, states
+what it expects to see before every result, explains the diagnosis, and answers your
+questions from the evidence.**
 
 When a rotating machine starts to vibrate, an engineer has to work out why: imbalance,
 misalignment, a failing bearing, or several at once. Each test costs time and machine
-downtime. FailureLab AI hands that investigation to a Meta model. It reads the maintenance
-note, picks the next most informative experiment (speed, load), **writes down what each
-possible fault should show there before the result arrives**, updates its beliefs, and
-stops as soon as it is confident. Then it explains the diagnosis and the check to do next.
+downtime. FailureLab AI hands that investigation to a Meta model (Muse Spark 1.3). It
+reads the maintenance note, picks the next most informative experiment (speed, load),
+**writes down what each possible fault should show there before the result arrives**,
+updates its beliefs, and stops as soon as it is confident. Then it explains the diagnosis
+and the check to do next, and an engineer can **question it about any reading** it used.
 
 Three roles keep it honest:
 
 - a **physics simulator** (a digital twin of a rotor on bearings) produces every
   measurement;
 - a **Bayesian engine** produces every probability;
-- the **Meta model** (Muse Spark 1.3) chooses experiments, states predictions and explains.
-  It never supplies numbers that are scored, and it never sees the true fault.
+- the **Meta model** chooses experiments, states predictions, explains and answers
+  questions. It never supplies numbers that are scored, and it never sees the true fault.
 
 **Investigation and lab data are simulated.** A separate Real recordings view analyses
 attributed accelerometer recordings from a physical laboratory rig
 ([Real data](docs/REAL_DATA.md)). Built for the Meta Global AI Developer Hackathon 2026
-(track: Indie Developer).
+(theme: Push the Frontier, manufacturing; track: Indie Developer).
 
 ![Live investigation: the Meta model states its expectations, then the measurement arrives and the probabilities update](docs/images/live-investigation.png)
 
@@ -41,13 +43,32 @@ advantage, or industrial reliability from eight recordings. The first real-data 
 (real-1, 6/8 vs 6/8) had a frequency error found in review; it is kept and reported as
 superseded ([details](docs/REAL_DATA.md)).
 
+## What the Meta model does here
+
+Most AI demos read data and summarise it. This one **acts** and is **held to account**:
+
+| Stage | The Meta model | The guardrail |
+|---|---|---|
+| Prior | Turns a human maintenance note into starting beliefs | Renormalised and floored: every hypothesis keeps at least 5%, so a wrong or malicious note cannot rule out the truth |
+| Choose | Picks the next experiment from the engine's five most informative candidates, with a rationale | It cannot invent an experiment, a measurement or a probability |
+| Predict | States the reading it expects under **each** hypothesis before the result | The dashboard shows its expectation next to the engine's prediction and the measurement |
+| Explain | Writes the diagnosis, the remaining doubts and the next physical check | Capped, validated; built only from the trace |
+| Answer | Answers an engineer's questions about the finished investigation, quoting readings | Grounded in the saved trace only; answers are never saved and cannot change anything |
+| Real signals | Inspects real accelerometer channels one by one and labels the fault | Labels and file names are hidden; 8/8 against a 5/8 statistical baseline |
+
+If the model times out, errs or returns anything unusable, that step falls back to the
+information-gain planner and the event is logged. Every model reply is stored in the
+trace, so any investigation replays exactly.
+
+![Ask the investigator: the Meta model answers from the recorded evidence, quoting the readings that ruled imbalance out](docs/images/ask-the-investigator.png)
+
 ## How it works
 
 ```mermaid
 flowchart LR
     N[Maintenance note] --> M
     subgraph Investigator
-      M[Meta model<br/>prior, choice, expectations, explanation]
+      M[Meta model<br/>prior, choice, expectations,<br/>explanation, answers]
       E[Bayesian engine<br/>990 particles, 6 hypotheses<br/>information gain per cost]
     end
     E -- top 5 experiments --> M
@@ -55,7 +76,8 @@ flowchart LR
     R --> S[Physics simulator<br/>hidden fault]
     S -- measurement --> E
     E -- probabilities --> D[Dashboard]
-    M -- explanation --> D
+    M -- explanation, answers --> D
+    D -- engineer's question --> M
 ```
 
 1. **Prior from the note.** The model turns the maintenance note into starting beliefs.
@@ -69,10 +91,9 @@ flowchart LR
    reading next to the measurement, and which hypotheses gained or lost.
 4. **Stop and explain.** At 90% confidence or when the 8-point budget runs out, the model
    explains the diagnosis, the remaining doubts and the check to do next.
-
-If the model times out, errs or returns anything unusable, that step falls back to the
-information-gain planner and the event is logged. Every model reply is stored in the
-trace, so any investigation replays exactly.
+5. **Ask.** The engineer questions the finished investigation ("Why not imbalance?",
+   "Which reading decided it?"). The model answers from the recorded evidence, quoting
+   operating points and readings; the answer is shown, never stored.
 
 ## Why the numbers can be trusted
 
@@ -86,9 +107,12 @@ trace, so any investigation replays exactly.
 - **Reproducible.** All randomness is seeded; rule runs are bit-identical; Meta runs replay
   from their recorded replies. Offline verification re-runs the recorded evidence without
   API calls.
+- **Machines nobody has seen.** Besides the six sealed cases, any seed names a new hidden
+  machine (`fresh-<seed>`): the fault is drawn by the seeded generator, so neither we nor
+  the model know it in advance. Investigate one live from the dashboard.
 - **Safe to host.** Closed request schemas, replay-id checks, a cross-site guard on the
-  endpoints that start runs, and an hourly cap on Meta investigations
-  ([decisions D-62 to D-70](docs/DECISIONS.md)).
+  endpoints that start runs, and hourly caps on Meta investigations and questions
+  ([decisions D-62 to D-76](docs/DECISIONS.md)).
 
 ## Try it in two minutes
 
@@ -98,23 +122,41 @@ python scripts/tasks.py build
 python scripts/tasks.py serve        # http://127.0.0.1:8000
 ```
 
+Or with Docker, from the repository root: `docker build -t failurelab . && docker run --rm
+-p 8000:8000 --env-file backend/.env failurelab` (omit `--env-file` to run without a model
+key). See [Deployment](docs/DEPLOYMENT.md) for hosting, including a Render blueprint.
+
 1. **Investigate**: choose a case and planner `meta`, then watch it live: the model's
-   expectations, each measurement and the probability changes.
-2. **Lab**: move the speed and load sliders on the public preset machine and watch the
+   expectations, each measurement and the probability changes. Then **ask it a question**
+   below the diagnosis.
+2. **Unseen machine**: type any seed on the dashed card and investigate a machine none of
+   us has seen.
+3. **Lab**: move the speed and load sliders on the public preset machine and watch the
    3D twin and spectrum respond.
-3. **Benchmark**: compare planners, and inspect the paired challenge evidence machine by
+4. **Benchmark**: compare planners, and inspect the paired challenge evidence machine by
    machine.
-4. **Real recordings**: inspect real sensor signals, the model's sensor-by-sensor
+5. **Real recordings**: inspect real sensor signals, the model's sensor-by-sensor
    reasoning, and reveal each trial's true label.
 
-Without a Meta key, use planner `info_gain` or open the saved Meta replays.
+Without a Meta key, use planner `info_gain` or open the saved Meta replays; the header
+says which mode the server is in.
+
+### A five-minute tour for judges
+
+| Minute | Where | What to look for |
+|---|---|---|
+| 1 | Investigate → Conveyor gearbox input, planner Meta | The note becomes a prior (misalignment favoured, nothing below 5%). The model picks an experiment and states six expected readings **before** the measurement. |
+| 2 | Same run, prediction check table | Each hypothesis's predicted 1x, 2x and temperature next to the measurement; probabilities before → after; the engine, not the model, moved them. |
+| 3 | Diagnosis → Ask the investigator | Ask "Why not imbalance?" The answer quotes the 2x at 1,500 RPM under load and the missing critical-speed peak at 3,300 RPM. Compare with the experiment log: every number is there. |
+| 4 | Unseen machine, any seed | A machine generated from the seed, unknown to everyone. Watch the same loop find it; try the baseline planners for contrast. |
+| 5 | Benchmark and Real recordings | 150 simulated runs per planner; the 72-pair challenge with intervals and one retained confident error; 8/8 vs 5/8 on real recordings from one rig, with the photograph and attribution. |
 
 Plans and records: [Product features](docs/PRODUCT_FEATURES.md) ·
 [Technical design](docs/TECHNICAL_DESIGN.md) · [Decisions](docs/DECISIONS.md) ·
 [Assumptions](docs/ASSUMPTIONS.md) · [API](docs/API.md) ·
 [Proof of concept](docs/PROOF_OF_CONCEPT.md) · [Real data](docs/REAL_DATA.md) ·
 [Verification](docs/VERIFICATION.md) · [Demo guide](docs/DEMO.md) ·
-[Submission](docs/SUBMISSION.md)
+[Deployment](docs/DEPLOYMENT.md) · [Submission](docs/SUBMISSION.md)
 
 ## Setup
 
@@ -276,6 +318,19 @@ All code in this repository was written from scratch during the event. Work star
 - Real-data correction: the review found the harmonic bands assumed 1238 RPM while the rig
   runs at 1,260–1,302 RPM. Study real-1 is preserved as superseded; pre-registered study
   real-2 estimates the speed per recording (Meta 8/8, baseline 5/8).
+- **Ask the investigator** (D-75): `POST /api/investigations/{id}/ask` and a dashboard
+  panel below every diagnosis. The Meta model answers an engineer's question from the
+  saved trace's evidence only; answers are capped, never saved, rate-limited separately
+  and fall back to the recorded explanation on any model failure. Tests cover grounding,
+  no hidden values in the prompt, caps, fallbacks, cross-site refusal and the hourly cap;
+  two live answers were checked against the recorded readings they quote.
+- **Unseen machines** (D-74): `fresh-<seed>` ids name a new hidden machine derived from the
+  seed alone, accepted by every case endpoint; `GET /api/cases/{id}` returns its public
+  view and the case picker offers it on a dashed card. Tests cover reproducibility, label
+  coverage, canonical ids, no hidden values and a bit-identical round trip.
+- Header status chip showing the configured model, and a one-command container
+  (`Dockerfile`, `.dockerignore`, `render.yaml`; D-76) with a CI job that builds and
+  smoke-tests the image on Linux.
 
 ## Benchmark results (simulated)
 
@@ -391,7 +446,9 @@ Direct dependencies, pinned to exact versions:
 
 Transitive dependencies are under compatible licenses: permissive (MIT, BSD, Apache-2.0,
 ISC), MPL-2.0 used unmodified (e.g. certifi), and CC-BY-4.0 data (caniuse-lite). No GPL or
-AGPL code is used.
+AGPL code is used. The container image builds on the Docker official `node:22-alpine` and
+`python:3.12-slim` images (Node: MIT; Python: PSF; base OS packages under their own
+permissive or copyleft-unmodified licenses); no image is published by this repository.
 
 ## License
 

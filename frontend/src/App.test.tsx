@@ -29,6 +29,17 @@ function stubBackend(metaConfigured = false, replays: TraceSummary[] = []) {
       );
     }
     if (url === "/api/cases") return Promise.resolve(json(CASES));
+    if (url === "/api/cases/fresh-77") {
+      return Promise.resolve(
+        json({
+          case_id: "fresh-77",
+          title: "Unseen machine 77",
+          note: "No maintenance history is available for this machine.",
+          initial_rpm: 2950,
+          initial_load_n: 500,
+        }),
+      );
+    }
     if (url === "/api/investigations" && init?.method === "POST") {
       return Promise.resolve(json(makeTrace({ planner: "info_gain" })));
     }
@@ -93,6 +104,47 @@ describe("App", () => {
     fireEvent.click(await screen.findByRole("button", { name: "Investigate Pump drive A" }));
     await screen.findByText("Pump drive A");
     expect(url()).toBe("/api/investigations/stream?case_id=case-k7&planner=meta&seed=0");
+  });
+
+  it("investigates a fresh machine by seed through its public case view", async () => {
+    stubBackend(true);
+    const { url } = stubEventSource();
+    render(<App />);
+    fireEvent.change(await screen.findByLabelText("Machine seed"), { target: { value: "77" } });
+    fireEvent.click(screen.getByRole("button", { name: "Investigate unseen machine" }));
+    expect(await screen.findByText("Unseen machine 77")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(url()).toBe("/api/investigations/stream?case_id=fresh-77&planner=meta&seed=0"),
+    );
+  });
+
+  it("reports when a fresh machine cannot be looked up", async () => {
+    stubBackend(true);
+    render(<App />);
+    fireEvent.change(await screen.findByLabelText("Machine seed"), { target: { value: "5" } });
+    fireEvent.click(screen.getByRole("button", { name: "Investigate unseen machine" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("not found");
+    expect(screen.getByRole("button", { name: "Investigate unseen machine" })).toBeEnabled();
+  });
+
+  it("shows the configured Meta model in the header", async () => {
+    const fetchMock = stubBackend(true);
+    fetchMock.mockImplementation((url: string) =>
+      url === "/api/ready"
+        ? Promise.resolve(
+            json({
+              status: "ok",
+              physics_model_version: "rotor-1",
+              meta_model_configured: true,
+              meta_model: "muse-spark-1.3",
+            }),
+          )
+        : url === "/api/cases"
+          ? Promise.resolve(json(CASES))
+          : Promise.resolve(json([])),
+    );
+    render(<App />);
+    expect(await screen.findByText("Meta model muse-spark-1.3 · live")).toBeVisible();
   });
 
   it("shows an error when the backend is unreachable", async () => {

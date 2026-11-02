@@ -36,3 +36,23 @@ jobs:
 
       - name: Check (lint + tests + build)
         run: python scripts/tasks.py check
+
+  docker:
+    name: Build container image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build
+        run: docker build -t failurelab:ci .
+      - name: Smoke test
+        run: |
+          docker run -d --rm --name failurelab -p 8000:8000 failurelab:ci
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8000/api/health >/dev/null; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:8000/api/health
+          curl -fsS http://127.0.0.1:8000/api/ready
+          curl -fsS -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8000/
+          docker stop failurelab

@@ -1,0 +1,28 @@
+# Render Blueprint: deploys the Dockerfile as one web service.
+# Dashboard and API share one origin; the health probe is GET /api/health.
+# Secrets (FAILURELAB_LLM_*) are entered in the Render dashboard, never committed.
+services:
+  - type: web
+    name: failurelab-ai
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: FAILURELAB_LLM_PROVIDER
+        value: meta
+      - key: FAILURELAB_LLM_MODEL
+        value: muse-spark-1.3
+      - key: FAILURELAB_LLM_BASE_URL
+        value: https://api.meta.ai/v1
+      - key: FAILURELAB_LLM_API_KEY
+        sync: false
+      - key: FAILURELAB_LLM_TIMEOUT_S
+        value: "60"
+      - key: FAILURELAB_LLM_REASONING_EFFORT
+        value: low
+      - key: FAILURELAB_META_RUNS_PER_HOUR
+        value: "30"
+      - key: FAILURELAB_META_QUESTIONS_PER_HOUR
+        value: "120"

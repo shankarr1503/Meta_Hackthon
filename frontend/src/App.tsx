@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
+  getCase,
   getCases,
   getInvestigation,
   getReady,
@@ -106,6 +107,18 @@ export default function App() {
     setLive({ runId: runs.current, caseView, planner, seed });
   };
 
+  /** Looks up the public view of a fresh machine, then investigates it live. */
+  const onRunFresh = async (machineSeed: number, planner: PlannerName, seed: number) => {
+    setBusy(true);
+    setError(null);
+    try {
+      onRun(await getCase(`fresh-${machineSeed}`), planner, seed);
+    } catch (e) {
+      setBusy(false);
+      setError(message(e));
+    }
+  };
+
   /** Leaves a live run (closing its stream) or a replay, and lists the saved replays again. */
   const backToCases = () => {
     setLive(null);
@@ -126,10 +139,31 @@ export default function App() {
           <div>
             <h1 className="text-2xl font-bold">FailureLab AI</h1>
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              A Meta-model investigator for rotating machines. Explore real recordings and simulated experiments.
+              A Meta-model investigator for rotating machines: it chooses the experiments, states
+              what it expects before each result, and explains the diagnosis.
             </p>
           </div>
-          {tab === "real" ? <span className="rounded border border-emerald-500 bg-emerald-50 px-2 py-1 text-xs font-semibold uppercase text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">Measured laboratory data</span> : <SimulatedLabel />}
+          <div className="flex flex-wrap items-center gap-2">
+            {loaded && (
+              <span
+                className={`rounded border px-2 py-1 text-xs ${
+                  loaded.ready.meta_model_configured
+                    ? "border-indigo-400 bg-indigo-50 text-indigo-900 dark:border-indigo-600 dark:bg-indigo-950 dark:text-indigo-100"
+                    : "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                }`}
+                title={
+                  loaded.ready.meta_model_configured
+                    ? "The Meta model is configured: live investigations and questions use it."
+                    : "No model key on this server: rule planners and saved replays only."
+                }
+              >
+                {loaded.ready.meta_model_configured
+                  ? `Meta model ${loaded.ready.meta_model || "configured"} · live`
+                  : "Meta model off · baseline planners and replays"}
+              </span>
+            )}
+            {tab === "real" ? <span className="rounded border border-emerald-500 bg-emerald-50 px-2 py-1 text-xs font-semibold uppercase text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">Measured laboratory data</span> : <SimulatedLabel />}
+          </div>
         </header>
 
         <nav aria-label="Sections" className="flex flex-wrap gap-1 border-b border-slate-200 dark:border-slate-800">
@@ -177,6 +211,7 @@ export default function App() {
                 planner={live.planner}
                 seed={live.seed}
                 onOpenReplay={openLiveReplay}
+                metaConfigured={loaded?.ready.meta_model_configured ?? false}
               />
             </ErrorBoundary>
           </div>
@@ -193,7 +228,11 @@ export default function App() {
             {trace ? (
               <div className="space-y-4">
                 <BackToCases onClick={backToCases} />
-                <InvestigationView key={trace.investigation_id} trace={trace} />
+                <InvestigationView
+                  key={trace.investigation_id}
+                  trace={trace}
+                  metaConfigured={loaded?.ready.meta_model_configured ?? false}
+                />
               </div>
             ) : loaded ? (
               <CasePicker
@@ -202,6 +241,7 @@ export default function App() {
                 metaConfigured={loaded.ready.meta_model_configured}
                 busy={busy}
                 onRun={onRun}
+                onRunFresh={(machineSeed, planner, seed) => void onRunFresh(machineSeed, planner, seed)}
                 onOpenReplay={(id) => open(() => getInvestigation(id))}
               />
             ) : (

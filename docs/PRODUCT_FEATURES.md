@@ -69,6 +69,9 @@ cut first. Build days follow the schedule in TECHNICAL_DESIGN.md §13.
 | F12 | 3D digital twin driven by measurements | Should | 2 Nov |
 | F13 | Live step streaming during an investigation | Could | 3 Nov |
 | F14 | Benchmark screen in the dashboard | Should | 2 Nov |
+| F15 | Ask the investigator: question a finished investigation; the Meta model answers from its recorded evidence | Should | 2 Nov |
+| F16 | Fresh machines: investigate a new hidden machine generated from a seed, live | Should | 2 Nov |
+| F17 | One-command container and hosting blueprint | Should | 2 Nov |
 
 ## 4. Feature details and acceptance criteria
 
@@ -105,6 +108,18 @@ stating what each hypothesis should show, and explain the result in plain langua
 - The model's stated expectations appear on screen before each result.
 - If the model is not configured, a Meta investigation request returns 503 explaining how to
   configure it or use `info_gain`.
+
+### Ask the investigator and fresh machines (F15, F16)
+
+- After a replay or live run reaches its diagnosis, an "Ask the investigator" panel sends a
+  question (3–300 characters) with the trace's public evidence to the Meta model, which
+  answers in at most 120 words, quoting readings with their operating point.
+- Answers are displayed and never saved; they cannot change a measurement, probability or
+  diagnosis. A failed call shows a labelled fallback that repeats the recorded explanation.
+- Without a model key the panel explains that questions need the Meta model.
+- The case picker offers an "Unseen machine" card: a seed (0–10,000) names a new hidden
+  simulated machine derived from that seed alone; investigating it uses the same planners,
+  budget and stopping rule as a sealed case. Its id and title carry no fault information.
 
 ### Simulator and manual lab (F1, F11)
 

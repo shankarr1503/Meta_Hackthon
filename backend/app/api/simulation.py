@@ -35,6 +35,14 @@ def list_cases() -> list[CaseOut]:
     return [CaseOut(**vars(case)) for case in public_cases()]
 
 
+@router.get("/cases/{case_id}", response_model=CaseOut)
+def get_case(case_id: str) -> CaseOut:
+    """Public fields of one case: a sealed case or a fresh machine `fresh-<seed>` (D-74)."""
+    if not 1 <= len(case_id) <= 64:
+        raise HTTPException(status_code=404, detail=f"Unknown case {case_id!r}")
+    return CaseOut(**vars(scenario_or_404(case_id).view()))
+
+
 @router.post("/experiments", response_model=ExperimentOut)
 def run_experiment(request: ExperimentRequest) -> ExperimentOut:
     scenario = scenario_or_404(request.case_id)

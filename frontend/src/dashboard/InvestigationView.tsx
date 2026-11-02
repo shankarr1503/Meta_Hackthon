@@ -4,6 +4,7 @@ import SimulatedLabel from "../SimulatedLabel";
 import { twinReading } from "../state/player";
 import { useInvestigation } from "../state/useInvestigation";
 import TwinPanel from "../twin/TwinPanel";
+import AskPanel from "./AskPanel";
 import BudgetMeter from "./BudgetMeter";
 import DiagnosisCard from "./DiagnosisCard";
 import ExperimentCard from "./ExperimentCard";
@@ -12,7 +13,13 @@ import Panel from "./Panel";
 import PlayerControls from "./PlayerControls";
 import ProbabilityBars from "./ProbabilityBars";
 
-export default function InvestigationView({ trace }: { trace: Trace }) {
+interface Props {
+  trace: Trace;
+  /** Whether the backend can answer questions about this replay with the Meta model. */
+  metaConfigured?: boolean;
+}
+
+export default function InvestigationView({ trace, metaConfigured = false }: Props) {
   const player = useInvestigation(trace);
   const { view } = player;
   const fallbacks = trace.llm_events.filter((e) => e.fallback).length;
@@ -88,7 +95,10 @@ export default function InvestigationView({ trace }: { trace: Trace }) {
       </Panel>
 
       {view.showDiagnosis && (
-        <DiagnosisCard diagnosis={trace.diagnosis} stopReason={trace.stop_reason} />
+        <>
+          <DiagnosisCard diagnosis={trace.diagnosis} stopReason={trace.stop_reason} />
+          <AskPanel investigationId={trace.investigation_id} metaConfigured={metaConfigured} />
+        </>
       )}
     </div>
   );

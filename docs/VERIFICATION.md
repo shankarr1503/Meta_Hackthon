@@ -261,3 +261,40 @@ Run on Windows 11, Python 3.12 venv, Node 22, after commits 4e27d68 (backend fix
 - A live Meta investigation of `case-t4` through the browser completed without alerts or
   page errors; it produced the README screenshots in `docs/images/`.
 - Not verified here: CI on GitHub (no remote yet), browsers other than Chromium.
+
+## Judge-facing additions – 2 November 2026 (evening)
+
+Run on Windows 11, Python 3.12 venv, Node 22, after the baseline check of the committed
+tree passed (258 backend and 72 frontend tests), for D-74 (unseen machines), D-75 (ask the
+investigator) and D-76 (container).
+
+- `python scripts/tasks.py check`: Ruff lint and format passed (47 Python files); backend
+  **303 passed** (45 new tests: fresh-machine generation, canonical ids, no hidden values,
+  bit-identical round trip; grounded answers, prompt without hidden values, caps, four
+  fallback shapes, question passed as data, 503/404/400/422/403/429 paths and the separate
+  hourly cap); frontend **80 passed** in 15 files (8 new: Ask panel not-configured note,
+  typed and suggested questions, fallback labelling, server error; fresh-machine flow via
+  `/api/cases/fresh-77`, lookup failure, header model chip); ESLint, TypeScript and the
+  production build passed.
+- Live model, question endpoint: two questions about the committed replay
+  `case-r2-meta-0-20261102030032` ("Why not imbalance?", "Which single experiment mattered
+  most, and what reading decided it?") returned `ok: true` in 3.1 s and 3.2 s (about 2,000
+  prompt tokens each). Both answers quoted readings present in the trace (1500 RPM / 2000 N:
+  2x 70.78 µm, 1x 6.99 µm; 3300 RPM / 0 N: 1x 20.56 µm, 2x 3.45 µm) and the engine's final
+  probabilities (misalignment 0.947, imbalance+misalignment 0.053). No invented values were
+  found on reading; this is a two-sample spot check, not a grounding guarantee.
+- `node scripts/browser-smoke.cjs` against `python scripts/tasks.py serve`: 25 views without
+  page errors, visible alerts or horizontal overflow; fresh live investigation, no-WebGL
+  fallback, keyboard navigation and backend-unavailable states passed.
+- New-feature browser check (desktop light, phone dark): the Unseen machine card renders;
+  a baseline run on `fresh-77` streamed to a diagnosis through the production dashboard;
+  the Ask panel on the replay sent one real question and rendered the answer with its
+  "Answered by muse-spark-1.3" footer; no alerts, page errors or overflow on either
+  viewport. Screenshots in `docs/images/ask-the-investigator.png` and `.tmp/browser/evidence-new/`.
+- Container: `docker build` succeeded (image 344 MB); the running container answered
+  `/api/health` and `/api/ready` (model not configured, as intended without a key), served
+  the dashboard (200), `/api/benchmark`, `/api/real-recordings` and the photograph (200),
+  listed 7 replays, completed a baseline investigation on `fresh-77` (200) and returned 503
+  for a question without a key.
+- Not verified here: CI on GitHub (no remote yet), the Render blueprint on Render itself,
+  browsers other than Chromium.

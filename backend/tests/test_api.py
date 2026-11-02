@@ -401,3 +401,131 @@ def test_large_json_is_compressed(client: TestClient) -> None:
     response = client.get("/api/benchmark", headers={"Accept-Encoding": "gzip"})
     if response.status_code == 200:
         assert response.headers.get("content-encoding") == "gzip"
+
+
+# --- fresh machines (D-74) ---------------------------------------------------------
+
+
+def test_case_lookup_returns_sealed_and_fresh_public_fields(client: TestClient) -> None:
+    sealed = client.get("/api/cases/case-k7").json()
+    assert set(sealed) == PUBLIC_CASE_FIELDS and sealed["title"] == "Pump drive A"
+    fresh = client.get("/api/cases/fresh-4242")
+    assert fresh.status_code == 200
+    body = fresh.json()
+    assert set(body) == PUBLIC_CASE_FIELDS
+    assert body["case_id"] == "fresh-4242" and body["title"] == "Unseen machine 4242"
+    assert body["initial_rpm"] == 2950 and body["initial_load_n"] == 500
+    for key in ("wn_rpm", "thermal", "faults", "truth", "imbalance", "friction", "misalign"):
+        assert key not in fresh.text
+
+
+@pytest.mark.parametrize("case_id", ["fresh-10001", "fresh-01", "fresh-x", "nope", "x" * 65])
+def test_case_lookup_unknown_is_404(client: TestClient, case_id: str) -> None:
+    assert client.get(f"/api/cases/{case_id}").status_code == 404
+
+
+def test_fresh_machine_investigation_round_trip(client: TestClient) -> None:
+    request = {"case_id": "fresh-4242", "planner": "info_gain", "seed": 1}
+    trace = client.post("/api/investigations", json=request).json()
+    assert trace["investigation_id"] == "fresh-4242-info_gain-1"
+    assert trace["case"]["case_id"] == "fresh-4242"
+    assert client.get("/api/investigations/fresh-4242-info_gain-1").json() == trace
+    # Same seed, same machine: a second run is bit-identical.
+    assert client.post("/api/investigations", json=request).json() == trace
+    experiment = client.post("/api/experiments", json={"case_id": "fresh-4242", "rpm": 3000})
+    assert experiment.status_code == 200 and experiment.json()["kind"] == "case"
+
+
+# --- ask the investigator (D-75) ---------------------------------------------------
+
+
+def _saved_replay(client: TestClient) -> str:
+    body = {"case_id": "case-r2", "planner": "info_gain", "seed": 0}
+    return client.post("/api/investigations", json=body).json()["investigation_id"]
+
+
+def test_ask_without_model_returns_503_after_finding_the_replay(client: TestClient) -> None:
+    replay = _saved_replay(client)
+    response = client.post(f"/api/investigations/{replay}/ask", json={"question": "Why?"})
+    assert response.status_code == 503
+    assert "FAILURELAB_LLM_API_KEY" in response.json()["detail"]
+
+
+def test_ask_missing_or_bad_replay(client: TestClient) -> None:
+    question = {"question": "Why?"}
+    assert client.post("/api/investigations/case-k7-sweep-99/ask", json=question).status_code == 404
+    assert client.post("/api/investigations/Bad.Id/ask", json=question).status_code == 400
+
+
+@pytest.mark.parametrize(
+    "body",
+    [{"question": "hi"}, {"question": "x" * 301}, {"question": "Why?", "truth": "imbalance"}, {}],
+)
+def test_ask_rejects_bad_questions(client: TestClient, body: dict) -> None:
+    replay = _saved_replay(client)
+    assert client.post(f"/api/investigations/{replay}/ask", json=body).status_code == 422
+
+
+def test_ask_with_working_model_returns_grounded_answer(make_settings, monkeypatch) -> None:
+    seen: list[tuple[str, str]] = []
+
+    def complete(self, system: str, user: str) -> str:
+        seen.append((system, user))
+        return json.dumps(
+            {"answer": "The strong 2x at 1500 RPM under load points to misalignment."}
+        )
+
+    client = _configured_client(make_settings, monkeypatch, complete)
+    replay = _saved_replay(client)
+    before = client.get(f"/api/investigations/{replay}").json()
+    url = f"/api/investigations/{replay}/ask"
+    response = client.post(url, json={"question": "Why not imbalance?"})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["investigation_id"] == replay
+    assert body["question"] == "Why not imbalance?"
+    assert body["answer"].startswith("The strong 2x")
+    assert body["ok"] is True and body["fallback"] is False
+    assert body["model"] == "m" and body["source"] == "simulation"
+    assert body["error_kind"] is None and body["error"] is None
+    assert json.loads(seen[0][1])["question"] == "Why not imbalance?"
+    # The saved trace is untouched: answers are never written into replays.
+    assert client.get(f"/api/investigations/{replay}").json() == before
+
+
+def test_ask_falls_back_when_model_fails(make_settings, monkeypatch) -> None:
+    from app.agent.llm_client import LLMError
+
+    def fail(self, system: str, user: str) -> str:
+        raise LLMError("model returned HTTP 500")
+
+    client = _configured_client(make_settings, monkeypatch, fail)
+    replay = _saved_replay(client)
+    body = client.post(f"/api/investigations/{replay}/ask", json={"question": "Why?"}).json()
+    assert body["ok"] is False and body["fallback"] is True
+    assert body["error_kind"] == "model_error"
+    assert "could not answer" in body["answer"]
+
+
+def test_ask_is_capped_per_hour_and_blocks_cross_site(make_settings, monkeypatch) -> None:
+    from app.agent.llm_client import ChatCompletionsClient
+
+    monkeypatch.setattr(
+        ChatCompletionsClient, "complete", lambda self, s, u: json.dumps({"answer": "ok"})
+    )
+    settings = make_settings(
+        llm_api_key="k",
+        llm_model="m",
+        llm_base_url="https://example.invalid/v1",
+        meta_questions_per_hour=1,
+    )
+    client = TestClient(create_app(settings))
+    replay = _saved_replay(client)
+    url = f"/api/investigations/{replay}/ask"
+    cross_site = {"Sec-Fetch-Site": "cross-site"}
+    assert client.post(url, json={"question": "Why?"}, headers=cross_site).status_code == 403
+    assert client.post(url, json={"question": "Why?"}).status_code == 200
+    second = client.post(url, json={"question": "Why?"})
+    assert second.status_code == 429 and "questions" in second.json()["detail"]
+    # Investigations keep their own, separate budget.
+    assert client.post("/api/investigations", json={"case_id": "case-k7"}).status_code == 200

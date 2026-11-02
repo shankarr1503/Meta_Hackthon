@@ -7,6 +7,7 @@ import SimulatedLabel from "../SimulatedLabel";
 import { currentExperiment, INITIAL_LIVE, liveReducer, type LiveState } from "../state/live";
 import type { TwinReading } from "../twin/mapping";
 import TwinPanel from "../twin/TwinPanel";
+import AskPanel from "./AskPanel";
 import BudgetMeter from "./BudgetMeter";
 import DiagnosisCard from "./DiagnosisCard";
 import ExperimentCard from "./ExperimentCard";
@@ -51,10 +52,18 @@ interface Props {
   seed: number;
   /** Hands the finished, saved trace to the replay view. */
   onOpenReplay: (trace: Trace) => void;
+  /** Whether the backend can answer questions about the finished run with the Meta model. */
+  metaConfigured?: boolean;
 }
 
 /** Renders one live investigation as its frames arrive. Display only: no numbers are computed. */
-export default function LiveInvestigationView({ caseView, planner, seed, onOpenReplay }: Props) {
+export default function LiveInvestigationView({
+  caseView,
+  planner,
+  seed,
+  onOpenReplay,
+  metaConfigured = false,
+}: Props) {
   const [state, dispatch] = useReducer(liveReducer, INITIAL_LIVE);
   const caseId = caseView.case_id;
 
@@ -179,6 +188,8 @@ export default function LiveInvestigationView({ caseView, planner, seed, onOpenR
           </button>
         </div>
       )}
+
+      {trace && <AskPanel investigationId={trace.investigation_id} metaConfigured={metaConfigured} />}
     </div>
   );
 }

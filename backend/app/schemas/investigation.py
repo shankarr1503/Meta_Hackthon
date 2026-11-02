@@ -115,3 +115,24 @@ class Ready(Closed):
     physics_model_version: str
     meta_model_configured: bool
     meta_model: str
+
+
+class QuestionRequest(Closed):
+    """An engineer's question about a finished investigation (D-75)."""
+
+    question: str = Field(min_length=3, max_length=300)
+
+
+class Answer(Closed):
+    """The Meta model's answer, grounded in the saved trace. Never stored in the trace."""
+
+    investigation_id: str
+    question: str
+    answer: str
+    model: str
+    ok: bool
+    fallback: bool
+    usage: dict[str, int] | None
+    error_kind: str | None = None
+    error: str | None = None
+    source: Literal["simulation"] = "simulation"

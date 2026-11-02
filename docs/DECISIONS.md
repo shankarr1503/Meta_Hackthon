@@ -288,3 +288,33 @@ A full code review on 2 November found the issues below; each fix ships with tes
 - **D-73 · 2 Nov 2026 · No displayed certainty.** Probabilities that round to 100.0% or
   0.0% (but are not exactly 0) display as ">99.9%" and "<0.1%". Accuracies, which are
   exact counts, still display as percentages.
+
+## Judge-facing additions (2 November 2026)
+
+- **D-74 · 2 Nov 2026 · Fresh machines.** `GET /api/cases/fresh-<seed>` (seed 0–10,000, no
+  leading zeros) describes a new hidden simulated machine derived from the seed alone, and
+  every experiment, investigation and stream endpoint accepts the id. The label, severities,
+  critical speed and thermal factor all come from one generator seeded by the id, so, unlike
+  the numbered benchmark cases (D-70), the id and title carry no fault order. The note says
+  the machine is generated and has no history. `fresh_scenario` joins the hidden names the
+  architecture test polices; the six sealed cases and `/api/cases` are unchanged. Purpose:
+  a judge can investigate a machine nobody has seen, live, instead of a curated case.
+- **D-75 · 2 Nov 2026 · Ask the investigator.** `POST /api/investigations/{id}/ask` sends a
+  3–300 character question plus an evidence record built from the public trace (note,
+  prior, alarm, each experiment's choice, stated expectations, engine predictions,
+  measurements and probabilities, diagnosis) to the Meta model, which answers in at most
+  120 words under a system prompt that forbids inventing readings or claiming the truth is
+  known. The question is data inside the JSON payload, never part of the system prompt.
+  Answers are returned to the dashboard and never saved into the replay, so replays stay
+  bit-identical and the player, benchmark and proof verification are untouched. Failures
+  return `ok: false` with a fallback that repeats the recorded explanation. Questions have
+  their own hourly cap (`FAILURELAB_META_QUESTIONS_PER_HOUR`, default 120) and the same
+  cross-site guard as runs. Works on rule-planner replays too: the model explains evidence
+  it did not gather.
+- **D-76 · 2 Nov 2026 · Container deployment.** A two-stage `Dockerfile` (Node 22 builds the
+  dashboard; Python 3.12-slim serves it with the API on one origin, as a non-root user, with
+  a health check on `/api/health` and `PORT` support) and a Render blueprint
+  (`render.yaml`) make hosting a one-step job. `.dockerignore` keeps `.env`, caches, raw
+  downloads and runtime replays out of the image; secrets are injected as environment
+  variables by the host. CI builds the image on Linux so a broken Dockerfile fails the
+  push. No hosted instance is created by the repository itself.

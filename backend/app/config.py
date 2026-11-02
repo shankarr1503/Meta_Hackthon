@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     llm_reasoning_effort: Literal["", "minimal", "low", "medium", "high", "xhigh"] = "low"
     # Meta investigations the API will start per rolling hour (each makes up to ~10 calls).
     meta_runs_per_hour: int = Field(30, ge=0)
+    # Questions about finished investigations the API will answer per rolling hour (one
+    # model call each).
+    meta_questions_per_hour: int = Field(120, ge=0)
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
     replays_dir: Path = BACKEND_DIR / "replays"
     results_dir: Path = BACKEND_DIR / "results"

@@ -1,12 +1,16 @@
 import dataclasses
+import itertools
 
 import numpy as np
 import pytest
 
 from app.cases import (
+    FRESH_MAX_SEED,
     SEALED_CASES,
     TRUTH_LABELS,
     CaseView,
+    fresh_scenario,
+    fresh_seed,
     get_scenario,
     public_cases,
     random_scenarios,
@@ -78,3 +82,65 @@ def test_runner_is_reproducible_per_experiment_index() -> None:
     assert np.array_equal(first.displacement_um, again.displacement_um)
     assert run(2950.0, 500.0, 4).features != first.features
     assert make_runner(SEALED_CASES[0], seed=5)(2950.0, 500.0, 3).features != first.features
+
+
+# --- fresh machines (D-74) ---------------------------------------------------------
+
+
+def test_fresh_scenario_is_reproducible_and_off_grid() -> None:
+    first, second = fresh_scenario(42), fresh_scenario(42)
+    assert first == second
+    assert first.case_id == "fresh-42"
+    assert first.truth in TRUTH_LABELS
+    assert 3300.0 <= first.machine.wn_rpm <= 3900.0
+    assert 0.7 <= first.machine.thermal <= 1.4
+    severities = [first.faults.imbalance, first.faults.misalignment, first.faults.friction]
+    assert all(s == 0.0 or 0.15 <= s <= 0.8 for s in severities)
+
+
+def test_fresh_scenarios_cover_every_hypothesis_without_an_ordered_label() -> None:
+    labels = [fresh_scenario(seed).truth for seed in range(60)]
+    assert set(labels) == set(TRUTH_LABELS)
+    # Not grouped by label like the numbered benchmark cases: neighbours differ somewhere.
+    assert any(a != b for a, b in itertools.pairwise(labels))
+
+
+def test_fresh_view_shows_no_hidden_values() -> None:
+    view = fresh_scenario(7).view()
+    assert isinstance(view, CaseView)
+    assert view.title == "Unseen machine 7"
+    assert "sealed" in view.note and "seed" in view.note
+    assert (view.initial_rpm, view.initial_load_n) == (2950.0, 500.0)
+
+
+@pytest.mark.parametrize(
+    ("case_id", "seed"),
+    [
+        ("fresh-0", 0),
+        ("fresh-7", 7),
+        ("fresh-10000", FRESH_MAX_SEED),
+        ("fresh-10001", None),
+        ("fresh-01", None),
+        ("fresh-", None),
+        ("fresh-x", None),
+        ("fresh--1", None),
+        ("fresh-1.5", None),
+        ("case-k7", None),
+        ("rand-2026-000", None),
+    ],
+)
+def test_fresh_seed_parses_only_canonical_ids(case_id: str, seed: int | None) -> None:
+    assert fresh_seed(case_id) == seed
+
+
+def test_get_scenario_resolves_fresh_ids() -> None:
+    assert get_scenario("fresh-7") == fresh_scenario(7)
+    assert get_scenario("fresh-10001") is None
+    assert get_scenario("fresh-01") is None
+
+
+def test_fresh_scenario_rejects_out_of_range_seeds() -> None:
+    with pytest.raises(ValueError):
+        fresh_scenario(FRESH_MAX_SEED + 1)
+    with pytest.raises(ValueError):
+        fresh_scenario(-1)

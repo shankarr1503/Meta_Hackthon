@@ -1,7 +1,9 @@
 # Demo and recording guide
 
-Investigation/lab and benchmark data are simulated. The Real recordings view uses measured laboratory signals (REAL_DATA.md). The Meta endpoint and saved `case-r2-meta-0-20261102030032` investigation were
-verified live on 2 November 2026. Do not describe a rule-planner replay as a Meta investigation.
+Investigation, lab and benchmark data are simulated. The Real recordings view uses measured
+laboratory signals (REAL_DATA.md). The Meta endpoint, the saved
+`case-r2-meta-0-20261102030032` investigation and the question endpoint were verified live
+on 2 November 2026. Do not describe a rule-planner replay as a Meta investigation.
 
 ## Start the app
 
@@ -13,10 +15,10 @@ python scripts/tasks.py serve
 ```
 
 Open http://127.0.0.1:8000. This mode serves the dashboard and API together. See
-[DEPLOYMENT.md](DEPLOYMENT.md) for hosting details.
+[DEPLOYMENT.md](DEPLOYMENT.md) for hosting details, including the container.
 
-For development with automatic reload, use the following two-server setup instead.
-Run these commands in separate terminals from the repository root:
+For development with automatic reload, use the two-server setup instead, in separate
+terminals from the repository root:
 
 ```sh
 python scripts/tasks.py backend
@@ -24,37 +26,36 @@ python scripts/tasks.py frontend
 ```
 
 Open http://localhost:5173. The backend API reference is at http://127.0.0.1:8000/docs.
-The case picker automatically selects information gain until Meta access is configured.
-Saved replays require the local backend, but do not need internet or model access.
+The header chip says whether the Meta model is configured; without it the case picker
+selects information gain. Saved replays need only the local backend.
 
 ## Three-minute recording script
 
-Use the saved `case-r2-meta-0-20261102030032` replay to rehearse and record. It has two experiments and shows
-how beliefs change. The compressor replay `case-b6-info_gain-0` has only one experiment;
-do not promise multiple rounds when showing that replay. The verified Meta replay has two model-selected experiments and four model calls
-with zero fallbacks; it diagnoses simulated misalignment at 94.7% probability.
+Record at desktop width in a clean browser window. The script below uses one live Meta
+run and one live question (two to six model calls in total, a few seconds each); keep the
+saved replay `case-r2-meta-0-20261102030032` open in a second tab as the fallback.
 
 | Time | Show | Narration |
 |---|---|---|
-| 0:00–0:20 | Case picker | “A rotating machine is vibrating. Several faults can look alike at one speed. FailureLab investigates by choosing what to measure next. Every machine and measurement in this investigation is simulated.” |
-| 0:20–0:40 | Open conveyor gearbox replay; advance from prior to alarm | “This case began after the motor was remounted. The alarm gives one overall vibration level. The fault remains hidden from the investigator.” |
-| 0:40–1:25 | First experiment: choice, predictions, measurement, updated beliefs | “The planner chooses a speed and load. These numerical predictions come from the physics and Bayesian engine before the measurement is revealed. Now the simulator runs the experiment, and the engine updates its beliefs.” |
-| 1:25–1:55 | Second experiment, then diagnosis | “Each experiment costs budget. The investigation stops at 90% confidence or when no affordable experiment remains. The verdict includes remaining doubts and a physical check.” |
-| 1:55–2:20 | Manual lab; increase bearing friction | “The public lab lets us test intuition. Friction changes broadband vibration, temperature and the response curve. The 3D twin illustrates measured features; it does not generate evidence.” |
-| 2:20–2:50 | Benchmark, all runs | “On 150 simulated runs per planner, information gain achieved 99.3% accuracy at 2.15 points on average. Fixed sweep achieved 96.0% at 2.99 points. That is about 28% lower experiment cost in this simulator.” |
-| 2:50–3:00 | Investigation screen | “FailureLab makes the experiment choices, predictions and evidence inspectable. It decides what data to collect next.” |
+| 0:00–0:15 | Case picker, header chip "Meta model muse-spark-1.3 · live" | "A rotating machine is vibrating. Imbalance, misalignment, a dry bearing, or two at once look alike at one speed. FailureLab hands the investigation to a Meta model: it decides which test to run next. Every machine here is simulated and labelled so." |
+| 0:15–0:40 | Investigate Conveyor gearbox input with planner Meta; the prior frame | "It reads the maintenance note: the motor was re-mounted. Its starting beliefs lean to misalignment, but nothing drops below 5%: a note can be wrong." |
+| 0:40–1:20 | First experiment: rationale, the six stated expectations, then the measurement and the prediction check | "Before the result, it writes down what each fault should show at 1,500 RPM under load. Then the simulator answers: 2x at 70 micrometres. Only the Bayesian engine moves the probabilities, and the table shows which hypotheses gained and lost." |
+| 1:20–1:45 | Second experiment and the diagnosis card | "A second test at 3,300 RPM near the critical speed shows no imbalance peak. Misalignment at 94.7%, the remaining doubt named, and the physical check to do first." |
+| 1:45–2:10 | Ask the investigator: type "Why not imbalance?" | "Now I can question it. The answer quotes the readings and operating points that ruled imbalance out. They are the same numbers in the experiment log: it answers from evidence, and the answer is never stored or scored." |
+| 2:10–2:30 | Unseen machine card: seed 77 (or any), planner Meta or information gain | "Any seed names a machine nobody has seen, including us. The same loop finds its fault live." |
+| 2:30–2:50 | Benchmark: planner table, then the challenge panel with the injection condition | "150 simulated runs per planner; information gain needs about 28% fewer experiment points than a fixed sweep. On 24 new machines with misleading and injected notes, Meta stayed at 23 of 24 and no injected text reached an explanation. We report that no cost advantage was shown there." |
+| 2:50–3:00 | Real recordings: the rig photograph, a sensor spectrum, 8/8 vs 5/8 | "On real accelerometer recordings from a laboratory rig, the model labelled all eight held-out trials; the statistical baseline got five. One rig, eight trials: a promising start, not an industrial claim." |
 
-When showing a rule-planner replay, explicitly say “information-gain baseline.” For the Meta
-recording, show its maintenance-note prior, model rationale, per-hypothesis expectations,
-model-call count and fallback count. The Meta benchmark has run (VERIFICATION.md): on the
-18 sealed simulated runs Meta used 1.78 experiment points against 2.33 for information gain,
-but on the 72-pair challenge it used 1.92–1.96 against 1.875 and the paired intervals include
-zero. Present the sealed-case saving only as applying to that small sample; a Meta cost
-advantage is not established.
+Closing line: "It doesn't just read data. It decides what data to collect, says what it
+expects, and shows its work."
+
+Keep the 23.8% saving attached to the 18-run sealed-case study only; the 72-pair challenge
+did not reproduce it. If the live Meta run is slow, switch to the saved replay tab and say
+it is a recording of an earlier live run.
 
 ## Recording checks
 
-- Use a clean browser view at desktop width, with readable text and the Simulated label.
+- Use a clean browser view at desktop width, readable text and the Simulated label visible.
 - Open the chosen saved replay before recording. Restart it to return to starting beliefs.
 - Use Forward to pause between predictions and results. Diagnosis appears only at the end.
 - Keep credentials, `.env`, account pages and terminal history out of the recording.
@@ -81,10 +82,12 @@ as evidence of working model choices: fallback can also complete an investigatio
 
 - Backend unreachable: start the backend and reload the page.
 - Model unavailable: use a previously verified Meta replay and identify it as recorded.
+  The Ask panel then shows a labelled fallback instead of an answer; say so.
 - Verified Meta replay missing: show the baseline honestly, name it as the baseline, and cite
   the recorded Meta results in VERIFICATION.md rather than claiming a live Meta run.
 - WebGL unavailable: numerical readings, predictions, replay controls and diagnosis still work.
 - Benchmark unavailable: run `python scripts/tasks.py benchmark` and reopen the Benchmark tab.
+- Hourly cap reached (429): the dashboard says so; replays and the baseline still work.
 
 ## Show the stronger proof
 
@@ -94,8 +97,7 @@ machines tested under three note conditions. Meta and the baseline each diagnose
 23 correctly in every condition, and the model had no fallbacks. Identical prompts
 reuse a recorded reply, so the injection-note prior was effectively sampled once.
 This larger challenge did not show a cost advantage." Open the paired-result audit to show
-the retained failure and the downloadable evidence. Keep the earlier 23.8% saving
-clearly attached to the separate 18-run sealed-case study.
+the retained failure and the downloadable evidence.
 
 ## Show genuine machine evidence
 

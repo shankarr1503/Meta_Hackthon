@@ -6,7 +6,14 @@ from pathlib import Path
 APP = Path(__file__).resolve().parent.parent / "app"
 
 # Names that expose hidden ground truth.
-HIDDEN_NAMES = {"Scenario", "SEALED_CASES", "get_scenario", "random_scenarios", "truth_label"}
+HIDDEN_NAMES = {
+    "Scenario",
+    "SEALED_CASES",
+    "get_scenario",
+    "random_scenarios",
+    "fresh_scenario",
+    "truth_label",
+}
 
 
 def _package_of(path: Path) -> list[str]:

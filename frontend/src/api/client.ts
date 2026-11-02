@@ -1,4 +1,5 @@
 import type {
+  Answer,
   BenchmarkResult,
   CaseView,
   HealthResponse,
@@ -55,11 +56,17 @@ function post<T>(path: string, body: unknown): Promise<T> {
 export const getHealth = () => request<HealthResponse>("/api/health");
 export const getReady = () => request<ReadyResponse>("/api/ready");
 export const getCases = () => request<CaseView[]>("/api/cases");
+/** One case's public fields: a sealed case or a fresh machine `fresh-<seed>`. */
+export const getCase = (caseId: string) =>
+  request<CaseView>(`/api/cases/${encodeURIComponent(caseId)}`);
 export const listInvestigations = () => request<TraceSummary[]>("/api/investigations");
 export const getInvestigation = (id: string) =>
   request<Trace>(`/api/investigations/${encodeURIComponent(id)}`);
 export const runInvestigation = (body: InvestigationRequest) =>
   post<Trace>("/api/investigations", body);
+/** Ask the Meta model about a finished investigation; it answers from the saved trace only. */
+export const askInvestigation = (id: string, question: string) =>
+  post<Answer>(`/api/investigations/${encodeURIComponent(id)}/ask`, { question });
 export const simulateLab = (body: LabRequest) => post<LabResult>("/api/lab/simulate", body);
 export const getBenchmark = () => request<BenchmarkResult>("/api/benchmark");
 

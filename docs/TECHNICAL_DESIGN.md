@@ -223,11 +223,13 @@ All endpoints under `/api`, JSON only, documented automatically at `/docs` and i
 | GET | `/api/health` | `{status, service, version, contract_version: "1"}` | — |
 | GET | `/api/ready` | Status of physics engine and Meta model adapter | — |
 | GET | `/api/cases` | Public case fields only | — |
+| GET | `/api/cases/{case_id}` | Public fields of one sealed case or fresh machine `fresh-<seed>` (D-74) | 404 |
 | POST | `/api/experiments` | One simulated experiment on a case: features, waveform, spectrum | 404, 422 |
 | POST | `/api/lab/simulate` | One simulated experiment on the public preset lab machine | 422 |
 | POST | `/api/investigations` | Run and save an investigation | 404, 422, 503 if planner `meta` and the model is not configured |
 | GET | `/api/investigations` | List saved replays | — |
 | GET | `/api/investigations/{id}` | Load a replay | 400, 404 |
+| POST | `/api/investigations/{id}/ask` | Meta model answers a question from the saved trace's evidence (D-75) | 400, 403, 404, 422, 429, 503 |
 | GET | `/api/benchmark` | Latest benchmark results | 404 if not yet run |
 
 **Case view** (`/api/cases`): exactly `case_id`, `title`, `note`, `initial_rpm` (2950),
@@ -249,6 +251,11 @@ response fields with `source: "simulation"` and `kind: "lab"`.
 
 **InvestigationRequest:** `case_id`; `planner` one of `meta`, `info_gain`, `sweep`, `random`
 (default `meta`); `seed` 0–10,000.
+
+**QuestionRequest** (extra keys rejected with 422): `question` (3–300 chars). The answer
+(`Answer`: `question`, `answer` ≤ 900 chars, `model`, `ok`, `fallback`, `usage`,
+`error_kind`, `error`, `source`) is returned and never written into the trace; the model
+sees only the question and the public trace fields (D-75).
 
 **Investigation ids:** rule planners `{case_id}-{planner}-{seed}`; Meta
 `{case_id}-meta-{seed}-{YYYYMMDDhhmmss}`. Both match `^[a-z0-9_-]{1,80}$`.

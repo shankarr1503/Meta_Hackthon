@@ -74,6 +74,11 @@ behaviour changes.
 - Model output is untrusted: JSON is extracted from the reply, unknown hypothesis names are
   dropped, text is capped (reason 600, rationale 400, expectation 200, explanation 1,200
   characters). Any failure falls back to `info_gain` for that call.
+- Questions about a finished investigation (D-75) are answered from the saved trace's public
+  fields only. The question is untrusted text passed as data; the answer is capped at 900
+  characters, shown to the user, never saved, and never affects a measurement, probability,
+  stopping decision or diagnosis. A grounded answer can still be wrong: the dashboard shows
+  the recorded evidence beside it so a reader can check every quoted reading.
 
 ## Cases and benchmark
 
@@ -83,6 +88,10 @@ behaviour changes.
   speed uniform in 3,300–3,900 RPM, thermal factor uniform in 0.7–1.4 (off the engine's
   grid on purpose), and a note saying no history is available.
 - Misalignment combined with friction is not a modelled hypothesis, so no case has it.
+- Fresh machines (`fresh-<seed>`, D-74) draw their label uniformly from the six hypotheses
+  and their severities and machine values from the generated-case ranges above, all from
+  one generator seeded by the id. The same seed always gives the same machine; a different
+  seed gives an unrelated one. They are simulated like every other case.
 - Benchmark: generated cases use seed 2026 and one investigation seed each; sealed cases run
   with seeds 0–4 (rule planners) or 0–2 (Meta). Accuracy is top hypothesis = truth label.
 
