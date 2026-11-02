@@ -1,112 +1,93 @@
 # Submission draft
 
-This is a draft for the owner to review and submit. Account eligibility, current organiser
-rules, repository visibility, hosting and final video links have not been verified here.
+Text for the owner to review and paste into the submission form. Account eligibility,
+the current organiser rules, repository visibility, hosting and the final video link have
+not been verified here (see "Materials the owner must supply").
 
 ## Project name
 
 FailureLab AI
 
-## One sentence
+## Tagline
 
-An AI investigator that chooses experiments on a simulated rotating machine, compares
-predictions with measurements, and explains the evidence behind a fault diagnosis.
+An AI investigator that finds out why a machine vibrates by running experiments, and
+states what it expects to see before every result.
 
 ## Problem
 
-A vibration alarm identifies a symptom. Several faults can produce similar readings at
-one operating point, so a useful next step is deciding which speed and load to test.
-FailureLab makes this experiment-selection process inspectable and measurable.
+When a rotating machine starts to vibrate, the alarm names a symptom, not a cause.
+Imbalance, misalignment and a failing bearing can look alike at one operating point, so an
+engineer has to decide which speed and load to test next. Every test costs time and
+machine downtime, and the reasoning behind a diagnosis is rarely written down.
 
-## What we built
+## What it does
 
-We built a physics simulator, six sealed machine cases, a Bayesian inference engine,
-an investigation loop, a Meta model adapter, validated model choices with fallbacks,
-saved replay traces, a React dashboard, a manual experiment lab, a measured-feature
-3D twin and a reproducible benchmark against fixed and random test plans.
+FailureLab AI hands that investigation to a Meta model (Muse Spark 1.3) and makes every
+step inspectable:
 
-The model's intended role is to interpret the maintenance note, choose among the
-engine's top five experiments, state expectations and explain the evidence. The simulator
-produces every measurement; the Bayesian engine computes the posterior probabilities.
-Model output is validated, and failures are logged before the baseline takes over.
-The model receives public case information and measurements, never hidden case truth.
+1. It reads the maintenance note and sets starting beliefs. Every possible fault keeps at
+   least 5%, so a wrong or malicious note cannot rule out the truth.
+2. A Bayesian engine ranks experiments by expected information per cost point; the model
+   picks one of the top five and **states the reading it expects under each hypothesis
+   before the experiment runs**.
+3. A physics simulator (a digital twin of a rotor on bearings) produces the measurement.
+   The engine updates the probabilities, and the dashboard shows each prediction next to
+   the measurement and which hypotheses gained or lost.
+4. At 90% confidence or when the budget runs out, the model explains the diagnosis, the
+   remaining doubts and the check to do next.
 
-## Evidence available now
+The model never supplies a measured value or a scored probability, and never sees the
+hidden fault. Any model failure falls back to the information-gain planner for that step
+and is logged; every reply is stored, so each investigation replays exactly. A separate
+view applies the model to real accelerometer recordings from a physical laboratory rig.
 
-The rule-planner benchmark was rerun on 1 November 2026: six sealed cases with five
-seeds each and 120 generated cases, for 150 investigations per planner. Each uses the
-same eight-point budget and 90% stopping target.
+## How we built it
 
-| Planner | Accuracy | Mean cost | Mean experiments |
-|---|---|---|---|
-| Information gain | 99.3% | 2.15 | 2.07 |
-| Fixed sweep | 96.0% | 2.99 | 2.51 |
-| Random | 98.0% | 3.90 | 2.79 |
+Python (FastAPI, NumPy, Pydantic) and React (TypeScript, Vite, Recharts, React Three
+Fiber), all written during the hackathon. The Meta Model API is called through an
+OpenAI-compatible chat-completions adapter with timeouts, length caps and validation.
+Investigations stream live to the dashboard as Server-Sent Events. Studies are
+pre-registered: a frozen plan (hashes of code, prompts and splits) is written before the
+first model call. 258 backend and 72 frontend tests, an architecture test that blocks any
+path from the investigator to the hidden fault, and a CI workflow for Linux and Windows
+(it runs once the repository is pushed).
 
-Source: `backend/results/benchmark.json`. These results use the same physics model family
-as inference and do not establish real-world accuracy or robustness to unmodelled faults.
-The cost comparison is observed at the accuracies above; it is not an equal-accuracy
-controlled comparison.
+## Evidence
 
-## Meta verification
+All simulated unless marked. Sources are in `backend/results/` and are re-checked by tests.
 
-Live endpoint smoke test and end-to-end Meta investigation passed on 2 November 2026.
-Replay `case-r2-meta-0-20261102030032` contains two model-selected experiments, four
-model calls and zero fallbacks, reaching 94.7% simulated misalignment probability.
-Playback and diagnosis also passed in the production dashboard.
+| Evidence | Result |
+|---|---|
+| Rule planners, 150 simulated runs each | Information gain 99.3% correct at 2.15 experiment points; fixed sweep 96.0% at 2.99; random 98.0% at 3.90 |
+| Meta, 18 sealed simulated runs (same runs for the baseline) | 100% correct at 1.78 points vs 2.33 for information gain; 0 fallbacks |
+| Meta, paired challenge: 24 new simulated machines × no note, misleading note, prompt-injection note | 23/24 correct in every condition, equal to information gain; injection never reached an explanation; no cost advantage (1.92–1.96 vs 1.875 points) |
+| Meta, **measured laboratory recordings**: 8 held-out trials, one rig (study real-2) | Meta 8/8 (95% interval 67.6%–100%); reference-distance baseline 5/8 |
 
-The full Meta benchmark is complete; measured results are recorded below.
+Honest limits: the simulator results use the same physics family the engine assumes, so
+they show the method works, not real-world accuracy. A Meta cost advantage was seen only
+on the small sealed sample. Identical prompts reuse a recorded reply, so in the challenge
+the injection prior was in effect sampled once. Eight recordings from one rig are
+promising, not proof of industrial reliability. Our first real-data study (real-1, 6/8 vs
+6/8) placed the harmonic bands at the documented 1238 RPM while the rig runs at
+1,260–1,302 RPM; we found this in code review, kept real-1 as superseded and
+pre-registered real-2.
+
+## What's next
+
+More rigs and independent recordings, calibrated amplitude units, temperature channels,
+and letting the model request new physical test points on a connected rig.
 
 ## Materials the owner must supply
 
-- Public repository URL. No Git remote was configured during this review.
-- Final demo video URL; use `docs/DEMO.md` to rehearse and record it.
-- Hosted demo URL if required by the submission form; the app currently runs locally.
-- Team member names, track selection and eligibility confirmation.
+- Public repository URL (no Git remote is configured yet).
+- Final demo video URL; rehearse with `docs/DEMO.md`.
+- Hosted demo URL if the form requires one; the app runs locally with
+  `python scripts/tasks.py serve` (see `docs/DEPLOYMENT.md`).
+- Team member names, track selection (Indie Developer) and eligibility confirmation.
 - Confirmation of the current official rules, deadline and required submission fields.
 
 The public [Meta event page](https://dev.meta.ai/events/global-hackathon) and
 [organiser page](https://cerebralvalley.ai/e/meta-ai-developer-hackathon), checked on
 1 November 2026, list a 4 November, 9 PM ET submission deadline and include manufacturing
-under the Push the Frontier theme. The public pages do not establish the complete project
-submission fields, video duration, team-size limit or publication requirements; confirm
-those in the participant portal. The existing three-minute recording guide is a rehearsal
-format until the participant requirements are confirmed.
-
-Verify the remaining owner materials before submitting.
-
-## Live Meta benchmark ? 2 November 2026
-
-Muse Spark 1.3 (`muse-spark-1.3`) completed six sealed simulated cases with three
-seeds each (18 investigations), using 53 new API calls in 242.69 seconds, with
-zero fallbacks. Both planners below ran on exactly the same cases and seeds.
-
-| Planner | Accuracy | Mean experiment cost | Mean experiments | Reached 90% |
-|---|---|---|---|---|
-| Meta | 100% | 1.7778 | 1.6111 | 100% |
-| Information gain, same runs | 100% | 2.3333 | 2.2778 | 94.44% |
-
-Meta used about 23.8% fewer experiment points on this small sealed-case sample.
-Experiment cost measures simulated experiment budget, not API billing or latency.
-This result does not establish real-world accuracy or generalisation to unseen
-machines. Source: `backend/results/benchmark.json`.
-
-## Additional proof challenge
-
-A frozen 24-machine challenge completed 72 paired note-condition runs. Meta and
-information gain each diagnosed 23/24 machines correctly in every condition,
-including misleading and injection notes. Meta had zero fallbacks across 273
-recorded stages (209 new API calls). This new sample did not demonstrate a cost
-advantage. One confidently wrong machine is preserved in all its note variants.
-The dashboard exposes confidence intervals, latency, every paired result and
-downloadable raw model evidence. See PROOF_OF_CONCEPT.md for the full protocol
-and limits. That challenge uses simulated evidence; the separate real-data study is below.
-
-## Real machine evidence (2 November 2026)
-
-A separate real-recording view now processes physical accelerometer measurements
-from the CC BY 4.0 Brito et al. (2022) rotor dataset, with original test-rig
-photograph and provenance. Meta and a reference-distance baseline each classified
-6/8 trial-held-out examples correctly. Two looseness examples were labelled
-unbalance by Meta. These are genuine laboratory measurements; the sample does
-not establish industrial reliability. See REAL_DATA.md for source and protocol.
+under the Push the Frontier theme. Confirm the submission fields, video length and
+publication requirements in the participant portal.
