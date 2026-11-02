@@ -30,6 +30,8 @@ TEMP_ABS_NOISE_C = 1.5
 DEFAULT_DURATION_S = 1.0
 DEFAULT_SAMPLE_RATE_HZ = 5000.0
 MIN_SAMPLES = 16
+# Fewer shaft cycles than this make the 1x/2x fit ill-conditioned (noise blows up).
+MIN_CYCLES = 2.0
 
 Array = NDArray[np.float64]
 
@@ -186,11 +188,15 @@ def extract_features(
     """Least-squares fit of 1x and 2x sinusoids plus an offset.
 
     Returns (amp_1x, amp_2x, broadband), where broadband is the RMS of the residual.
+    Windows shorter than MIN_CYCLES shaft turns report no harmonics, as at standstill,
+    because the sinusoid columns become nearly collinear with the offset.
     Cost is O(n) in the number of samples (a fixed five-column least-squares problem).
     """
     t = np.arange(signal_um.size) / sample_rate_hz
     columns = [np.ones_like(t)]
     omega = 2.0 * np.pi * rpm / 60.0
+    if signal_um.size / sample_rate_hz * rpm / 60.0 < MIN_CYCLES:
+        omega = 0.0
     if omega > 0:
         for harmonic in (1.0, 2.0):
             columns += [np.sin(harmonic * omega * t), np.cos(harmonic * omega * t)]

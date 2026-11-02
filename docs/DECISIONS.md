@@ -236,3 +236,44 @@ Keep 12 reference trials separate from eight held-out trials. Hide query labels
 and filenames from Meta; allow inspection only of already recorded sensors.
 Preserve native amplitude units until calibration is verified. Keep the physical
 rig photograph and source attribution visible. All code is original.
+
+## Review fixes (2 November 2026)
+
+A full code review on 2 November found the issues below; each fix ships with tests.
+
+- **D-62 · 2 Nov 2026 · Model replies can never crash a run.** Replies that once escaped
+  the fallback (integers beyond float range, integers longer than Python's digit limit,
+  JSON nested thousands deep) now become `invalid_output` events and fall back to
+  information gain, as CLAUDE.md requires.
+- **D-63 · 2 Nov 2026 · Save before the final frame.** The live stream validates and saves
+  the trace before it sends the `trace` frame, so the id a client receives always names a
+  stored replay. The Meta id is reserved only once streaming starts, and released if the
+  run fails before saving.
+- **D-64 · 2 Nov 2026 · Cross-site guard and Meta budget.** The live stream is a GET with
+  side effects (a paid Meta run). Requests a browser marks `Sec-Fetch-Site: cross-site`,
+  or that carry an unknown `Origin` without that header, get 403. Each server process
+  starts at most `FAILURELAB_META_RUNS_PER_HOUR` (default 30) Meta investigations per
+  rolling hour; beyond that the API returns 429. Rule planners are not limited.
+- **D-65 · 2 Nov 2026 · Settings fail fast.** `FAILURELAB_LLM_REASONING_EFFORT` must be
+  empty or one of the client's supported values; an invalid value stops startup with a
+  validation error instead of breaking each Meta run.
+- **D-66 · 2 Nov 2026 · Harmonics need two shaft turns.** `extract_features` reports no
+  1x/2x amplitude for windows shorter than two shaft cycles, as at standstill: the
+  least-squares fit is ill-conditioned there (60 RPM over 0.04 s once gave 15,100 µm).
+  Investigations (≥ 900 RPM, 1 s) are unaffected.
+- **D-67 · 2 Nov 2026 · Real-data study real-2 supersedes real-1.** real-1 centred the
+  harmonic bands on the documented 1238 RPM (20.63 Hz). The recordings actually run at
+  1260–1302 RPM: their 3x peak near 65 Hz fell outside the 60.4–63.4 Hz band. real-2
+  estimates each recording's shaft speed (harmonic-sum search within ±15% of nominal,
+  first four harmonics, 1/8 Hz zero-padded spectrum) and centres ±1 Hz bands on it. The
+  split, features and system prompt are unchanged. The real-2 plan was written before
+  any real-2 model call. real-1's plan, replies and scores are kept under
+  `data/real/studies/real-1/` and reported as superseded; nothing was deleted.
+- **D-68 · 2 Nov 2026 · Compact measured evidence.** `real-recordings.json` is written
+  without indentation (11 MB → 4.7 MB) and the API gzips JSON responses over 2 KB.
+- **D-69 · 2 Nov 2026 · Timing tests take the best of three runs,** so scheduling noise
+  on a shared CI runner cannot fail the 2 s and 0.5 s targets by chance.
+- **D-70 · 2 Nov 2026 · Not changed: generated case names.** Generated benchmark cases
+  are numbered in truth-label order. Meta never runs on them (the proof renames them to
+  opaque ids and a neutral title), so the order is not exposed; changing the generator
+  would invalidate the published rule-planner benchmark.

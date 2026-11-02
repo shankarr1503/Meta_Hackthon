@@ -5,15 +5,16 @@ from contextlib import ExitStack
 from datetime import UTC, datetime
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
 from pydantic import ValidationError
 
 from app.agent.investigate import investigate_frames, investigation_id
-from app.api.deps import scenario_or_404, settings_of
+from app.api.deps import reject_cross_site, scenario_or_404, settings_of
 from app.api.runs import (
     META_NOT_CONFIGURED,
     MetaNotConfiguredError,
+    MetaRunLimiter,
     build_planner,
     reserve_meta_id,
     run_and_save,
@@ -32,6 +33,23 @@ from app.schemas.investigation import (
 
 router = APIRouter(prefix="/api", tags=["investigations"])
 SettingsDep = Annotated[Settings, Depends(settings_of)]
+META_LIMIT_REACHED = (
+    "The hourly limit of Meta model investigations for this server has been reached. "
+    "Try again later, replay a saved investigation, or use planner 'info_gain'."
+)
+
+
+def _admit_meta(request: Request, settings: Settings) -> None:
+    """503 when the model is not configured, 429 when the hourly Meta budget is spent."""
+    if not settings.llm_configured:
+        raise HTTPException(status_code=503, detail=META_NOT_CONFIGURED)
+    limiter: MetaRunLimiter = request.app.state.meta_limiter
+    if not limiter.try_start():
+        raise HTTPException(status_code=429, detail=META_LIMIT_REACHED)
+
+
+def _sse(frame: dict[str, Any]) -> str:
+    return f"data: {json.dumps(frame, ensure_ascii=False)}\n\n"
 
 
 def _summary(trace: dict[str, Any], is_demo: bool) -> TraceSummary | None:
@@ -62,19 +80,22 @@ def ready(settings: SettingsDep) -> Ready:
     )
 
 
-@router.post("/investigations", response_model=Trace)
-def run_investigation(request: InvestigationRequest, settings: SettingsDep) -> Trace:
-    scenario = scenario_or_404(request.case_id)
+@router.post("/investigations", response_model=Trace, dependencies=[Depends(reject_cross_site)])
+def run_investigation(body: InvestigationRequest, request: Request, settings: SettingsDep) -> Trace:
+    scenario = scenario_or_404(body.case_id)
     store = ReplayStore(settings.replays_dir)
+    if body.planner == "meta":
+        _admit_meta(request, settings)
     try:
-        return run_and_save(scenario, request.planner, request.seed, settings, store)
+        return run_and_save(scenario, body.planner, body.seed, settings, store)
     except MetaNotConfiguredError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
 
 
-@router.get("/investigations/stream")
+@router.get("/investigations/stream", dependencies=[Depends(reject_cross_site)])
 def stream_investigation(
-    case_id: str,
+    request: Request,
+    case_id: Annotated[str, Query(min_length=1, max_length=64)],
     planner: PlannerName = "meta",
     seed: int = Query(0, ge=0, le=10_000),
     settings: SettingsDep = ...,
@@ -83,25 +104,27 @@ def stream_investigation(
 
     Each frame is one investigation phase (prior, alarm, choice, predict, result,
     update, diagnosis) followed by a final ``trace`` frame holding the complete
-    replayable trace. Data is simulated; frames are produced by the simulator and
-    Bayesian engine, never by the Meta model.
+    replayable trace. The trace is validated and saved before that frame is sent, so
+    its id always names a stored replay. Data is simulated; frames are produced by the
+    simulator and Bayesian engine, never by the Meta model.
     """
     scenario = scenario_or_404(case_id)
     store = ReplayStore(settings.replays_dir)
-
-    if planner == "meta" and not settings.llm_configured:
-        raise HTTPException(status_code=503, detail=META_NOT_CONFIGURED)
-
     if planner == "meta":
-        trace_id = reserve_meta_id(store, scenario.case_id, seed, datetime.now(UTC))
-    else:
-        trace_id = investigation_id(scenario.case_id, planner, seed)
+        _admit_meta(request, settings)
 
     def event_iter():
-        with ExitStack() as stack:
-            planner_instance = build_planner(planner, settings, stack)
-            try:
-                full_trace = None
+        # The id is reserved only once streaming starts, so a client that disconnects
+        # before the first chunk never leaves an empty reservation behind.
+        trace_id: str | None = None
+        saved = False
+        try:
+            with ExitStack() as stack:
+                planner_instance = build_planner(planner, settings, stack)
+                if planner == "meta":
+                    trace_id = reserve_meta_id(store, scenario.case_id, seed, datetime.now(UTC))
+                else:
+                    trace_id = investigation_id(scenario.case_id, planner, seed)
                 for frame in investigate_frames(
                     scenario.view(),
                     make_runner(scenario, seed),
@@ -110,17 +133,20 @@ def stream_investigation(
                     trace_id=trace_id,
                 ):
                     if frame["kind"] == "trace":
-                        full_trace = frame["trace"]
-                    yield f"data: {json.dumps(frame, ensure_ascii=False)}\n\n"
-                if full_trace is not None:
-                    validated = Trace.model_validate(full_trace)
-                    store.save(validated.model_dump(mode="json"))
-            except BaseException:
-                if planner == "meta":
-                    store.release(trace_id)
-                raise
+                        validated = Trace.model_validate(frame["trace"])
+                        store.save(validated.model_dump(mode="json"))
+                        saved = True
+                    yield _sse(frame)
+        except BaseException:
+            if planner == "meta" and trace_id is not None and not saved:
+                store.release(trace_id)
+            raise
 
-    return StreamingResponse(event_iter(), media_type="text/event-stream")
+    return StreamingResponse(
+        event_iter(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @router.get("/investigations", response_model=list[TraceSummary])

@@ -111,6 +111,10 @@ def test_valid_prior_is_used() -> None:
         json.dumps({"priors": {"imbalance": 1}}),
         json.dumps([1, 2]),
         LLMError("model request timed out"),
+        # Hostile shapes that once escaped as OverflowError, ValueError and RecursionError.
+        '{"priors": {"imbalance": 1' + "0" * 400 + '}, "reasoning": "x"}',
+        '{"priors": {"imbalance": ' + "9" * 5000 + '}, "reasoning": "x"}',
+        "{" + '"a":' + "[" * 5000 + "]" * 5000 + "}",
     ],
 )
 def test_bad_prior_falls_back_to_uniform(reply: Reply) -> None:
@@ -285,3 +289,10 @@ def test_prior_with_huge_values_still_sums_to_one() -> None:
     prior = floored_prior({"imbalance": 1e308, "friction": 1e308})
     assert sum(prior.values()) == pytest.approx(1.0, abs=1e-12)
     assert prior["imbalance"] == prior["friction"] == pytest.approx(0.05 + 0.35)
+
+
+def test_huge_integer_choice_falls_back() -> None:
+    planner = MetaPlanner(FakeClient(['{"choice": ' + "7" * 5000 + ', "rationale": "r"}']))
+    choice, _ = _choose(planner)
+    assert choice is not None and choice.chosen_by == "info_gain_fallback"
+    assert planner.events[-1]["error_kind"] == "invalid_output"

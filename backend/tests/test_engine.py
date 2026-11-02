@@ -47,7 +47,16 @@ def test_prior_is_renormalised_and_spread_evenly() -> None:
     np.testing.assert_allclose(weights, 0.75 / 75)
 
 
-@pytest.mark.parametrize("prior", [{"bogus": 1.0}, {"healthy": -1.0}, {"healthy": 0.0}])
+@pytest.mark.parametrize(
+    "prior",
+    [
+        {"bogus": 1.0},
+        {"healthy": -1.0},
+        {"healthy": 0.0},
+        {"healthy": float("nan"), "imbalance": 1.0},
+        {"healthy": float("inf")},
+    ],
+)
 def test_invalid_prior_rejected(prior: dict[str, float]) -> None:
     with pytest.raises(ValueError):
         engine.initial_belief(prior)
@@ -132,6 +141,9 @@ def test_predictions_handle_zero_weight_hypothesis() -> None:
 
 def test_ranking_all_candidates_is_fast() -> None:
     belief = engine.initial_belief()
-    start = time.perf_counter()
-    engine.rank_candidates(belief, engine.BUDGET, [], np.random.default_rng(0))
-    assert time.perf_counter() - start < 0.5
+    timings = []
+    for _ in range(3):  # best of three: robust to scheduler noise on shared CI runners
+        start = time.perf_counter()
+        engine.rank_candidates(belief, engine.BUDGET, [], np.random.default_rng(0))
+        timings.append(time.perf_counter() - start)
+    assert min(timings) < 0.5

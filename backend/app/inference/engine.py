@@ -150,8 +150,8 @@ def initial_belief(prior: Mapping[str, float] | None = None) -> Belief:
         if unknown:
             raise ValueError(f"unknown hypotheses: {sorted(unknown)}")
         probs = np.array([prior.get(h, 0.0) for h in HYPOTHESES], dtype=float)
-        if np.any(probs < 0) or probs.sum() <= 0:
-            raise ValueError("prior must be non-negative with a positive sum")
+        if not np.all(np.isfinite(probs)) or np.any(probs < 0) or probs.sum() <= 0:
+            raise ValueError("prior must be finite, non-negative and with a positive sum")
         probs = probs / probs.sum()
     with np.errstate(divide="ignore"):
         log_w = np.log(probs[PARTICLES.hypothesis] / PARTICLE_COUNTS[PARTICLES.hypothesis])

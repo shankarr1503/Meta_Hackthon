@@ -4,6 +4,9 @@ Shared by the API route and scripts/demo_replays.py, so both build planners, ids
 replays the same way.
 """
 
+import threading
+import time
+from collections import deque
 from contextlib import ExitStack
 from datetime import UTC, datetime
 
@@ -26,6 +29,31 @@ MAX_SAME_SECOND_RUNS = 50
 
 class MetaNotConfiguredError(RuntimeError):
     pass
+
+
+class MetaRunLimiter:
+    """At most `per_hour` Meta investigations per rolling hour, per server process.
+
+    Protects the model budget from scripted or cross-site requests. O(1) amortised per check.
+    """
+
+    WINDOW_S = 3600.0
+
+    def __init__(self, per_hour: int, clock=time.monotonic) -> None:
+        self.per_hour = per_hour
+        self._clock = clock
+        self._starts: deque[float] = deque()
+        self._lock = threading.Lock()
+
+    def try_start(self) -> bool:
+        with self._lock:
+            now = self._clock()
+            while self._starts and now - self._starts[0] >= self.WINDOW_S:
+                self._starts.popleft()
+            if len(self._starts) >= self.per_hour:
+                return False
+            self._starts.append(now)
+            return True
 
 
 def build_planner(name: str, settings: Settings, stack: ExitStack) -> Planner:
@@ -62,9 +90,9 @@ def run_and_save(
                 scenario.view(), make_runner(scenario, seed), planner, seed, trace_id=trace_id
             )
             validated = Trace.model_validate(trace)
+            store.save(validated.model_dump(mode="json"))
         except BaseException:
             if planner_name == "meta":
                 store.release(trace_id)
             raise
-    store.save(validated.model_dump(mode="json"))
     return validated

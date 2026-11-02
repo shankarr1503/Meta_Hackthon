@@ -1,7 +1,8 @@
 # API reference
 
 All endpoints are under `/api`, JSON only. Interactive docs at `/docs` when the backend
-runs. All data is simulated. Contract version: `1`. Update this file whenever the API
+runs. All data is simulated except `/api/real-recordings`, which serves attributed measured
+laboratory recordings. Contract version: `1`. Update this file whenever the API
 changes. Every request model rejects unknown keys with `422`.
 
 | Method | Path | Purpose | Errors |
@@ -11,10 +12,14 @@ changes. Every request model rejects unknown keys with `422`.
 | GET | `/api/cases` | Public fields of the six sealed cases | — |
 | POST | `/api/experiments` | One simulated experiment on a sealed case | 404, 422 |
 | POST | `/api/lab/simulate` | One simulated experiment on the public preset lab machine | 422 |
-| POST | `/api/investigations` | Run and save an investigation | 404, 422, 503 |
+| POST | `/api/investigations` | Run and save an investigation | 403, 404, 422, 429, 503 |
+| GET | `/api/investigations/stream` | Run an investigation live as Server-Sent Events | 403, 404, 422, 429, 503 |
 | GET | `/api/investigations` | List saved replays | — |
 | GET | `/api/investigations/{id}` | Load a replay | 400, 404 |
 | GET | `/api/benchmark` | Latest benchmark results | 404 if not yet run |
+| GET | `/api/proof/download` | Proof challenge evidence as a JSON attachment | 404 |
+| GET | `/api/real-recordings` | Measured laboratory recordings report | 404, 503 |
+| GET | `/api/real-recordings/photo` | Source test-rig photograph (CC BY 4.0) | 404 |
 
 ## `GET /api/health`
 
@@ -75,6 +80,10 @@ default `meta`), `seed` (0–10,000, default 0).
 - `404` for an unknown case.
 - `503` for planner `meta` when the model is not configured; the message explains which
   `.env` values to set or to use `info_gain`.
+- `429` for planner `meta` once this server has started `FAILURELAB_META_RUNS_PER_HOUR`
+  (default 30) Meta investigations in the last hour. Rule planners are not limited.
+- `403` when a browser marks the request as cross-site (`Sec-Fetch-Site: cross-site`), or
+  it carries an `Origin` that is neither this host nor a configured CORS origin.
 
 The trace is saved to `backend/replays/{investigation_id}.json` and returned. Ids:
 `{case_id}-{planner}-{seed}` for rule planners and `{case_id}-meta-{seed}-{YYYYMMDDhhmmss}`
@@ -95,6 +104,27 @@ Trace fields:
 | `stop_reason` | `confident`, `budget` or `no_affordable_experiment` |
 | `diagnosis` | `top`, `probability`, `confident`, `ranked[]`, `remaining_doubts[]`, `recommended_check`, `explanation` |
 | `llm_events[]` | Every Meta model call (empty for rule planners): `call` (`prior`, `choose:N`, `explain`), `model`, `response` (raw reply or null), `ok`, `fallback`, `usage` (token counts or null), and on failure `error_kind` (`model_error` or `invalid_output`) and `error` |
+
+## `GET /api/investigations/stream`
+
+Query: `case_id` (1–64 chars), `planner` (default `meta`), `seed` (0–10,000). Same errors as
+`POST /api/investigations`, returned before streaming starts. The response is
+`text/event-stream`; each event's `data` is one JSON frame with `kind`:
+
+| `kind` | Payload (besides `investigation_id`, `case`, `planner`, `seed`) |
+|---|---|
+| `prior` | `prior: {probabilities, reason}` |
+| `alarm` | `alarm: {rpm, load_n, overall_rms_um, posterior}` |
+| `choice` | `step`, `candidate: {rpm, load_n, cost}`, `chosen_by`, `rationale`, `information_bits`, `expectations` |
+| `predict` | `step`, `predictions` (engine prediction per hypothesis, before the run) |
+| `result` | `step` (the full step: measurement and updated posterior) |
+| `update` | `step` (same object; marks the belief update) |
+| `diagnosis` | `diagnosis`, `stop_reason`, `experiments`, `cost` |
+| `trace` | `trace` (the complete replay, identical to `POST /api/investigations`) |
+
+The trace is validated and saved before the `trace` frame is sent, so its id always names
+a stored replay. A Meta run that fails before saving releases its reserved id. Frames come
+from the simulator and the Bayesian engine; the Meta model only chooses and explains.
 
 ## `GET /api/investigations`
 

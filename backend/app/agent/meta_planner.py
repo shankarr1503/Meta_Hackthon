@@ -90,7 +90,9 @@ def parse_json_object(text: str) -> dict[str, Any]:
         raise InvalidOutputError("no JSON object in reply")
     try:
         value = json.loads(text[start : end + 1])
-    except json.JSONDecodeError as error:
+    except (ValueError, RecursionError) as error:
+        # ValueError covers JSONDecodeError and integers longer than Python's digit limit;
+        # RecursionError covers absurdly deep nesting.
         raise InvalidOutputError("reply is not valid JSON") from error
     if not isinstance(value, dict):
         raise InvalidOutputError("reply is not a JSON object")
@@ -115,9 +117,13 @@ def floored_prior(raw: Any) -> dict[str, float]:
         value = raw.get(hypothesis, 0.0)
         if isinstance(value, bool) or not isinstance(value, int | float):
             raise InvalidOutputError(f"prior for {hypothesis} is not a number")
-        if not math.isfinite(value) or value < 0:
+        try:
+            number = float(value)  # an integer beyond float range raises OverflowError
+        except OverflowError as error:
+            raise InvalidOutputError(f"prior for {hypothesis} is too large") from error
+        if not math.isfinite(number) or number < 0:
             raise InvalidOutputError(f"prior for {hypothesis} is negative or not finite")
-        values[hypothesis] = float(value)
+        values[hypothesis] = number
     largest = max(values.values())
     if largest <= 0:
         raise InvalidOutputError("priors sum to zero")
@@ -172,7 +178,13 @@ class MetaPlanner:
         try:
             reply = self.client.complete(SYSTEM_PROMPT, user)
             event["response"] = reply
-            result = parse(parse_json_object(reply))
+            try:
+                result = parse(parse_json_object(reply))
+            except InvalidOutputError:
+                raise
+            except (ValueError, TypeError, ArithmeticError, RecursionError) as error:
+                # Any other malformed shape is still a model failure, never a crash.
+                raise InvalidOutputError(f"unusable reply ({type(error).__name__})") from error
             event |= {"ok": True, "fallback": False}
             return result
         except (LLMError, InvalidOutputError) as error:

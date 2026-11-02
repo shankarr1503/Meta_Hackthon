@@ -142,6 +142,22 @@ def test_extract_features_at_standstill_reports_no_harmonics() -> None:
     assert extract_features(signal, 0.0, 5000.0)[:2] == (0.0, 0.0)
 
 
+@pytest.mark.parametrize(("rpm", "duration_s"), [(6.0, 1.0), (60.0, 0.04), (100.0, 1.0)])
+def test_extract_features_below_two_cycles_reports_no_harmonics(rpm, duration_s) -> None:
+    rate = 5000.0
+    signal = np.random.default_rng(3).normal(0.0, SENSOR_NOISE_UM, round(duration_s * rate))
+    amp_1x, amp_2x, broadband = extract_features(signal, rpm, rate)
+    assert (amp_1x, amp_2x) == (0.0, 0.0)
+    assert broadband < 3 * SENSOR_NOISE_UM  # noise is not amplified into a huge 1x
+
+
+def test_extract_features_from_two_cycles_is_well_conditioned() -> None:
+    rate, rpm = 5000.0, 120.0  # exactly two cycles in one second
+    t = np.arange(int(rate)) / rate
+    signal = 10.0 * np.sin(2 * np.pi * rpm / 60 * t)
+    assert extract_features(signal, rpm, rate)[0] == pytest.approx(10.0, rel=1e-6)
+
+
 def test_measure_is_deterministic_for_a_seed() -> None:
     first = measure(IMBALANCE, MACHINE, 2950.0, 500.0, np.random.default_rng(7))
     second = measure(IMBALANCE, MACHINE, 2950.0, 500.0, np.random.default_rng(7))

@@ -281,3 +281,123 @@ def test_saved_run_shadows_demo_with_same_id(make_settings) -> None:
     (demo / "case-k7-sweep-0.json").write_text(trace.text, encoding="utf-8")
     listed = client.get("/api/investigations").json()
     assert [(s["investigation_id"], s["demo"]) for s in listed] == [("case-k7-sweep-0", False)]
+
+
+def test_meta_stream_saves_trace_before_final_frame(make_settings, monkeypatch) -> None:
+    from tests.test_meta_planner import smart_reply
+
+    client = _configured_client(make_settings, monkeypatch, lambda self, s, u: smart_reply(u))
+    with client.stream(
+        "GET", "/api/investigations/stream?case_id=case-k7&planner=meta&seed=1"
+    ) as response:
+        for line in response.iter_lines():
+            if line.startswith("data: ") and json.loads(line[6:])["kind"] == "trace":
+                trace_id = json.loads(line[6:])["trace"]["investigation_id"]
+                # Already on disk when the client receives the frame, even if it leaves now.
+                assert client.get(f"/api/investigations/{trace_id}").status_code == 200
+                break
+    assert client.get(f"/api/investigations/{trace_id}").status_code == 200
+
+
+def test_meta_stream_releases_reservation_when_model_crashes(make_settings, monkeypatch) -> None:
+    def crash(self, system: str, user: str) -> str:
+        raise RuntimeError("unexpected client bug")
+
+    settings = make_settings(
+        llm_api_key="k", llm_model="m", llm_base_url="https://example.invalid/v1"
+    )
+    from app.agent.llm_client import ChatCompletionsClient
+
+    monkeypatch.setattr(ChatCompletionsClient, "complete", crash)
+    client = TestClient(create_app(settings), raise_server_exceptions=False)
+    with pytest.raises(RuntimeError):
+        TestClient(create_app(settings)).get(
+            "/api/investigations/stream?case_id=case-k7&planner=meta&seed=0"
+        )
+    assert list(settings.replays_dir.glob("*.json")) == []
+    assert client.get("/api/investigations").json() == []
+
+
+@pytest.mark.parametrize(
+    "headers",
+    [
+        {"Sec-Fetch-Site": "cross-site"},
+        {"Origin": "https://evil.example"},
+    ],
+)
+def test_cross_site_requests_cannot_start_runs(client: TestClient, headers: dict) -> None:
+    stream = client.get(
+        "/api/investigations/stream?case_id=case-m9&planner=info_gain&seed=0", headers=headers
+    )
+    post = client.post(
+        "/api/investigations", json={"case_id": "case-m9", "planner": "info_gain"}, headers=headers
+    )
+    assert stream.status_code == 403 and post.status_code == 403
+
+
+def test_same_origin_and_dev_server_requests_are_allowed(client: TestClient) -> None:
+    url = "/api/investigations/stream?case_id=case-m9&planner=info_gain&seed=0"
+    for headers in (
+        {"Sec-Fetch-Site": "same-origin"},
+        {"Origin": "http://localhost:5173"},
+        {"Origin": "http://testserver"},
+    ):
+        assert client.get(url, headers=headers).status_code == 200
+
+
+def test_meta_runs_are_capped_per_hour(make_settings, monkeypatch) -> None:
+    from app.agent.llm_client import ChatCompletionsClient
+    from tests.test_meta_planner import smart_reply
+
+    monkeypatch.setattr(ChatCompletionsClient, "complete", lambda self, s, u: smart_reply(u))
+    settings = make_settings(
+        llm_api_key="k",
+        llm_model="m",
+        llm_base_url="https://example.invalid/v1",
+        meta_runs_per_hour=1,
+    )
+    client = TestClient(create_app(settings))
+    first = client.post("/api/investigations", json={"case_id": "case-k7"})
+    second = client.get("/api/investigations/stream?case_id=case-k7&planner=meta&seed=0")
+    rule = client.post("/api/investigations", json={"case_id": "case-k7", "planner": "info_gain"})
+    assert first.status_code == 200
+    assert second.status_code == 429 and "hourly limit" in second.json()["detail"]
+    assert rule.status_code == 200
+
+
+def test_meta_run_limiter_window_slides() -> None:
+    from app.api.runs import MetaRunLimiter
+
+    now = [0.0]
+    limiter = MetaRunLimiter(2, clock=lambda: now[0])
+    assert limiter.try_start() and limiter.try_start() and not limiter.try_start()
+    now[0] = 3600.0
+    assert limiter.try_start()
+
+
+def test_stream_rejects_overlong_case_id(client: TestClient) -> None:
+    url = f"/api/investigations/stream?case_id={'x' * 65}&planner=info_gain"
+    assert client.get(url).status_code == 422
+
+
+def test_invalid_reasoning_effort_is_rejected_at_startup(make_settings) -> None:
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        make_settings(llm_reasoning_effort="max")
+
+
+def test_settings_and_client_agree_on_reasoning_efforts() -> None:
+    import typing
+
+    from app.agent.llm_client import REASONING_EFFORTS
+    from app.config import Settings
+
+    allowed = typing.get_args(Settings.model_fields["llm_reasoning_effort"].annotation)
+    assert set(allowed) == {"", *REASONING_EFFORTS}
+
+
+def test_large_json_is_compressed(client: TestClient) -> None:
+    response = client.get("/api/benchmark", headers={"Accept-Encoding": "gzip"})
+    if response.status_code == 200:
+        assert response.headers.get("content-encoding") == "gzip"

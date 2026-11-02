@@ -34,8 +34,15 @@ def _replay_files(folder: Path) -> list[Path]:
     """Replay files in a folder, newest first."""
     if not folder.is_dir():
         return []
-    files = [path for path in folder.glob("*.json") if _ID.fullmatch(path.stem)]
-    return sorted(files, key=lambda p: p.stat().st_mtime, reverse=True)
+    dated = []
+    for path in folder.glob("*.json"):
+        if not _ID.fullmatch(path.stem):
+            continue
+        try:
+            dated.append((path.stat().st_mtime, path))
+        except OSError:  # released or replaced since the glob
+            continue
+    return [path for _, path in sorted(dated, key=lambda item: item[0], reverse=True)]
 
 
 def _read(path: Path) -> dict[str, Any] | None:
