@@ -11,6 +11,7 @@ from app.api.investigations import router as investigations_router
 from app.api.real_recordings import router as real_recordings_router
 from app.api.runs import MetaRunLimiter
 from app.api.simulation import router as simulation_router
+from app.api.video import router as video_router
 from app.config import SERVICE_NAME, VERSION, Settings, get_settings
 
 
@@ -39,6 +40,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         investigations_router,
         benchmark_router,
         real_recordings_router,
+        video_router,
     ):
         app.include_router(router)
     if settings.frontend_dir is not None:

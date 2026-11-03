@@ -51,6 +51,11 @@ saved replay `case-r2-meta-0-20261102030032` open in a second tab as the fallbac
 Closing line: "It doesn't just read data. It decides what data to collect, says what it
 expects, and shows its work."
 
+Optional closing wow, if a few seconds remain: open **Video intake**, upload a phone
+slow-motion clip of any vibrating object (a fan works), click a high-contrast edge,
+Extract vibration, and ask the Meta model to read the spectrum. Say it is experimental
+and uncalibrated; the point is that the same loop reaches anything you can film.
+
 Optional opening stake, if the first scene has room: "Siemens prices unplanned downtime
 at 1.4 trillion dollars a year for the world's 500 biggest companies — up to 2.3 million
 dollars an hour in automotive" (The True Cost of Downtime 2024, cited in the README).

@@ -377,6 +377,13 @@ All code in this repository was written from scratch during the event. Work star
 - Industrial monochrome restyle (D-80): slate chrome with near-black actions (inverted
   in dark mode); blue reserved for links and the leading probability bar; status colors
   unchanged. Verified in the browser in both themes.
+- Video intake, experimental (D-81): upload a video of a vibrating machine; the browser
+  samples the brightness of one chosen point frame by frame (the video never leaves the
+  computer), `POST /api/video/analyze` returns the motion spectrum, peaks and — given the
+  machine speed — 1x/2x/3x harmonics, and `POST /api/video/assess` asks the Meta model to
+  read the extracted features, with a deterministic fallback and the hourly cap. A
+  ground-truth test recovers a known 25 Hz signal with its half-amplitude 2x; labelled
+  experimental and uncalibrated everywhere, readable only to half the frame rate.
 
 ## Benchmark results (simulated)
 

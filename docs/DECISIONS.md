@@ -349,6 +349,22 @@ A full code review on 2 November found the issues below; each fix ships with tes
   call and changes no trace, schema or probability. A diagnosed-component highlight in
   the 3D twin was considered and deferred: it would touch three views and need visual
   re-verification across themes and widths on the eve of submission.
+- **D-81 · 3 Nov 2026 · Experimental video vibrometry.** A video of a vibrating machine
+  contains the vibration as pixel motion sampled at the frame rate. The browser samples
+  the mean luminance of a user-chosen patch per frame (`requestVideoFrameCallback`; the
+  extraction closes on the `ended` event because the last frame callback can fire before
+  `ended` is true) and sends only that series — never the video — to
+  `POST /api/video/analyze` (closed schema, 64–20,000 samples), which reuses the
+  existing Hann-window spectrum and reports peaks and, given a nominal speed, the shaft
+  estimate and 1x/2x/3x amplitudes below Nyquist. `POST /api/video/assess` has the Meta
+  model read those derived features only (prompt forbids certainty and instructs it to
+  flag an insufficient frame rate), with the question-rate cap, a 503 without a key and
+  a deterministic fallback. Grounding: a unit test recovers a synthetic 25 Hz signal
+  with its half-amplitude 2x exactly; an end-to-end browser check recovered a generated
+  5 Hz flashing clip through the full UI with a correct live model reading. The feature
+  is labelled experimental and uncalibrated everywhere and feeds no benchmark, study or
+  probability; image upload was rejected in favour of video because video carries
+  measurable motion while a photo would only invite unvalidated guessing.
 - **D-80 · 3 Nov 2026 · Industrial monochrome restyle.** The template-default indigo
   accent is replaced everywhere: chrome (buttons, active tab, status chip, diagnosis
   border, badges, focus rings) is now slate monochrome — near-black actions in light

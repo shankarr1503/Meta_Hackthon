@@ -301,3 +301,43 @@ export interface ProofReport {
     info_gain: { top: string; correct: boolean; probability: number; cost: number; fallbacks: number };
   }[];
 }
+
+/** Experimental video vibrometry: spectrum extracted from a user's video, pixel units. */
+export interface VideoPeak {
+  freq_hz: number;
+  amplitude: number;
+}
+
+export interface VideoHarmonic {
+  order: number;
+  freq_hz: number;
+  amplitude: number;
+}
+
+export interface VideoAnalysis {
+  source: "video";
+  sample_rate_hz: number;
+  duration_s: number;
+  nyquist_hz: number;
+  rms: number;
+  crest_factor: number;
+  waveform_t_s: number[];
+  waveform: number[];
+  spectrum_freq_hz: number[];
+  spectrum: number[];
+  peaks: VideoPeak[];
+  shaft_hz_estimate: number | null;
+  harmonics: VideoHarmonic[];
+  note: string;
+}
+
+export interface VideoAssessment {
+  assessment: string;
+  model: string;
+  ok: boolean;
+  fallback: boolean;
+  usage: Record<string, number> | null;
+  error_kind?: string | null;
+  error?: string | null;
+  note: string;
+}

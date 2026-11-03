@@ -10,6 +10,8 @@ import type {
   ReadyResponse,
   Trace,
   TraceSummary,
+  VideoAnalysis,
+  VideoAssessment,
 } from "./types";
 
 /** The frontend talks only to /api; Vite proxies it to the backend in development. */
@@ -69,6 +71,27 @@ export const askInvestigation = (id: string, question: string) =>
   post<Answer>(`/api/investigations/${encodeURIComponent(id)}/ask`, { question });
 export const simulateLab = (body: LabRequest) => post<LabResult>("/api/lab/simulate", body);
 export const getBenchmark = () => request<BenchmarkResult>("/api/benchmark");
+/** Spectrum and features from a motion series the browser extracted from a user's video. */
+export const analyzeVideo = (body: { fps: number; samples: number[]; nominal_rpm?: number | null }) =>
+  post<VideoAnalysis>("/api/video/analyze", body);
+/** Meta model reading of video-extracted features (experimental; needs the model key). */
+export const assessVideo = (
+  analysis: VideoAnalysis,
+  context: string,
+  nominalRpm: number | null,
+) =>
+  post<VideoAssessment>("/api/video/assess", {
+    fps: analysis.sample_rate_hz,
+    duration_s: analysis.duration_s,
+    nyquist_hz: analysis.nyquist_hz,
+    rms: analysis.rms,
+    crest_factor: analysis.crest_factor,
+    peaks: analysis.peaks,
+    shaft_hz_estimate: analysis.shaft_hz_estimate,
+    harmonics: analysis.harmonics,
+    nominal_rpm: nominalRpm,
+    context,
+  });
 
 /** Shown when the stream ends before the final trace. EventSource cannot see the HTTP status. */
 export const STREAM_INTERRUPTED =

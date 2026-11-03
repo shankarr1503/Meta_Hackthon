@@ -16,14 +16,16 @@ import ErrorBoundary from "./ErrorBoundary";
 import ManualLab from "./lab/ManualLab";
 import RealRecordings from "./real/RealRecordings";
 import SimulatedLabel from "./SimulatedLabel";
+import VideoIntake from "./video/VideoIntake";
 
-type Tab = "investigate" | "lab" | "benchmark" | "real";
+type Tab = "investigate" | "lab" | "benchmark" | "real" | "video";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "real", label: "Real recordings" },
   { id: "investigate", label: "Investigate" },
   { id: "lab", label: "Manual lab" },
   { id: "benchmark", label: "Benchmark" },
+  { id: "video", label: "Video intake" },
 ];
 
 interface Loaded {
@@ -56,7 +58,10 @@ function message(error: unknown): string {
 }
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>(new URLSearchParams(window.location.search).get("view") === "real" ? "real" : "investigate");
+  const [tab, setTab] = useState<Tab>(() => {
+    const view = new URLSearchParams(window.location.search).get("view");
+    return view === "real" || view === "video" ? view : "investigate";
+  });
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [replays, setReplays] = useState<TraceSummary[]>([]);
   const [trace, setTrace] = useState<Trace | null>(null);
@@ -162,7 +167,17 @@ export default function App() {
                   : "Meta model off · baseline planners and replays"}
               </span>
             )}
-            {tab === "real" ? <span className="rounded border border-emerald-500 bg-emerald-50 px-2 py-1 text-xs font-semibold uppercase text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">Measured laboratory data</span> : <SimulatedLabel />}
+            {tab === "real" ? (
+              <span className="rounded border border-emerald-500 bg-emerald-50 px-2 py-1 text-xs font-semibold uppercase text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
+                Measured laboratory data
+              </span>
+            ) : tab === "video" ? (
+              <span className="rounded border border-amber-500 bg-amber-50 px-2 py-1 text-xs font-semibold uppercase text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+                Experimental · your video
+              </span>
+            ) : (
+              <SimulatedLabel />
+            )}
           </div>
         </header>
 
@@ -197,6 +212,11 @@ export default function App() {
         {tab === "benchmark" && (
           <ErrorBoundary label="benchmark">
             <BenchmarkView />
+          </ErrorBoundary>
+        )}
+        {tab === "video" && (
+          <ErrorBoundary label="video intake">
+            <VideoIntake metaConfigured={loaded?.ready.meta_model_configured ?? false} />
           </ErrorBoundary>
         )}
 
