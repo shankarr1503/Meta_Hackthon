@@ -50,6 +50,12 @@ class Protocol:
 
 RULE_PROTOCOL = Protocol(sealed_seeds=5, generated_per_hypothesis=20)
 META_PROTOCOL = Protocol(sealed_seeds=3, generated_per_hypothesis=0)
+# Wall-clock budget for the whole rule-planner run (TECHNICAL_DESIGN.md).
+RULE_BUDGET_S = 120.0
+
+
+class BudgetExceededError(Exception):
+    """A rule-benchmark run took longer than its wall-clock budget."""
 
 
 @dataclass(frozen=True)
@@ -187,14 +193,25 @@ def _protocol_dict(protocol: Protocol, runtime_s: float, extra: dict | None = No
     } | (extra or {})
 
 
-def run_rules(planners: Iterable[str], protocol: Protocol, out: Path) -> dict:
+def run_rules(
+    planners: Iterable[str], protocol: Protocol, out: Path, budget_s: float = RULE_BUDGET_S
+) -> dict:
     entries, protocols = {}, {}
     for name in planners:
         entries[name], runtime = benchmark_planner(
             name, protocol, lambda n=name: rule_planner(n), progress=True
         )
+        if runtime > budget_s:
+            raise BudgetExceededError(
+                f"{name}: {runtime:.1f} s exceeded the {budget_s:.0f} s rule-benchmark budget"
+            )
         protocols[name] = _protocol_dict(protocol, runtime)
         print(f"{name}: accuracy {entries[name]['all']['accuracy']:.1%} in {runtime:.1f} s")
+    total = round(sum(p["runtime_s"] for p in protocols.values()), 2)
+    if total > budget_s:
+        raise BudgetExceededError(
+            f"rule benchmark total {total:.1f} s exceeded the {budget_s:.0f} s budget"
+        )
     return merge_results(out, entries, protocols)
 
 
@@ -243,7 +260,10 @@ def main(argv: list[str] | None = None) -> None:
     if args.seeds is not None:
         protocol = Protocol(args.seeds, protocol.generated_per_hypothesis)
     planners = RULE_PLANNERS if args.planner == "rules" else (args.planner,)
-    run_rules(planners, protocol, args.out)
+    try:
+        run_rules(planners, protocol, args.out)
+    except BudgetExceededError as error:
+        sys.exit(str(error))
 
 
 if __name__ == "__main__":

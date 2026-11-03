@@ -8,7 +8,17 @@ from fastapi.testclient import TestClient
 
 from app.agent.llm_client import LLMError
 from app.main import create_app
-from scripts.benchmark import CachedClient, Protocol, cases_for, main, run_rules
+from scripts.benchmark import (
+    RESULTS_FILE,
+    RULE_BUDGET_S,
+    RULE_PLANNERS,
+    BudgetExceededError,
+    CachedClient,
+    Protocol,
+    cases_for,
+    main,
+    run_rules,
+)
 
 TINY = Protocol(sealed_seeds=1, generated_per_hypothesis=1)
 
@@ -43,6 +53,23 @@ def test_rule_benchmark_writes_and_merges_results(tmp_path: Path) -> None:
     assert 0 <= sweep["all"]["accuracy"] <= 1
     assert sweep["all"]["fallback_rate"] is None
     assert json.loads(out.read_text(encoding="utf-8")) == result
+
+
+def test_rule_benchmark_enforces_time_budget(tmp_path: Path) -> None:
+    out = tmp_path / "benchmark.json"
+    with pytest.raises(BudgetExceededError):
+        run_rules(["sweep"], TINY, out, budget_s=0)
+    result = run_rules(["sweep"], TINY, out)
+    assert result["protocols"]["sweep"]["runtime_s"] >= 0
+
+
+def test_committed_rule_benchmark_is_within_budget() -> None:
+    if not RESULTS_FILE.is_file():
+        pytest.skip("rule benchmark has not been run yet")
+    stored = json.loads(RESULTS_FILE.read_text(encoding="utf-8"))
+    runtimes = [stored["protocols"][name]["runtime_s"] for name in RULE_PLANNERS]
+    assert max(runtimes) <= RULE_BUDGET_S
+    assert sum(runtimes) <= RULE_BUDGET_S
 
 
 def test_cli_single_planner(tmp_path: Path) -> None:
