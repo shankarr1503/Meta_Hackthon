@@ -44,7 +44,7 @@ saved replay `case-r2-meta-0-20261102030032` open in a second tab as the fallbac
 | 0:40–1:20 | First experiment: rationale, the six stated expectations, then the measurement and the prediction check | "Before the result, it writes down what each fault should show at 1,500 RPM under load. Then the simulator answers: 2x at 70 micrometres. Only the Bayesian engine moves the probabilities, and the table shows which hypotheses gained and lost." |
 | 1:20–1:45 | Second experiment and the diagnosis card | "A second test at 3,300 RPM near the critical speed shows no imbalance peak. Misalignment at 94.7%, the remaining doubt named, and the physical check to do first." |
 | 1:45–2:10 | Ask the investigator: type "Why not imbalance?" | "Now I can question it. The answer quotes the readings and operating points that ruled imbalance out. They are the same numbers in the experiment log: it answers from evidence, and the answer is never stored or scored." |
-| 2:10–2:30 | Unseen machine card: seed 77 (or any), planner Meta or information gain | "Any seed names a machine nobody has seen, including us. The same loop finds its fault live." |
+| 2:10–2:30 | Unseen machine card: type a seed not used before on camera, planner Meta or information gain | "Any seed names a machine nobody has seen. The same loop finds what is wrong — and about one machine in five is healthy, which it reports instead of inventing a fault." |
 | 2:30–2:50 | Benchmark: planner table, then the challenge panel with the injection condition | "150 simulated runs per planner; information gain needs about 28% fewer experiment points than a fixed sweep. On 24 new machines with misleading and injected notes, Meta stayed at 23 of 24 and no injected text reached an explanation. We report that no cost advantage was shown there." |
 | 2:50–3:00 | Real recordings: the rig photograph, a sensor spectrum, 8/8 vs 5/8 | "On real accelerometer recordings from a laboratory rig, the model labelled all eight held-out trials; the statistical baseline got five. One rig, eight trials: a promising start, not an industrial claim." |
 
@@ -58,6 +58,13 @@ dollars an hour in automotive" (The True Cost of Downtime 2024, cited in the REA
 Keep the 23.8% saving attached to the 18-run sealed-case study only; the 72-pair challenge
 did not reproduce it. If the live Meta run is slow, switch to the saved replay tab and say
 it is a recording of an earlier live run.
+
+Unseen-machine seeds for rehearsal (probed offline with the baseline on 3 November; a
+machine probed or replayed before is no longer "unseen to us", so say so or pick a new
+seed on camera): 77 and 4242 are **healthy**; 16, 21, 24 and 28 are misalignment in about
+two experiments; 29 is imbalance+misalignment in three; 17 is the same compound fault in
+five. Roughly one seed in five is healthy, which is worth presenting as a feature: the
+investigator does not invent a fault that is not there.
 
 ## Recording checks
 
