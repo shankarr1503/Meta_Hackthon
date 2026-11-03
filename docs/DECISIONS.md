@@ -339,3 +339,13 @@ A full code review on 2 November found the issues below; each fix ships with tes
   Meta call, and does not join the pre-registered real-data studies. The report
   (`backend/results/second-rig-check.json`) is committed and re-checked by a test from
   its stored features; raw downloads stay Git-ignored.
+- **D-79 · 3 Nov 2026 · Action plan on the diagnosis card.** Every diagnosis now shows a
+  maintenance action plan for the diagnosed fault class: where to look on the machine,
+  likely root causes, ordered actions, and how to confirm the fix from the same
+  measurements; compound faults combine both sections with a practical ordering note
+  (align before balancing; restore the bearing before re-measuring). The content is
+  static engineering practice in the frontend (`ActionPlan.tsx`), labelled "general
+  guidance for this fault class, not a machine-specific work order"; it uses no model
+  call and changes no trace, schema or probability. A diagnosed-component highlight in
+  the 3D twin was considered and deferred: it would touch three views and need visual
+  re-verification across themes and widths on the eve of submission.

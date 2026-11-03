@@ -370,6 +370,10 @@ All code in this repository was written from scratch during the event. Work star
   20/20 on held-out segments across four conditions; recorded in
   `backend/results/second-rig-check.json` and re-checked by a test. Labelled
   exploratory: segments are correlated within one session and no Meta call is made.
+- Action plan on the diagnosis card (D-79): for the diagnosed fault class, where to look
+  on the machine, likely root causes, ordered maintenance actions and how to confirm the
+  fix from the same measurements, with an ordering note for compound faults. Static
+  engineering guidance labelled as such, with tests.
 
 ## Benchmark results (simulated)
 

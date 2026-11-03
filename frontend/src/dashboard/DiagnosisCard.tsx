@@ -1,6 +1,7 @@
 import type { Diagnosis } from "../api/types";
 import { hypothesisName, probability } from "../format";
 import SimulatedLabel from "../SimulatedLabel";
+import ActionPlan from "./ActionPlan";
 
 const STOP_REASONS: Record<string, string> = {
   confident: "Stopped: the leading hypothesis reached 90%.",
@@ -51,6 +52,7 @@ export default function DiagnosisCard({
         <span className="font-semibold">Recommended check: </span>
         {diagnosis.recommended_check}
       </p>
+      <ActionPlan hypothesis={diagnosis.top} />
     </section>
   );
 }

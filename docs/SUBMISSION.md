@@ -45,7 +45,9 @@ step inspectable:
    The engine updates the probabilities, and the dashboard shows each prediction next to
    the measurement and which hypotheses gained or lost.
 4. At 90% confidence or when the budget runs out, the model explains the diagnosis, the
-   remaining doubts and the check to do next.
+   remaining doubts and the check to do next — and the dashboard adds a maintenance
+   action plan for that fault class: where to look, likely root causes, ordered actions,
+   and how to confirm the fix from the same measurements.
 5. The engineer can then **question the investigator**: "Why not imbalance?" The model
    answers from the recorded evidence, quoting the readings and operating points; the
    answer is shown, never stored, and cannot change a number.
