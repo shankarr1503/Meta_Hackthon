@@ -365,6 +365,14 @@ A full code review on 2 November found the issues below; each fix ships with tes
   is labelled experimental and uncalibrated everywhere and feeds no benchmark, study or
   probability; image upload was rejected in favour of video because video carries
   measurable motion while a photo would only invite unvalidated guessing.
+- **D-82 · 3 Nov 2026 · Structural de-templating pass.** Audited against a published
+  checklist of AI-generated design tells. Changes: the six identical case cards became a
+  divided work-queue list with compact actions (accessible names unchanged); the action
+  plan and Ask answers lost their nested card chrome in favour of hairline dividers;
+  panels and badges moved from rounded-lg to near-square corners with letter-spaced
+  micro-labels; the H1 gained weight. Borders and colors continue to carry meaning only
+  (status, the diagnosis, the dashed not-yet-generated machine). No text, behaviour or
+  accessible name changed; all 93 frontend tests and the demo scripts pass unchanged.
 - **D-80 · 3 Nov 2026 · Industrial monochrome restyle.** The template-default indigo
   accent is replaced everywhere: chrome (buttons, active tab, status chip, diagnosis
   border, badges, focus rings) is now slate monochrome — near-black actions in light

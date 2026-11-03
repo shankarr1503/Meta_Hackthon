@@ -80,7 +80,7 @@ export default function AskPanel({ investigationId, metaConfigured }: Props) {
               <button
                 type="submit"
                 disabled={busy || question.trim().length < MIN_CHARS}
-                className="rounded bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+                className="rounded-sm bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
               >
                 Ask
               </button>
@@ -93,7 +93,7 @@ export default function AskPanel({ investigationId, metaConfigured }: Props) {
                   type="button"
                   disabled={busy}
                   onClick={() => void ask(suggestion)}
-                  className="rounded-full border border-slate-300 px-3 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:opacity-40 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800"
+                  className="rounded-sm border border-slate-300 px-2.5 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:opacity-40 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   {suggestion}
                 </button>
@@ -123,11 +123,14 @@ export default function AskPanel({ investigationId, metaConfigured }: Props) {
       )}
 
       {answers.length > 0 && (
-        <ol aria-label="Answers" className="mt-4 space-y-3">
+        <ol
+          aria-label="Answers"
+          className="mt-4 divide-y divide-slate-200 border-t border-slate-200 dark:divide-slate-800 dark:border-slate-800"
+        >
           {answers.map((item, index) => (
             <li
               key={`${answers.length - index}-${item.question}`}
-              className="rounded border border-slate-200 p-3 text-sm dark:border-slate-800"
+              className="py-3 text-sm"
             >
               <p className="font-semibold">{item.question}</p>
               <p className="mt-1 leading-relaxed">{item.answer}</p>

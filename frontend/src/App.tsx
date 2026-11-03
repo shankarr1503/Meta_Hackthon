@@ -142,7 +142,7 @@ export default function App() {
       <div className="mx-auto max-w-6xl space-y-6">
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">FailureLab AI</h1>
+            <h1 className="text-[1.7rem] font-semibold tracking-tight">FailureLab AI</h1>
             <p className="text-sm text-slate-600 dark:text-slate-400">
               A Meta-model investigator for rotating machines: it chooses the experiments, states
               what it expects before each result, and explains the diagnosis.
@@ -151,7 +151,7 @@ export default function App() {
           <div className="flex flex-wrap items-center gap-2">
             {loaded && (
               <span
-                className={`rounded border px-2 py-1 text-xs ${
+                className={`rounded-sm border px-2 py-1 text-xs ${
                   loaded.ready.meta_model_configured
                     ? "border-slate-400 bg-slate-100 text-slate-900 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100"
                     : "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
@@ -168,11 +168,11 @@ export default function App() {
               </span>
             )}
             {tab === "real" ? (
-              <span className="rounded border border-emerald-500 bg-emerald-50 px-2 py-1 text-xs font-semibold uppercase text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
+              <span className="rounded-sm border border-emerald-500 bg-emerald-50 px-2 py-1 text-xs font-semibold uppercase text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
                 Measured laboratory data
               </span>
             ) : tab === "video" ? (
-              <span className="rounded border border-amber-500 bg-amber-50 px-2 py-1 text-xs font-semibold uppercase text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+              <span className="rounded-sm border border-amber-500 bg-amber-50 px-2 py-1 text-xs font-semibold uppercase text-amber-800 dark:bg-amber-950 dark:text-amber-200">
                 Experimental · your video
               </span>
             ) : (

@@ -152,7 +152,7 @@ export default function RealRecordings() {
             <p>Source: {record.provenance.archive}, {record.provenance.member}.</p>
             <p className="break-all font-mono text-xs">Recording SHA-256: {record.provenance.recording_sha256}</p>
           </div> : <button type="button" onClick={() => setRevealed(true)}
-            className="rounded bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white">Reveal dataset label and source file</button>}
+            className="rounded-sm bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white">Reveal dataset label and source file</button>}
         </div>
       </Panel>
       </>}

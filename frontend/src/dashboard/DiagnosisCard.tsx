@@ -19,10 +19,10 @@ export default function DiagnosisCard({
   return (
     <section
       aria-labelledby="diagnosis-heading"
-      className="space-y-3 rounded-lg border-2 border-slate-900 bg-white p-4 dark:border-slate-300 dark:bg-slate-900"
+      className="space-y-3 rounded-sm border-2 border-slate-900 bg-white p-4 dark:border-slate-300 dark:bg-slate-900"
     >
       <header className="flex items-center justify-between gap-2">
-        <h3 id="diagnosis-heading" className="text-lg font-semibold">
+        <h3 id="diagnosis-heading" className="text-xl font-semibold tracking-tight">
           Diagnosis: {hypothesisName(diagnosis.top)}{" "}
           <span className="font-mono">{probability(diagnosis.probability)}</span>
         </h3>

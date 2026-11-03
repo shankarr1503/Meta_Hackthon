@@ -158,7 +158,7 @@ export function VideoResults({
                 type="button"
                 disabled={busy}
                 onClick={() => void ask()}
-                className="rounded bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-40 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+                className="rounded-sm bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-40 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
               >
                 {busy ? "Asking…" : "Ask the Meta model to read this spectrum"}
               </button>
@@ -281,7 +281,7 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
             type="button"
             disabled={busy}
             onClick={() => void extract()}
-            className="rounded bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 disabled:opacity-40 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+            className="rounded-sm bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 disabled:opacity-40 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
           >
             {busy ? "Reading frames…" : "Extract vibration"}
           </button>

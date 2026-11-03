@@ -81,7 +81,7 @@ export default function ActionPlan({ hypothesis }: { hypothesis: string }) {
   const note = COMBINATION_NOTES[hypothesis];
 
   return (
-    <section aria-labelledby="action-plan-heading" className="space-y-2 rounded border border-slate-200 bg-slate-50 p-3 text-sm dark:border-slate-700 dark:bg-slate-800/50">
+    <section aria-labelledby="action-plan-heading" className="space-y-2 border-t border-slate-200 pt-3 text-sm dark:border-slate-700">
       <h4 id="action-plan-heading" className="font-semibold">
         Action plan — {hypothesisName(hypothesis)}
       </h4>

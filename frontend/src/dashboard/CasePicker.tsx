@@ -68,35 +68,59 @@ export default function CasePicker({
         )}
       </div>
 
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" aria-label="Cases">
-        {cases.map((c) => (
-          <li
-            key={c.case_id}
-            className="flex flex-col justify-between gap-3 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
-          >
-            <div>
-              <h3 className="font-semibold">{c.title}</h3>
-              <p className="font-mono text-xs text-slate-500">{c.case_id}</p>
-              <p className="mt-2 text-sm italic">“{c.note}”</p>
-            </div>
-            <button
-              type="button"
-              disabled={busy || metaUnavailable}
-              onClick={() => onRun(c, planner, seed)}
-              className="rounded bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+      <section aria-labelledby="cases-heading">
+        <h3 id="cases-heading" className="mb-1 font-semibold">
+          Sealed cases
+        </h3>
+        <p className="mb-2 text-sm text-slate-600 dark:text-slate-400">
+          Six machines with hidden faults and a human maintenance note each.
+        </p>
+        <ul
+          className="divide-y divide-slate-200 border-y border-slate-200 dark:divide-slate-800 dark:border-slate-800"
+          aria-label="Cases"
+        >
+          {cases.map((c) => (
+            <li
+              key={c.case_id}
+              className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3"
             >
-              Investigate {c.title}
-            </button>
-          </li>
-        ))}
-        <li className="flex flex-col justify-between gap-3 rounded-lg border border-dashed border-slate-400 bg-slate-100/60 p-4 dark:border-slate-600 dark:bg-slate-800/40">
-          <div>
-            <h3 className="font-semibold">Unseen machine</h3>
-            <p className="font-mono text-xs text-slate-500">fresh-{machineSeed}</p>
-            <p className="mt-2 text-sm">
-              A new simulated machine generated from the seed below, with no maintenance history.
-              Nobody, including us, has seen its fault: the investigator must find it from
-              measurements alone.
+              <div className="min-w-64 flex-1">
+                <h4 className="font-semibold">
+                  {c.title}{" "}
+                  <span className="ml-1 font-mono text-xs font-normal text-slate-500">
+                    {c.case_id}
+                  </span>
+                </h4>
+                <p className="mt-0.5 text-sm italic text-slate-600 dark:text-slate-400">
+                  “{c.note}”
+                </p>
+              </div>
+              <button
+                type="button"
+                disabled={busy || metaUnavailable}
+                onClick={() => onRun(c, planner, seed)}
+                aria-label={`Investigate ${c.title}`}
+                className="rounded-sm bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+              >
+                Investigate
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="rounded-sm border border-dashed border-slate-400 p-4 dark:border-slate-600">
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+          <div className="min-w-64 flex-1">
+            <h3 className="font-semibold">
+              Unseen machine{" "}
+              <span className="ml-1 font-mono text-xs font-normal text-slate-500">
+                fresh-{machineSeed}
+              </span>
+            </h3>
+            <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-400">
+              A new simulated machine generated from the seed alone, with no maintenance history:
+              the investigator must find its fault from measurements.
             </p>
           </div>
           <div className="flex flex-wrap items-end gap-3 text-sm">
@@ -106,7 +130,7 @@ export default function CasePicker({
                 type="number"
                 min={0}
                 max={MAX_MACHINE_SEED}
-                className="w-24 rounded border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
+                className="w-24 rounded-sm border border-slate-300 bg-white px-2 py-1 dark:border-slate-700 dark:bg-slate-900"
                 value={machineSeed}
                 onChange={(e) =>
                   setMachineSeed(
@@ -119,13 +143,13 @@ export default function CasePicker({
               type="button"
               disabled={busy || metaUnavailable}
               onClick={() => onRunFresh(machineSeed, planner, seed)}
-              className="rounded bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+              className="rounded-sm bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
             >
               Investigate unseen machine
             </button>
           </div>
-        </li>
-      </ul>
+        </div>
+      </section>
 
       <section aria-labelledby="replays-heading">
         <h3 id="replays-heading" className="mb-2 font-semibold">
