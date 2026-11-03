@@ -52,6 +52,19 @@ No remote CI run, external deployment or final submission has been performed.
 Repository publication is the owner's action in the table above; the local checks
 verify the working tree only.
 
+## Submit-day checklist (4 November, before 9:00 PM ET)
+
+1. Push `main` and confirm the GitHub Actions run is green on the pushed commits
+   (Linux, Windows, container smoke test).
+2. Record the three-minute video with `docs/DEMO.md` (one live Meta run, one live
+   question, one unseen machine; saved replays as fallback). Upload it externally
+   and keep the file out of the repository.
+3. Paste the video URL into the submission form and under the README title.
+4. Paste `docs/SUBMISSION.md` into the form; confirm track (Indie Developer), team
+   members and eligibility.
+5. Confirm the current official rules, judging criteria and required fields in the
+   participant portal.
+
 ## Proof challenge complete
 
 The 24-machine, three-condition challenge and evidence panel are implemented. All 72

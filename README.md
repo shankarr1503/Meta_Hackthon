@@ -159,9 +159,9 @@ says which mode the server is in.
 
 | Minute | Where | What to look for |
 |---|---|---|
-| 1 | Investigate → Conveyor gearbox input, planner Meta | The note becomes a prior (misalignment favoured, nothing below 5%). The model picks an experiment and states six expected readings **before** the measurement. |
+| 1 | Investigate → Conveyor gearbox input, planner Meta | The note becomes a prior (in the saved replay: misalignment favoured, nothing below 5%). The model picks an experiment and states six expected readings **before** the measurement. |
 | 2 | Same run, prediction check table | Each hypothesis's predicted 1x, 2x and temperature next to the measurement; probabilities before → after; the engine, not the model, moved them. |
-| 3 | Diagnosis → Ask the investigator | Ask "Why not imbalance?" The answer quotes the 2x at 1,500 RPM under load and the missing critical-speed peak at 3,300 RPM. Compare with the experiment log: every number is there. |
+| 3 | Diagnosis → Ask the investigator | Ask "Why not imbalance?" The answer quotes the readings and operating points that ruled it out (in the saved replay: the 2x at 1,500 RPM under load and the missing critical-speed peak at 3,300 RPM). Compare with the experiment log: every number is there. |
 | 4 | Unseen machine, any seed | A machine generated from the seed, unknown to everyone. Watch the same loop find it; try the baseline planners for contrast. |
 | 5 | Benchmark and Real recordings | 150 simulated runs per planner; the 72-pair challenge with intervals and one retained confident error; 8/8 vs 5/8 on real recordings from one rig, with the photograph and attribution. |
 
@@ -170,7 +170,8 @@ Plans and records: [Product features](docs/PRODUCT_FEATURES.md) ·
 [Assumptions](docs/ASSUMPTIONS.md) · [API](docs/API.md) ·
 [Proof of concept](docs/PROOF_OF_CONCEPT.md) · [Real data](docs/REAL_DATA.md) ·
 [Verification](docs/VERIFICATION.md) · [Demo guide](docs/DEMO.md) ·
-[Deployment](docs/DEPLOYMENT.md) · [Submission](docs/SUBMISSION.md)
+[Deployment](docs/DEPLOYMENT.md) · [Submission](docs/SUBMISSION.md) ·
+[Third-party licenses](docs/THIRD_PARTY_LICENSES.md)
 
 ## Setup
 

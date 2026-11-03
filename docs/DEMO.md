@@ -36,6 +36,9 @@ live Meta replay (ids ending in a timestamp), so any case can be shown as a real
 investigation without a key. Record at desktop width in a clean browser window. The script below uses one live Meta
 run and one live question (two to six model calls in total, a few seconds each); keep the
 saved replay `case-r2-meta-0-20261102030032` open in a second tab as the fallback.
+Quoted readings below (70 µm, 94.7%) are from that saved replay, verified against it
+on 3 November; a live run will differ slightly, so read your run's numbers instead of
+the script's.
 
 | Time | Show | Narration |
 |---|---|---|
@@ -44,7 +47,7 @@ saved replay `case-r2-meta-0-20261102030032` open in a second tab as the fallbac
 | 0:40–1:20 | First experiment: rationale, the six stated expectations, then the measurement and the prediction check | "Before the result, it writes down what each fault should show at 1,500 RPM under load. Then the simulator answers: 2x at 70 micrometres. Only the Bayesian engine moves the probabilities, and the table shows which hypotheses gained and lost." |
 | 1:20–1:45 | Second experiment and the diagnosis card | "A second test at 3,300 RPM near the critical speed shows no imbalance peak. Misalignment at 94.7%, the remaining doubt named, and the physical check to do first." |
 | 1:45–2:10 | Ask the investigator: type "Why not imbalance?" | "Now I can question it. The answer quotes the readings and operating points that ruled imbalance out. They are the same numbers in the experiment log: it answers from evidence, and the answer is never stored or scored." |
-| 2:10–2:30 | Unseen machine card: type a seed not used before on camera, planner Meta or information gain | "Any seed names a machine nobody has seen. The same loop finds what is wrong — and about one machine in five is healthy, which it reports instead of inventing a fault." |
+| 2:10–2:30 | Unseen machine card: type a seed not used before on camera, planner Meta or information gain | "Any seed names a machine nobody has seen. The same loop finds what is wrong — and about one machine in six is healthy, which it reports instead of inventing a fault." |
 | 2:30–2:50 | Benchmark: planner table, then the challenge panel with the injection condition | "150 simulated runs per planner; information gain needs about 28% fewer experiment points than a fixed sweep. On 24 new machines with misleading and injected notes, Meta stayed at 23 of 24 and no injected text reached an explanation. We report that no cost advantage was shown there." |
 | 2:50–3:00 | Real recordings: the rig photograph, a sensor spectrum, 8/8 vs 5/8 | "On real accelerometer recordings from a laboratory rig, the model labelled all eight held-out trials; the statistical baseline got five. One rig, eight trials: a promising start, not an industrial claim." |
 
@@ -66,10 +69,11 @@ it is a recording of an earlier live run.
 
 Unseen-machine seeds for rehearsal (probed offline with the baseline on 3 November; a
 machine probed or replayed before is no longer "unseen to us", so say so or pick a new
-seed on camera): 77 and 4242 are **healthy**; 16, 21, 24 and 28 are misalignment in about
-two experiments; 29 is imbalance+misalignment in three; 17 is the same compound fault in
-five. Roughly one seed in five is healthy, which is worth presenting as a feature: the
-investigator does not invent a fault that is not there.
+seed on camera): 77 is **healthy** and 4242 has **friction** (both already replayed, so
+prefer a new seed); 16, 21, 24 and 28 are misalignment in about two experiments; 29 is
+imbalance+misalignment in three; 17 is the same compound fault in five. Roughly one
+seed in six is healthy, which is worth presenting as a feature: the investigator does
+not invent a fault that is not there.
 
 ## Recording checks
 
@@ -80,10 +84,12 @@ investigator does not invent a fault that is not there.
 - Record captions identifying this project's implementation and its simulated evidence.
 - Review the exported video for readable numbers, correct planner labels and working audio.
 
-## After the API key is ready
+## Model access (configured 2 November 2026)
 
-Set the key, model and base URL in `backend/.env`, using the actual values from the Meta
-project. Restart the backend after editing configuration. Then run from the repository root:
+The key, model (`muse-spark-1.3`) and base URL are set in the git-ignored
+`backend/.env` from the Meta project; the live benchmark, proof challenge, real-data
+study and ask audit on 2 November all used it. To re-verify model access after any
+configuration change, restart the backend and run from the repository root:
 
 ```sh
 backend/.venv/Scripts/python -m pytest backend/tests/test_llm_client.py
