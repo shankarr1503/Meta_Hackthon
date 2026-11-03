@@ -19,9 +19,17 @@ what it expects to see before every result, and answers your questions from the 
 When a rotating machine starts to vibrate, the alarm names a symptom, not a cause.
 Imbalance, misalignment and a failing bearing can look alike at one operating point, so an
 engineer has to decide which speed and load to test next. Every test costs time and
-machine downtime, and the reasoning behind a diagnosis is rarely written down. Unplanned
-downtime in manufacturing is measured in thousands of dollars per hour; the expensive part
-of a vibration problem is not the sensor, it is deciding what to measure next.
+machine downtime, and the reasoning behind a diagnosis is rarely written down.
+
+The stakes are documented: Siemens' industry survey
+[The True Cost of Downtime 2024](https://assets.new.siemens.com/siemens/assets/api/uuid:1b43afb5-2d07-47f7-9eb7-893fe7d0bc59/TCOD-2024_original.pdf)
+(checked 3 November 2026) estimates that unplanned downtime costs the world's 500
+biggest companies $1.4 trillion a year — 11% of their revenues. One lost hour costs up
+to $2.3 million in automotive (over $600 a second) and up to $150,000 even for small
+and mid-size manufacturers; the average large plant loses $253 million a year. The same
+report names vibration among the key machine-health signals for predictive maintenance,
+and reports that adopters have halved their unplanned downtime. The expensive part of a
+vibration problem is not the sensor, it is deciding what to measure next.
 
 ## What it does
 
@@ -92,7 +100,7 @@ of this hackathon (checked 2 November 2026); confirm them in the participant por
 
 | Criterion | Where to look |
 |---|---|
-| Impact (30%) | A general pattern for diagnosis under a test budget: an AI that decides what to measure, commits to predictions, and shows its work. Built for rotating machinery, the most common industrial asset class; the same loop applies to any domain with a simulator and a hypothesis set. |
+| Impact (30%) | A general pattern for diagnosis under a test budget: an AI that decides what to measure, commits to predictions, and shows its work. Built for rotating machinery, the most common industrial asset class, against a problem Siemens prices at $1.4 trillion a year for the largest 500 companies; the same loop applies to any domain with a simulator and a hypothesis set. |
 | Use of Meta AI tooling (25%) | Muse Spark 1.3 is the investigator at six points: prior from the note, experiment choice, stated expectations, explanation, grounded question answering, and sensor-by-sensor assessment of real recordings. Every call is validated, capped, logged and replayable. |
 | Demo (25%) | Live stream of each decision and measurement, a 3D twin driven by measured features, the Ask panel, unseen machines by seed, the benchmark and challenge evidence, and real recordings with the rig photograph. One command or one container to run. |
 | Technical depth and execution (20%) | Vectorised physics and a 990-particle Bayesian engine with expected information gain; architecture test that isolates the hidden truth; pre-registered, replayable studies with intervals; 404 tests; CI passing on GitHub for Linux and Windows plus a container build. |

@@ -6,7 +6,12 @@ questions from the evidence.**
 
 When a rotating machine starts to vibrate, an engineer has to work out why: imbalance,
 misalignment, a failing bearing, or several at once. Each test costs time and machine
-downtime. FailureLab AI hands that investigation to a Meta model (Muse Spark 1.3). It
+downtime — losses that Siemens' survey
+[The True Cost of Downtime 2024](https://assets.new.siemens.com/siemens/assets/api/uuid:1b43afb5-2d07-47f7-9eb7-893fe7d0bc59/TCOD-2024_original.pdf)
+puts at $1.4 trillion a year across the world's 500 biggest companies (11% of their
+revenues), with one lost hour costing up to $2.3 million in automotive and up to
+$150,000 for small and mid-size manufacturers (industry survey figures, checked
+3 November 2026). FailureLab AI hands that investigation to a Meta model (Muse Spark 1.3). It
 reads the maintenance note, picks the next most informative experiment (speed, load),
 **writes down what each possible fault should show there before the result arrives**,
 updates its beliefs, and stops as soon as it is confident. Then it explains the diagnosis
