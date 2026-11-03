@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 
 from app.main import create_app
 from app.measured import analyse_recording, estimate_shaft_hz, nearest_reference
+from app.schemas.real_recordings import RealRecordingsResponse
 from scripts.real_examples import DATA, LABELS, NOMINAL_RPM, SAMPLE_RATE_HZ, assess
 
 
@@ -82,6 +83,54 @@ def test_invalid_sensor_selection_is_reported_without_a_hidden_fallback() -> Non
     assert result["events"][-1]["action"] == "error"
 
 
+def _minimal_report(**overrides) -> dict:
+    """A structurally valid real-recordings report with no records."""
+    report = {
+        "source": "measured_laboratory",
+        "study_version": "real-2",
+        "dataset": {
+            "source": "measured_laboratory",
+            "dataset_url": "https://example.test/dataset",
+            "doi": "10.example/test",
+            "license": "CC BY 4.0",
+            "license_url": "https://example.test/license",
+            "attribution": "Test Authors (2026)",
+            "selection": "Test selection.",
+            "recordings": [],
+        },
+        "sample_rate_hz": 25000,
+        "duration_s": 1,
+        "shaft_rpm_approximate": 1280,
+        "shaft_rpm_documented": 1238,
+        "shaft_rpm_estimated_range": [1260.0, 1300.0],
+        "amplitude_units": "native source units (physical unit not verified)",
+        "plan_sha256": "0" * 64,
+        "reference_trials": 0,
+        "held_out_trials": 0,
+        "model": None,
+        "baseline_correct": 0,
+        "meta_correct": None,
+        "meta_accuracy_ci95": None,
+        "model_errors": 0,
+        "records": [],
+        "superseded_study": {
+            "version": "real-1",
+            "status": "superseded",
+            "plan_sha256": "0" * 64,
+            "model": "test-model",
+            "reason": "Test reason.",
+            "baseline_correct": 0,
+            "meta_correct": None,
+            "meta_accuracy_ci95": None,
+            "held_out_trials": 0,
+            "records": [],
+        },
+        "limitations": ["Test limitation."],
+    }
+    report.update(overrides)
+    return report
+
+
 def test_real_api_never_relabels_simulation_as_real(make_settings) -> None:
     settings = make_settings()
     client = TestClient(create_app(settings))
@@ -90,8 +139,35 @@ def test_real_api_never_relabels_simulation_as_real(make_settings) -> None:
     path = settings.results_dir / "real-recordings.json"
     path.write_text('{"source":"simulation"}')
     assert client.get("/api/real-recordings").status_code == 503
-    path.write_text('{"source":"measured_laboratory","records":[]}')
+    path.write_text(json.dumps(_minimal_report()))
     assert client.get("/api/real-recordings").json()["source"] == "measured_laboratory"
+
+
+def test_real_api_rejects_malformed_evidence_shape(make_settings) -> None:
+    settings = make_settings()
+    client = TestClient(create_app(settings))
+    settings.results_dir.mkdir(parents=True)
+    path = settings.results_dir / "real-recordings.json"
+    malformed = [
+        json.dumps({k: v for k, v in _minimal_report().items() if k != "records"}),
+        json.dumps(_minimal_report(records={})),
+        json.dumps(_minimal_report(records=[{"split": "test"}])),
+        json.dumps(_minimal_report(meta_accuracy_ci95=[0.1])),
+        json.dumps(_minimal_report(dataset={"doi": "10.example/test"})),
+        json.dumps(_minimal_report(truth="normal")),
+        json.dumps(["measured_laboratory"]),
+    ]
+    for payload in malformed:
+        path.write_text(payload)
+        assert client.get("/api/real-recordings").status_code == 503, payload
+
+
+def test_committed_real_report_matches_response_schema() -> None:
+    path = DATA.parents[1] / "results" / "real-recordings.json"
+    if not path.exists():
+        pytest.skip("real dataset not yet prepared")
+    report = json.loads(path.read_text(encoding="utf-8"))
+    RealRecordingsResponse.model_validate(report)
 
 
 def test_published_real_split_and_scores_are_trial_disjoint() -> None:
