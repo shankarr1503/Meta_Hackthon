@@ -114,6 +114,25 @@ behaviour changes.
   is drawn when 2x is at least 1x and above the 2 µm noise floor; bearing tint saturates at
   a 40 °C rise; jitter is seeded, so a replay looks the same each time.
 - Recommended checks and explanations are for the simulated machine only.
+- The maintenance action plan (D-79) is static engineering practice per fault class,
+  shown with every diagnosis and labelled general guidance, not a machine-specific
+  work order. It uses no model call and changes no trace, schema or probability;
+  compound faults combine both sections with a fixed ordering note.
+
+## Video vibrometry (experimental, D-81)
+
+- The input is the mean luminance of one user-chosen patch per video frame, in
+  arbitrary pixel units. Pixel brightness is assumed to move monotonically with the
+  point's physical motion; no calibration to displacement, velocity or g is claimed.
+- Motion is readable only up to half the frame rate (Nyquist). The spectrum, peaks
+  and harmonics stop there, and the Meta reading is instructed to flag an
+  insufficient frame rate.
+- Peaks are the strongest local maxima at or above 0.5 Hz, strongest first, at most
+  five. Given a nominal speed, the shaft estimate is the frequency within ±15% of
+  it whose visible 1x/2x/3x bands (each ±0.5 Hz) carry the most energy; harmonics
+  above Nyquist are omitted.
+- The Meta model reads the derived features and the user's context text only, never
+  the video. Its reading feeds no benchmark, study or probability.
 
 ## Proof challenge
 
@@ -140,3 +159,7 @@ See REAL_DATA.md.
   estimate and every harmonic band centred on it.
 - Measured harmonic features are the largest amplitude within ±1 Hz of each order of the
   estimated shaft frequency.
+- The second-rig check (D-78) is exploratory: its 50 recordings per condition are
+  consecutive segments of one session, so held-out segments are correlated with the
+  references. It shows the feature pipeline is not tuned to one apparatus; it adds
+  no independent trials and no Meta call was made on that rig.

@@ -349,6 +349,13 @@ A full code review on 2 November found the issues below; each fix ships with tes
   call and changes no trace, schema or probability. A diagnosed-component highlight in
   the 3D twin was considered and deferred: it would touch three views and need visual
   re-verification across themes and widths on the eve of submission.
+- **D-80 · 3 Nov 2026 · Industrial monochrome restyle.** The template-default indigo
+  accent is replaced everywhere: chrome (buttons, active tab, status chip, diagnosis
+  border, badges, focus rings) is now slate monochrome — near-black actions in light
+  mode, inverted in dark mode — and one deep blue is reserved for data and affordances
+  (links, the leading probability bar, the lab slider). Status colors (amber simulated
+  badge, emerald rise, red errors) are unchanged. No layout, text or behaviour change;
+  verified in the browser in both themes.
 - **D-81 · 3 Nov 2026 · Experimental video vibrometry.** A video of a vibrating machine
   contains the vibration as pixel motion sampled at the frame rate. The browser samples
   the mean luminance of a user-chosen patch per frame (`requestVideoFrameCallback`; the
@@ -373,10 +380,3 @@ A full code review on 2 November found the issues below; each fix ships with tes
   micro-labels; the H1 gained weight. Borders and colors continue to carry meaning only
   (status, the diagnosis, the dashed not-yet-generated machine). No text, behaviour or
   accessible name changed; all 93 frontend tests and the demo scripts pass unchanged.
-- **D-80 · 3 Nov 2026 · Industrial monochrome restyle.** The template-default indigo
-  accent is replaced everywhere: chrome (buttons, active tab, status chip, diagnosis
-  border, badges, focus rings) is now slate monochrome — near-black actions in light
-  mode, inverted in dark mode — and one deep blue is reserved for data and affordances
-  (links, the leading probability bar, the lab slider). Status colors (amber simulated
-  badge, emerald rise, red errors) are unchanged. No layout, text or behaviour change;
-  verified in the browser in both themes.

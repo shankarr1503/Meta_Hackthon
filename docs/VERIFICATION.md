@@ -1,6 +1,6 @@
 # Verification record
 
-Checks performed locally on 1 and 2 November 2026; each section states when it was run.
+Checks performed locally on 1 to 3 November 2026; each section states when it was run.
 Machine data is simulated, except the attributed measured-laboratory recordings path
 (REAL_DATA.md).
 
@@ -340,3 +340,40 @@ investigator) and D-76 (container).
   13 grounding-audit tests and 7 demo-replay checks (one per new Meta replay), so 323 are
   collected; with 81 frontend tests that is 404.
 - Not verified here: a hosted deployment, browsers other than Chromium.
+
+## Review fixes, budget enforcement and license audit - 3 November 2026
+
+A full-codebase review on 3 November found one unvalidated route, unenforced
+benchmark budget, stale documentation and unaudited transitive licences. Fixed the
+same day, each step committed separately after a green check:
+
+- Real-recordings evidence is validated against a closed response schema
+  (`backend/app/schemas/real_recordings.py`): malformed reports return 503 instead
+  of being served unchecked. New tests cover seven malformed shapes plus the
+  committed 4.7 MB report, which validates unchanged.
+- `RealRecordings.tsx` goes through the shared API client: backend error detail
+  (e.g. invalid evidence shape) reaches the alert, and the friendly 404 message is
+  kept. New test asserts the backend detail surfaces.
+- The rule-benchmark 2-minute target is enforced by `RULE_BUDGET_S` in
+  `scripts/benchmark.py` (the run exits 1 past it) and by a suite test on the
+  committed `runtime_s` values. A full rule run to a temporary output on 3 November
+  measured info_gain 39.78 s, sweep 1.01 s, random 1.34 s (42.1 s total, under the
+  120 s budget; accuracies unchanged at 99.3%/96.0%/98.0%). An earlier background
+  attempt had reported a spurious 1504 s sweep caused by the machine sleeping
+  mid-run; the timed re-run above and a 0.75 s isolated full sweep protocol rule
+  out a code slowdown.
+- Transitive backend licences audited with pip-licenses plus `importlib.metadata`
+  for the four packages the tool omits: all 32 installed distributions are MIT,
+  BSD, Apache-2.0, PSF-2.0 (`typing_extensions`, flagged as a judgement call in
+  the report) or MPL-2.0 unmodified (`certifi`). Recorded in
+  `docs/THIRD_PARTY_LICENSES.md`. No GPL, AGPL or unlicensed package.
+- The per-process Meta limiter note needed no change: the deployed container runs
+  one uvicorn process, and the per-process behaviour was already documented in the
+  `MetaRunLimiter` docstring, D-64 and DEPLOYMENT.md.
+- Full check after the fixes: Ruff lint and formatting, backend 336 passed in
+  95 s (the live-model test ran with the local key), frontend 94 passed in
+  18 files, ESLint, TypeScript and the Vite production build. The 3 November
+  features (second-rig check, action plan, D-80/D-82 restyle, video intake) are
+  covered by this green suite.
+- Not verified here: the Siemens downtime figures (cited 3 November in the
+  submission draft), a hosted deployment, browsers other than Chromium.

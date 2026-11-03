@@ -48,7 +48,9 @@ logged. The loop never holds a hidden case, only a function that runs experiment
 | Investigation loop | Alarm, experiments, stopping, diagnosis, trace | `backend/app/agent/investigate.py` |
 | API | Routes, validation, replay storage | `backend/app/api/` |
 | Schemas | Pydantic request and response models (closed) | `backend/app/schemas/` |
-| Dashboard | Case picker, investigation player, lab, benchmark | `frontend/src/` |
+| Measured recordings | Features and plot previews from attributed lab recordings; no simulator or priors | `backend/app/measured.py` |
+| Video vibrometry | Spectrum from a client-extracted motion series; Meta reading of derived features | `backend/app/api/video.py` |
+| Dashboard | Case picker, investigation player, lab, benchmark, real recordings, video intake, ask panel | `frontend/src/` |
 | 3D twin | Shaft and bearings driven by measurements | `frontend/src/twin/` |
 
 ### Dependency rules
@@ -201,11 +203,10 @@ class Planner(Protocol):
 Temperature 0.2. Prompts say notes can mislead. Prompts are built only from the case
 view, probabilities, candidates and trace, never hidden values.
 
-**Adapter.** `llm_client.py` exposes `complete(system, user) -> str` with a 30-second
-timeout. The provider, endpoint, model name and key come from `backend/.env`
-(`FAILURELAB_LLM_*`). It expects an OpenAI-compatible chat-completions endpoint unless the
-hackathon docs say otherwise; confirm the hackathon's Meta model and API format first. Only
-this file changes if the format differs.
+**Adapter.** `llm_client.py` exposes `complete(system, user) -> str` with a 60-second
+timeout (D-55). The provider, endpoint, model name and key come from `backend/.env`
+(`FAILURELAB_LLM_*`). The confirmed model is Muse Spark 1.3 (`muse-spark-1.3`) behind an
+OpenAI-compatible chat-completions endpoint. Only this file changes if the format differs.
 
 **Not configured vs failing.** If the model is not configured, `POST /api/investigations` with
 planner `meta` returns 503 explaining how to configure it or use `info_gain`. If it is
@@ -226,11 +227,17 @@ All endpoints under `/api`, JSON only, documented automatically at `/docs` and i
 | GET | `/api/cases/{case_id}` | Public fields of one sealed case or fresh machine `fresh-<seed>` (D-74) | 404 |
 | POST | `/api/experiments` | One simulated experiment on a case: features, waveform, spectrum | 404, 422 |
 | POST | `/api/lab/simulate` | One simulated experiment on the public preset lab machine | 422 |
-| POST | `/api/investigations` | Run and save an investigation | 404, 422, 503 if planner `meta` and the model is not configured |
+| POST | `/api/investigations` | Run and save an investigation | 403, 404, 422, 429, 503 |
+| GET | `/api/investigations/stream` | Run an investigation live as Server-Sent Events | 403, 404, 422, 429, 503 |
 | GET | `/api/investigations` | List saved replays | — |
 | GET | `/api/investigations/{id}` | Load a replay | 400, 404 |
 | POST | `/api/investigations/{id}/ask` | Meta model answers a question from the saved trace's evidence (D-75) | 400, 403, 404, 422, 429, 503 |
 | GET | `/api/benchmark` | Latest benchmark results | 404 if not yet run |
+| GET | `/api/proof/download` | Proof challenge evidence as a JSON attachment | 404 |
+| GET | `/api/real-recordings` | Measured laboratory recordings report (closed schema) | 404, 503 |
+| GET | `/api/real-recordings/photo` | Source test-rig photograph (CC BY 4.0) | 404 |
+| POST | `/api/video/analyze` | Spectrum from a client-extracted motion series (experimental) | 422 |
+| POST | `/api/video/assess` | Meta reading of video-extracted features (experimental) | 403, 422, 429, 503 |
 
 **Case view** (`/api/cases`): exactly `case_id`, `title`, `note`, `initial_rpm` (2950),
 `initial_load_n` (500).
@@ -290,10 +297,12 @@ target the mapping functions, not WebGL rendering.
 |---|---|
 | `frontend/src/api/` | `client.ts`, `types.ts` |
 | `frontend/src/state/` | `useInvestigation.ts` |
-| `frontend/src/dashboard/` | CasePicker, ProbabilityBars, BudgetMeter, ExperimentLog, ExperimentCard, PredictionTable (prediction check), SpectrumChart, DiagnosisCard, PlayerControls, LiveInvestigationView; `src/state/live.ts` reduces live frames; `src/ErrorBoundary.tsx` isolates each view |
+| `frontend/src/dashboard/` | CasePicker, ProbabilityBars, BudgetMeter, ExperimentLog, ExperimentCard, PredictionTable (prediction check), SpectrumChart, DiagnosisCard, ActionPlan, AskPanel, PlayerControls, LiveInvestigationView; `src/state/live.ts` reduces live frames; `src/ErrorBoundary.tsx` isolates each view |
 | `frontend/src/twin/` | ShaftScene, Shaft, Bearing, LoadArrow |
 | `frontend/src/lab/` | ManualLab |
-| `frontend/src/benchmark/` | BenchmarkView |
+| `frontend/src/benchmark/` | BenchmarkView, ProofPanel |
+| `frontend/src/real/` | RealRecordings |
+| `frontend/src/video/` | VideoIntake |
 
 **Visual rules.** A visible "Simulated" label on every result view; probabilities always shown
 as numbers; light and dark themes; keyboard-operable controls; text summaries for
@@ -337,7 +346,9 @@ or pick among vetted candidates. It cannot change measurements, scoring or stopp
 **Benchmark protocol.** Six sealed cases × 5 seeds, plus 120 random cases (20 per
 hypothesis, severities 0.15–0.8, off-grid hidden values). Planners `info_gain`, `sweep` and
 `random` run together with the same budget and stopping rule; this run has the under-2-minute
-target. `meta` runs as a separate command, `scripts/benchmark.py --planner meta`, starting with
+target, enforced by `RULE_BUDGET_S` in `scripts/benchmark.py` (the run exits 1 past it)
+and by a suite test on the committed `runtime_s` values. `meta` runs as a separate
+command, `scripts/benchmark.py --planner meta`, starting with
 the sealed cases × 3 seeds, with response caching and a configurable call limit. Metrics:
 accuracy, mean experiments, mean cost, share reaching 90%, accuracy when 90% sure, model
 fallback rate. Output to `backend/results/benchmark.json`, committed with the code that
@@ -372,14 +383,20 @@ failurelab-ai/
   scripts/tasks.py          same commands for machines without make
   .github/workflows/ci.yml
   docs/                     PRODUCT_FEATURES.md, TECHNICAL_DESIGN.md,
-                            ASSUMPTIONS.md, DECISIONS.md, API.md
+                            ASSUMPTIONS.md, DECISIONS.md, API.md, REAL_DATA.md,
+                            PROOF_OF_CONCEPT.md, VERIFICATION.md, DEMO.md,
+                            DEPLOYMENT.md, SUBMISSION.md, READINESS.md,
+                            THIRD_PARTY_LICENSES.md
   backend/
     app/  physics/ inference/ agent/ api/ schemas/
-          cases.py runner.py config.py main.py
-    scripts/benchmark.py
-    results/ replays/ (replays/demo/ committed) tests/
+          cases.py runner.py config.py measured.py main.py
+    scripts/                benchmark.py proof.py real_examples.py
+                            fetch_real.py second_rig_check.py demo_replays.py
+                            ask_audit.py
+    results/ replays/ (replays/demo/ committed) tests/ data/real/
     pyproject.toml .env.example
   frontend/                 Vite + React + TypeScript + Tailwind
+    src/  api/ state/ dashboard/ twin/ lab/ benchmark/ real/ video/
 ```
 
 | Tool | Use | License |

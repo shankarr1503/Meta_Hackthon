@@ -384,6 +384,12 @@ All code in this repository was written from scratch during the event. Work star
   read the extracted features, with a deterministic fallback and the hourly cap. A
   ground-truth test recovers a known 25 Hz signal with its half-amplitude 2x; labelled
   experimental and uncalibrated everywhere, readable only to half the frame rate.
+- Review fixes: closed response schema on `GET /api/real-recordings` (malformed
+  evidence returns 503); the Real recordings view uses the shared API client so
+  backend error detail reaches the screen; the rule-benchmark 2-minute target is
+  enforced by `RULE_BUDGET_S` with a suite test (re-timed at 42.1 s total).
+- Transitive licence audit: all 32 installed backend distributions checked, all
+  permissive or allowed ([audit](docs/THIRD_PARTY_LICENSES.md)).
 
 ## Benchmark results (simulated)
 
@@ -499,9 +505,11 @@ Direct dependencies, pinned to exact versions:
 
 Transitive dependencies are under compatible licenses: permissive (MIT, BSD, Apache-2.0,
 ISC), MPL-2.0 used unmodified (e.g. certifi), and CC-BY-4.0 data (caniuse-lite). No GPL or
-AGPL code is used. The container image builds on the Docker official `node:22-alpine` and
-`python:3.12-slim` images (Node: MIT; Python: PSF; base OS packages under their own
-permissive or copyleft-unmodified licenses); no image is published by this repository.
+AGPL code is used; the full per-package audit is in
+[THIRD_PARTY_LICENSES.md](docs/THIRD_PARTY_LICENSES.md). The container image builds on
+the Docker official `node:22-alpine` and `python:3.12-slim` images (Node: MIT; Python:
+PSF; base OS packages under their own permissive or copyleft-unmodified licenses); no
+image is published by this repository.
 
 ## License
 

@@ -22,6 +22,8 @@ changes. Every request model rejects unknown keys with `422`.
 | GET | `/api/proof/download` | Proof challenge evidence as a JSON attachment | 404 |
 | GET | `/api/real-recordings` | Measured laboratory recordings report | 404, 503 |
 | GET | `/api/real-recordings/photo` | Source test-rig photograph (CC BY 4.0) | 404 |
+| POST | `/api/video/analyze` | Spectrum from a client-extracted motion series (experimental) | 422 |
+| POST | `/api/video/assess` | Meta model reading of video-extracted features (experimental) | 403, 422, 429, 503 |
 
 ## `GET /api/health`
 
@@ -207,6 +209,34 @@ truth labels used only by the evaluator, never by the investigator.
 
 GET `/api/real-recordings` returns the attributed measured-laboratory report: source
 manifest, trial split, measured previews/features, recorded Meta sensor-inspection
-actions and per-trial published labels for retrospective inspection. 404 if absent,
-503 if the source is not measured_laboratory. GET `/api/real-recordings/photo` serves
-the original CC BY 4.0 test-rig photograph. Neither route calls the model.
+actions and per-trial published labels for retrospective inspection. The stored file
+is validated against a closed response schema; 404 if absent, 503 if the source is
+not measured_laboratory or the shape is invalid. GET `/api/real-recordings/photo`
+serves the original CC BY 4.0 test-rig photograph. Neither route calls the model.
+
+## Video vibrometry, experimental (3 November 2026, D-81)
+
+The browser samples the brightness of a user-chosen point in the user's own video,
+frame by frame, and sends only that time series — never the video. Amplitudes are in
+arbitrary pixel units: uncalibrated, and labelled so in every response's `note`.
+Neither route feeds a benchmark, study or probability.
+
+`POST /api/video/analyze` request (extra keys are `422`): `fps` (5–1,000),
+`samples` (64–20,000 numbers), `nominal_rpm` (60–30,000, optional). Response:
+`source: "video"`, `sample_rate_hz`, `duration_s`, `nyquist_hz` (half the frame
+rate), `rms`, `crest_factor`, a 2-second waveform preview (`waveform_t_s`,
+`waveform`), the Hann-window spectrum up to Nyquist (`spectrum_freq_hz`,
+`spectrum`), the strongest local-maximum peaks (`peaks`, at most 5, at or above
+0.5 Hz), and, when a nominal speed is given, `shaft_hz_estimate` (the frequency
+near it whose visible harmonics carry the most energy) with 1x/2x/3x `harmonics`
+below Nyquist.
+
+`POST /api/video/assess` asks the Meta model to read derived features only:
+`fps`, `duration_s`, `nyquist_hz`, `rms`, `crest_factor`, `peaks` (at most 5),
+`shaft_hz_estimate`, `harmonics` (at most 3), `nominal_rpm`, `context` (at most 300
+characters). The model sees the features and the context text; its prompt forbids
+certainty and tells it to flag an insufficient frame rate. `503` without a key
+(same message as a Meta run), `429` past the hourly Meta question cap, `403` for
+browser requests marked cross-site. Response: `assessment`, `model`, `ok`,
+`fallback`, `usage`, `error_kind`, `error`, `note`. A model failure returns a
+deterministic fallback with `ok: false`.

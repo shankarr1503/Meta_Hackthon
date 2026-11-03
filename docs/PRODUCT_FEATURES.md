@@ -27,7 +27,7 @@ recommends the next physical check. The investigator never sees the true fault.
 | Team | Up to 4; one person submits with every member added |
 | Build window | 26 October – 4 November 2026; build started 28 October |
 | Deadline | Wednesday 4 November, 9:00 PM ET |
-| Status | Core implementation built; live Meta verification and public submission pending. See README and VERIFICATION.md. |
+| Status | Built and verified 2–3 Nov: live Meta benchmark, proof challenge, real-data study, ask audit and public repository push done. Submission form and video pending. See VERIFICATION.md and READINESS.md. |
 
 **Why it is not a generic project.** It is not a chatbot, RAG app, image analyser or advice tool.
 The model acts: it chooses experiments, commits to predictions before seeing results,
@@ -72,6 +72,11 @@ cut first. Build days follow the schedule in TECHNICAL_DESIGN.md §13.
 | F15 | Ask the investigator: question a finished investigation; the Meta model answers from its recorded evidence | Should | 2 Nov |
 | F16 | Fresh machines: investigate a new hidden machine generated from a seed, live | Should | 2 Nov |
 | F17 | One-command container and hosting blueprint | Should | 2 Nov |
+| F18 | Real recordings view: attributed laboratory accelerometer evidence with recorded Meta sensor inspection | Should | 2 Nov |
+| F19 | Paired proof challenge with frozen plan, intervals and downloadable evidence | Should | 2 Nov |
+| F20 | Exploratory feature check on a second public rig (no Meta call) | Could | 3 Nov |
+| F21 | Maintenance action plan on the diagnosis card (static guidance per fault class) | Should | 3 Nov |
+| F22 | Experimental video intake: motion spectrum from a user video plus a Meta reading | Could | 3 Nov |
 
 ## 4. Feature details and acceptance criteria
 
@@ -147,9 +152,39 @@ stating what each hypothesis should show, and explain the result in plain langua
   when 90% sure.
 - Results are reported as measured, including failures.
 
+### Real recordings, proof evidence and video intake (F18–F22)
+
+- The Real recordings view (F18) shows attributed laboratory accelerometer signals
+  (Mendeley, CC BY 4.0) with the source test-rig photograph: 12 labelled reference
+  trials and 8 separate held-out trials. The Meta model inspected the sensors one by
+  one with the labels hidden; each recorded assessment, its sensor choices and the
+  published label for retrospective inspection are shown. The dataset label stays
+  hidden until the reader reveals it. Labelled as recorded evidence throughout: not
+  a live machine connection and not industrial validation. See REAL_DATA.md.
+- The paired proof challenge (F19) runs Meta and information gain on the same 24
+  newly generated machines under three note conditions (plain, misleading,
+  prompt-injection), from a frozen pre-registered plan, with confidence intervals
+  and downloadable evidence. See PROOF_OF_CONCEPT.md.
+- The second-rig check (F20) applies the measured feature family to another public
+  rig dataset (Zenodo, CC BY 4.0) without any Meta call, labelled exploratory:
+  segments from one session are correlated, so it shows the pipeline is not tuned
+  to one apparatus, not independent validation.
+- The diagnosis card carries a maintenance action plan (F21): where to look, likely
+  root causes, ordered actions and how to confirm the fix, combined with an ordering
+  note for compound faults. Static engineering guidance per fault class, labelled as
+  general guidance rather than a machine-specific work order; no model call, and it
+  changes no trace, schema or probability.
+- Video intake (F22, experimental): the browser samples the brightness of one
+  user-chosen point in the user's own video frame by frame — the video never leaves
+  the computer — and `POST /api/video/analyze` returns the motion spectrum, peaks
+  and shaft harmonics readable only up to half the frame rate. `POST
+  /api/video/assess` asks the Meta model to read those derived features only, with
+  the hourly question cap and a deterministic fallback. Labelled experimental and
+  uncalibrated everywhere; feeds no benchmark, study or probability.
+
 ## 5. Out of scope
 
-- Real sensor data, real machines or plant integrations.
+- Live plant integrations, or claims beyond the recorded laboratory evidence (F18).
 - Claims of validated, industrial-grade accuracy.
 - Machines other than one shaft on two bearings, or more than six hypotheses.
 - User accounts, sharing, databases, microservices or multi-agent orchestration.
@@ -174,8 +209,10 @@ the event.
 
 The rehearsal uses `case-r2-info_gain-0`, the conveyor gearbox case, because its saved
 baseline run has two experiments. The compressor replay `case-b6-info_gain-0` finishes
-after one experiment. The final video must use an inspected real Meta replay once API
-access is available; adapt the narration to that run. See [DEMO.md](DEMO.md).
+after one experiment. Meta API access was configured on 2 November and eight live Meta
+replays (six sealed cases, two unseen machines, 8/8 correct) are committed under
+`backend/replays/demo/`; the final video uses an inspected one of those. See
+[DEMO.md](DEMO.md).
 
 1. **0:00–0:20 — Hook.** "This compressor is shaking. Unbalanced, misaligned, a dry bearing,
    or two at once? Watch the Meta model decide which tests to run."
@@ -197,16 +234,16 @@ event.
 
 | Rule | How we comply | Check |
 |---|---|---|
-| New work only (26 Oct – 4 Nov) | Build started 28 October; first commit 30 October (D-34); no code from earlier experiments | [ ] |
-| Identify contributions | README section "Built during the hackathon" with dated features; small dated commits; demo captions | [ ] |
-| Public repo | Repository `failurelab-ai` public before submission | [ ] |
-| Rights to code, data, assets | Permissive or compatible licenses only, listed in the README (see DECISIONS.md); simulated data; MIT license on our code | [ ] |
-| Not a banned or generic project | Experiment-design agent for manufacturing diagnostics; not health, RAG, education, image, job, nutrition, personality or sports | [ ] |
-| Theme fit | Push the Frontier: Meta model at the centre of a manufacturing problem | [ ] |
-| Meta models used | Meta model drives the investigation; confirm model and access in the hackathon docs | [ ] |
-| Team and track | Indie Developer; up to 4 members; one submitter; all members added | [ ] |
-| Demo video | 3 minutes, linked in the submission | [ ] |
-| Eligibility | Every member 18+; no Meta or Cerebral Valley staff, contractors, government-affiliated people or their households | [ ] |
+| New work only (26 Oct – 4 Nov) | Build started 28 October; first commit 30 October (D-34); no code from earlier experiments | [x] |
+| Identify contributions | README section "Built during the hackathon" with dated features; small dated commits; demo captions | [x] |
+| Public repo | Pushed to https://github.com/shankarr1503/Meta_Hackthon on 2 November; CI passed there | [x] |
+| Rights to code, data, assets | Permissive or compatible licenses only, listed in the README with a transitive audit (see DECISIONS.md and THIRD_PARTY_LICENSES.md); simulated data plus attributed CC BY 4.0 recordings; MIT license on our code | [x] |
+| Not a banned or generic project | Experiment-design agent for manufacturing diagnostics; not health, RAG, education, image, job, nutrition, personality or sports | [x] |
+| Theme fit | Push the Frontier: Meta model at the centre of a manufacturing problem | [x] |
+| Meta models used | Muse Spark 1.3 (`muse-spark-1.3`) drives the investigation via the hackathon endpoint | [x] |
+| Team and track | Indie Developer; up to 4 members; one submitter; all members added | [ ] owner |
+| Demo video | 3 minutes, linked in the submission | [ ] owner |
+| Eligibility | Every member 18+; no Meta or Cerebral Valley staff, contractors, government-affiliated people or their households | [ ] owner |
 | Deadline | Submitted before Wednesday 4 November, 9:00 PM ET | [ ] |
 
 **Planning material.** This document and the design mockups are planning, not code. The

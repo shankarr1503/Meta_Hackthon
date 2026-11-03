@@ -5,7 +5,7 @@ Local development and the baseline demo do not need a model key. Use
 container), and [DEMO.md](DEMO.md) to rehearse. Simulation evidence and real laboratory
 measurements are reported separately; see REAL_DATA.md.
 
-## Engineering status (2 November 2026, evening)
+## Engineering status (3 November 2026)
 
 Everything the repository can verify on its own is done and recorded in
 [VERIFICATION.md](VERIFICATION.md):
@@ -27,6 +27,11 @@ Everything the repository can verify on its own is done and recorded in
 7. Live Meta demo replays committed for all six sealed cases and two unseen machines
    (8/8 correct, 0 fallbacks); grounding audit of the question feature recorded
    (10/10 answered, 194/194 numbers traced to the evidence) and re-checked by a test.
+8. Review fixes committed 3 November: closed schema on the real-recordings route,
+   shared API client for the Real recordings view, enforced rule-benchmark budget
+   (re-timed at 42.1 s total), transitive licence audit
+   (THIRD_PARTY_LICENSES.md), and refreshed product, design, API, assumptions and
+   submission docs. Full check green: 336 backend and 94 frontend tests.
 
 ## Owner and external items
 
@@ -43,8 +48,9 @@ are reused; hitting the limit causes logged fallbacks and must be reflected in t
 Hosted Meta usage is bounded per server process by `FAILURELAB_META_RUNS_PER_HOUR` (30)
 and `FAILURELAB_META_QUESTIONS_PER_HOUR` (120).
 
-No repository publication, remote CI run, external deployment or final submission has
-been performed by the local checks.
+No remote CI run, external deployment or final submission has been performed.
+Repository publication is the owner's action in the table above; the local checks
+verify the working tree only.
 
 ## Proof challenge complete
 
