@@ -95,8 +95,16 @@ pre-registered real-2.
 ## How it maps to the judging criteria
 
 Meta's event page judges the Indie developer track on "creativity, technical ambition, and
-whether it works" and gives no weights. The weights below come from third-party listings
-of this hackathon (checked 2 November 2026); confirm them in the participant portal.
+whether it works" (checked again 3 November 2026). Against those words:
+
+| Official criterion | Where to look |
+|---|---|
+| Creativity | The model is the experimenter, not a summariser: it designs the next test, commits to a prediction under every hypothesis **before** the result, and can be cross-examined afterwards. Unseen machines by seed mean judges can hand it a fault nobody has seen. |
+| Technical ambition | A vectorised physics twin, a 990-particle Bayesian engine ranking experiments by information per cost, an architecture test that walls the investigator off from the hidden truth, and pre-registered studies — including on real accelerometer recordings. |
+| Whether it works | Every claim is a committed file tests re-check: 100% on 18 sealed runs at lower cost, 23/24 on a 72-pair challenge with misleading and injected notes, 8/8 on held-out real recordings vs 5/8 baseline, 10/10 grounded answers with all 194 quoted numbers traced. CI green on GitHub; one command or one container to run it. |
+
+Third-party listings of this hackathon give the weighted criteria below (checked
+2 November 2026); confirm them in the participant portal.
 
 | Criterion | Where to look |
 |---|---|
