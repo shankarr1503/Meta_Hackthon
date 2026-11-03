@@ -3,6 +3,7 @@ import {
   CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 
+import { ApiError, getRealRecordings } from "../api/client";
 import Panel from "../dashboard/Panel";
 import type { RealReport } from "./types";
 
@@ -21,11 +22,15 @@ export default function RealRecordings() {
   const [revealed, setRevealed] = useState(false);
   useEffect(() => {
     let active = true;
-    fetch("/api/real-recordings").then(async response => {
-      if (!response.ok) throw new Error("Real recording evidence is unavailable on this server.");
-      return response.json() as Promise<RealReport>;
-    }).then(data => { if (active) setReport(data); })
-      .catch(e => { if (active) setError(e instanceof Error ? e.message : String(e)); });
+    getRealRecordings().then(data => { if (active) setReport(data); })
+      .catch(e => {
+        if (!active) return;
+        setError(
+          e instanceof ApiError && e.status === 404
+            ? "Real recording evidence is unavailable on this server."
+            : e instanceof Error ? e.message : String(e),
+        );
+      });
     return () => { active = false; };
   }, []);
   if (error) return <p role="alert">{error}</p>;

@@ -55,4 +55,12 @@ describe("RealRecordings", () => {
     render(<RealRecordings />);
     expect(await screen.findByRole("alert")).toHaveTextContent("unavailable");
   });
+
+  it("shows the backend error detail when the evidence is invalid", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(
+      JSON.stringify({ detail: "Real recording evidence has an invalid shape" }), { status: 503 })));
+    render(<RealRecordings />);
+    expect(await screen.findByRole("alert"))
+      .toHaveTextContent("Real recording evidence has an invalid shape");
+  });
 });

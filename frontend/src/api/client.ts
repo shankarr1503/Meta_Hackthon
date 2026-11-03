@@ -13,6 +13,7 @@ import type {
   VideoAnalysis,
   VideoAssessment,
 } from "./types";
+import type { RealReport } from "../real/types";
 
 /** The frontend talks only to /api; Vite proxies it to the backend in development. */
 export class ApiError extends Error {
@@ -71,6 +72,8 @@ export const askInvestigation = (id: string, question: string) =>
   post<Answer>(`/api/investigations/${encodeURIComponent(id)}/ask`, { question });
 export const simulateLab = (body: LabRequest) => post<LabResult>("/api/lab/simulate", body);
 export const getBenchmark = () => request<BenchmarkResult>("/api/benchmark");
+/** Recorded laboratory accelerometer evidence (measured, never simulated). */
+export const getRealRecordings = () => request<RealReport>("/api/real-recordings");
 /** Spectrum and features from a motion series the browser extracted from a user's video. */
 export const analyzeVideo = (body: { fps: number; samples: number[]; nominal_rpm?: number | null }) =>
   post<VideoAnalysis>("/api/video/analyze", body);
