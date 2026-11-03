@@ -375,5 +375,11 @@ same day, each step committed separately after a green check:
   18 files, ESLint, TypeScript and the Vite production build. The 3 November
   features (second-rig check, action plan, D-80/D-82 restyle, video intake) are
   covered by this green suite.
+- Secret scan of the full history on 3 November: only `backend/.env.example` is
+  tracked (blank placeholders); `git log --all -S FAILURELAB_LLM_API_KEY` finds
+  four commits that reference only the variable name (error text, tests, the
+  `render.yaml` declaration, the blank example); no `sk-*` or private-key pattern
+  in the tree; `backend/.env` and the model-response cache are ignored; no
+  stashes; `main` only.
 - Not verified here: the Siemens downtime figures (cited 3 November in the
   submission draft), a hosted deployment, browsers other than Chromium.
