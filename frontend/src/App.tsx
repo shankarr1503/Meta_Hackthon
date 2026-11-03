@@ -43,7 +43,7 @@ function BackToCases({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
-      className="text-sm text-indigo-700 underline dark:text-indigo-300"
+      className="text-sm text-blue-700 underline dark:text-blue-400"
       onClick={onClick}
     >
       ← Back to cases
@@ -148,7 +148,7 @@ export default function App() {
               <span
                 className={`rounded border px-2 py-1 text-xs ${
                   loaded.ready.meta_model_configured
-                    ? "border-indigo-400 bg-indigo-50 text-indigo-900 dark:border-indigo-600 dark:bg-indigo-950 dark:text-indigo-100"
+                    ? "border-slate-400 bg-slate-100 text-slate-900 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-100"
                     : "border-slate-300 bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
                 }`}
                 title={
@@ -173,9 +173,9 @@ export default function App() {
               type="button"
               aria-current={tab === t.id ? "page" : undefined}
               onClick={() => setTab(t.id)}
-              className={`-mb-px border-b-2 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+              className={`-mb-px border-b-2 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 ${
                 tab === t.id
-                  ? "border-indigo-600 font-semibold text-indigo-700 dark:text-indigo-300"
+                  ? "border-slate-900 font-semibold text-slate-900 dark:border-slate-100 dark:text-slate-100"
                   : "border-transparent text-slate-600 hover:text-slate-900 dark:text-slate-400"
               }`}
             >

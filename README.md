@@ -374,6 +374,9 @@ All code in this repository was written from scratch during the event. Work star
   on the machine, likely root causes, ordered maintenance actions and how to confirm the
   fix from the same measurements, with an ordering note for compound faults. Static
   engineering guidance labelled as such, with tests.
+- Industrial monochrome restyle (D-80): slate chrome with near-black actions (inverted
+  in dark mode); blue reserved for links and the leading probability bar; status colors
+  unchanged. Verified in the browser in both themes.
 
 ## Benchmark results (simulated)
 

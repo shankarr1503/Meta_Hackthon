@@ -190,7 +190,7 @@ export default function LiveInvestigationView({
           <button
             type="button"
             onClick={() => onOpenReplay(trace)}
-            className="rounded bg-indigo-600 px-3 py-1.5 font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+            className="rounded bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
           >
             Open full replay
           </button>

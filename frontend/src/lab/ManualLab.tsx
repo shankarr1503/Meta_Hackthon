@@ -161,7 +161,7 @@ export default function ManualLab() {
                 </span>
                 <input
                   type="range"
-                  className="w-full accent-indigo-600"
+                  className="w-full accent-blue-700"
                   min={s.min}
                   max={s.max}
                   step={s.step}

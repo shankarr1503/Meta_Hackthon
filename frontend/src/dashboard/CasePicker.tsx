@@ -83,13 +83,13 @@ export default function CasePicker({
               type="button"
               disabled={busy || metaUnavailable}
               onClick={() => onRun(c, planner, seed)}
-              className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              className="rounded bg-slate-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
             >
               Investigate {c.title}
             </button>
           </li>
         ))}
-        <li className="flex flex-col justify-between gap-3 rounded-lg border border-dashed border-indigo-400 bg-indigo-50/60 p-4 dark:border-indigo-700 dark:bg-indigo-950/40">
+        <li className="flex flex-col justify-between gap-3 rounded-lg border border-dashed border-slate-400 bg-slate-100/60 p-4 dark:border-slate-600 dark:bg-slate-800/40">
           <div>
             <h3 className="font-semibold">Unseen machine</h3>
             <p className="font-mono text-xs text-slate-500">fresh-{machineSeed}</p>
@@ -119,7 +119,7 @@ export default function CasePicker({
               type="button"
               disabled={busy || metaUnavailable}
               onClick={() => onRunFresh(machineSeed, planner, seed)}
-              className="rounded bg-indigo-600 px-3 py-1.5 font-medium text-white hover:bg-indigo-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              className="rounded bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
             >
               Investigate unseen machine
             </button>
@@ -139,7 +139,7 @@ export default function CasePicker({
               <li key={r.investigation_id} className="flex items-center justify-between gap-3 py-1.5">
                 <span>
                   {r.demo && (
-                    <span className="mr-2 rounded bg-indigo-100 px-1.5 text-xs text-indigo-800 dark:bg-indigo-900 dark:text-indigo-100">
+                    <span className="mr-2 rounded bg-slate-200 px-1.5 text-xs text-slate-700 dark:bg-slate-700 dark:text-slate-200">
                       demo
                     </span>
                   )}

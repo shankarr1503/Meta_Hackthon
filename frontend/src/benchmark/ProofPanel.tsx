@@ -118,7 +118,7 @@ export default function ProofPanel({ report }: { report: ProofReport }) {
         <p>Accuracy uses Wilson intervals; cost intervals resample paired machines within each condition.</p>
         <p className="mt-2 break-all font-mono text-xs">Frozen plan SHA-256: {report.plan_sha256}</p>
       </details>
-      <a className="mt-4 inline-block text-sm text-indigo-700 underline dark:text-indigo-300" href="/api/proof/download" download>
+      <a className="mt-4 inline-block text-sm text-blue-700 underline dark:text-blue-400" href="/api/proof/download" download>
         Download all results and model evidence (JSON)
       </a>
     </Panel>

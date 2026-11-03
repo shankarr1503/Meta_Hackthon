@@ -349,3 +349,10 @@ A full code review on 2 November found the issues below; each fix ships with tes
   call and changes no trace, schema or probability. A diagnosed-component highlight in
   the 3D twin was considered and deferred: it would touch three views and need visual
   re-verification across themes and widths on the eve of submission.
+- **D-80 · 3 Nov 2026 · Industrial monochrome restyle.** The template-default indigo
+  accent is replaced everywhere: chrome (buttons, active tab, status chip, diagnosis
+  border, badges, focus rings) is now slate monochrome — near-black actions in light
+  mode, inverted in dark mode — and one deep blue is reserved for data and affordances
+  (links, the leading probability bar, the lab slider). Status colors (amber simulated
+  badge, emerald rise, red errors) are unchanged. No layout, text or behaviour change;
+  verified in the browser in both themes.

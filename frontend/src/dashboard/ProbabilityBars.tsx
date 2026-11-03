@@ -25,7 +25,7 @@ export default function ProbabilityBars({ probabilities }: { probabilities: Prob
             >
               <span
                 className={`absolute inset-y-0 left-0 rounded transition-[width] duration-700 ${
-                  leading ? "bg-indigo-600 dark:bg-indigo-400" : "bg-slate-400 dark:bg-slate-500"
+                  leading ? "bg-blue-700 dark:bg-blue-400" : "bg-slate-400 dark:bg-slate-500"
                 }`}
                 style={{ width: `${(p * 100).toFixed(2)}%` }}
               />

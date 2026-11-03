@@ -3,7 +3,7 @@ import { frameLabel } from "../state/player";
 
 const BUTTON =
   "rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-100 disabled:opacity-40 " +
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 " +
   "dark:border-slate-700 dark:hover:bg-slate-800";
 
 export default function PlayerControls({ player }: { player: Player }) {

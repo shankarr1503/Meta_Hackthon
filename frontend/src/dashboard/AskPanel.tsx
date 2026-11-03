@@ -80,7 +80,7 @@ export default function AskPanel({ investigationId, metaConfigured }: Props) {
               <button
                 type="submit"
                 disabled={busy || question.trim().length < MIN_CHARS}
-                className="rounded bg-indigo-600 px-3 py-1.5 font-medium text-white hover:bg-indigo-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                className="rounded bg-slate-900 px-3 py-1.5 font-medium text-white hover:bg-slate-700 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
               >
                 Ask
               </button>
@@ -93,7 +93,7 @@ export default function AskPanel({ investigationId, metaConfigured }: Props) {
                   type="button"
                   disabled={busy}
                   onClick={() => void ask(suggestion)}
-                  className="rounded-full border border-indigo-300 px-3 py-1 text-xs text-indigo-800 hover:bg-indigo-50 disabled:opacity-40 dark:border-indigo-700 dark:text-indigo-200 dark:hover:bg-indigo-950"
+                  className="rounded-full border border-slate-300 px-3 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:opacity-40 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   {suggestion}
                 </button>
