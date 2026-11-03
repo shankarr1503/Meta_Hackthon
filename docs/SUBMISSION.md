@@ -118,8 +118,16 @@ Third-party listings of this hackathon give the weighted criteria below (checked
 
 ## What's next
 
-More rigs and independent recordings, calibrated amplitude units, temperature channels,
-and letting the model request new physical test points on a connected rig.
+- **Visual intake.** Upload a photo, thermal image or short video of the machine; a
+  multimodal Meta model reads what is visible — coupling wear, leaked grease, a missing
+  balance weight, a hot bearing housing — and turns it into starting hypotheses and
+  recommended checks. It would feed the same Bayesian loop as a prior, never as a
+  measurement, keep the 5% floor so a misleading photo cannot rule out the truth, and
+  ship only with a labelled-image validation study, the same bar as the recordings path.
+- **More rigs and independent recordings**, calibrated amplitude units and temperature
+  channels; a pre-registered Meta study on the second rig already checked exploratorily.
+- **Closing the loop on hardware:** letting the model request new physical test points
+  on a connected rig, so the investigation it plans runs on the machine itself.
 
 ## Materials the owner must supply
 
