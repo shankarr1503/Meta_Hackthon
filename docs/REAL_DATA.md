@@ -101,6 +101,29 @@ replies and scores are preserved unchanged in `backend/data/real/studies/real-1/
 summarised in the report's `superseded_study` field. real-2 changed only the speed
 handling; the split, features, classes and system prompt are the same.
 
+## Exploratory second-rig check
+
+To see whether the measured feature family transfers to an unrelated apparatus, we ran
+the same features (per-channel RMS, crest factor, kurtosis, 1x/2x/3x shaft harmonics with
+per-recording speed estimation) on a second public dataset: Amanda Lucatto Marra and
+Claudio Luiz Marte (2024), *Vibration data of rotating machines subjected to different
+failure conditions*, Zenodo, DOI
+[10.5281/zenodo.10846291](https://zenodo.org/records/10846291), CC BY 4.0. Four
+accelerometer channels at 6 kHz, shaft at a nominal 30 Hz; recordings are fetched
+file-by-file from the authors' repository at a pinned commit and hashed.
+
+For four conditions (normal, unbalance, horizontal misalignment, bearing defect), the
+first five recordings are references and the next five are held out; a nearest-centroid
+baseline on standardized log features labelled **20/20** held-out segments correctly
+(`backend/results/second-rig-check.json`, re-checked by a test from its stored features).
+
+This is an exploratory robustness check, not a pre-registered study: the source's 50
+recordings per condition are consecutive segments of one session, so held-out segments
+are correlated with the references, and the Meta model was not evaluated on this rig.
+It shows the feature pipeline is not tuned to one apparatus; it does not add independent
+trials. Reproduce with `python scripts/second_rig_check.py` from `backend/` (downloads
+about 155 MB into the Git-ignored `backend/data/real/second_rig/`).
+
 ## Reproduce
 
 ```sh

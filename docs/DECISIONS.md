@@ -328,3 +328,14 @@ A full code review on 2 November found the issues below; each fix ships with tes
   evidence record the model saw (numeric fields, numbers inside text fields, probabilities
   as percentages; display rounding allowed). A test re-runs that check offline. The audit is
   a spot check that numbers come from the record; it cannot judge whether a sentence is true.
+- **D-78 · 3 Nov 2026 · Exploratory second-rig check, kept out of the scored evidence.**
+  `scripts/second_rig_check.py` applies the measured feature family to a second public
+  rig dataset (Marra & Marte 2024, Zenodo, DOI 10.5281/zenodo.10846291, CC BY 4.0),
+  downloaded file-by-file at a pinned commit with per-file SHA-256. Five references and
+  five held-out segments per condition (normal, unbalance, horizontal misalignment,
+  bearing defect); a nearest-centroid baseline scored 20/20. Decision: because the
+  source's recordings per condition are consecutive segments of one session, the result
+  is labelled exploratory everywhere it is mentioned, is not pre-registered, makes no
+  Meta call, and does not join the pre-registered real-data studies. The report
+  (`backend/results/second-rig-check.json`) is committed and re-checked by a test from
+  its stored features; raw downloads stay Git-ignored.

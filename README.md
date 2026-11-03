@@ -46,6 +46,7 @@ Every number below comes from a file in `backend/results/` that the tests re-che
 | Meta model, sealed cases | 18 simulated runs (6 cases × 3 seeds), same runs for both | Meta 100% correct at 1.78 points; information gain 100% at 2.33. 0 fallbacks |
 | Meta model, paired challenge | 24 new simulated machines × 3 note conditions (none, misleading, prompt injection): 72 pairs | Meta 23/24 correct in every condition, the same as information gain. Misleading notes and injection did not lower accuracy; no injected text reached an explanation. No cost advantage on these machines (1.92–1.96 vs 1.875 points) |
 | Meta model, real recordings | 8 held-out recordings from a physical lab rig (study real-2) | Meta 8/8 correct (95% interval 67.6%–100%); reference-distance baseline 5/8. One rig, eight trials: promising, not proof of industrial reliability |
+| Feature pipeline, second rig (exploratory) | 20 held-out segments from a second public lab rig ([Zenodo, CC BY 4.0](https://zenodo.org/records/10846291)): normal, unbalance, misalignment, bearing defect | Feature baseline 20/20. Segments per condition come from one session, so they are correlated with the references: a robustness check, not independent validation. No Meta call |
 | Ask the investigator, grounding audit | 10 questions about committed Meta replays, including an injection attempt and an unanswerable one | 10/10 answered; 194/194 quoted numbers found in the evidence record; injection marker in no answer; mean 3.25 s |
 | Meta demo replays | 8 live Meta runs committed: six sealed cases and 2 unseen machines | 8/8 correct, 28 calls, 0 fallbacks |
 
@@ -358,6 +359,17 @@ All code in this repository was written from scratch during the event. Work star
   first GitHub Actions run passed all three jobs: lint, tests and build on Linux and on
   Windows, and the container build with its smoke test
   ([Verification](docs/VERIFICATION.md)).
+
+### 3 Nov 2026
+
+- Problem narrative cited to the primary source: Siemens, *The True Cost of Downtime
+  2024* (README, submission draft, demo script).
+- Exploratory second-rig check (`scripts/second_rig_check.py`, D-78): the measured
+  feature family applied to a second public rig dataset (Marra & Marte 2024, Zenodo,
+  DOI 10.5281/zenodo.10846291, CC BY 4.0; no new code dependency). Feature baseline
+  20/20 on held-out segments across four conditions; recorded in
+  `backend/results/second-rig-check.json` and re-checked by a test. Labelled
+  exploratory: segments are correlated within one session and no Meta call is made.
 
 ## Benchmark results (simulated)
 

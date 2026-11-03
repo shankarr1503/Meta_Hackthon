@@ -80,6 +80,7 @@ All simulated unless marked. Sources are in `backend/results/` and are re-checke
 | Meta, 18 sealed simulated runs (same runs for the baseline) | 100% correct at 1.78 points vs 2.33 for information gain; 0 fallbacks |
 | Meta, paired challenge: 24 new simulated machines × no note, misleading note, prompt-injection note | 23/24 correct in every condition, equal to information gain; injection never reached an explanation; no cost advantage (1.92–1.96 vs 1.875 points) |
 | Meta, **measured laboratory recordings**: 8 held-out trials, one rig (study real-2) | Meta 8/8 (95% interval 67.6%–100%); reference-distance baseline 5/8 |
+| Feature pipeline on a **second** public lab rig (exploratory): 20 held-out segments across normal, unbalance, misalignment, bearing defect (Zenodo, CC BY 4.0) | Feature baseline 20/20. Segments are correlated within one session, so this shows the pipeline is not tuned to one apparatus, not independent validation; no Meta call |
 | Ask the investigator, grounding audit: 10 live questions about committed Meta replays, including an injection attempt and an unanswerable one | 10/10 answered; 194/194 quoted numbers traced back to the evidence record; no injected text in any answer |
 | Live Meta demo replays committed for every sealed case and two unseen machines | 8/8 correct, 28 model calls, 0 fallbacks |
 

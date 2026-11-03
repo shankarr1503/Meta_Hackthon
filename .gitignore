@@ -33,6 +33,7 @@ backend/results/llm_cache.json
 backend/results/proof-cache.json
 backend/results/proof-traces/
 backend/data/real/raw/
+backend/data/real/second_rig/
 
 # OS / editor
 .DS_Store
