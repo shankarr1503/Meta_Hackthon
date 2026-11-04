@@ -223,8 +223,9 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
     });
   };
 
-  /** A 3-second synthetic clip (bright point oscillating at ~5 Hz), generated
-   * in the browser so the view is never a dead end without a recording. */
+  /** A 5-second synthetic clip (bright point oscillating at ~5 Hz), generated
+   * in the browser so the view is never a dead end without a recording. Long
+   * enough to clear the 64-frame minimum even where frames arrive slowly. */
   const loadSample = async () => {
     setError(null);
     try {
@@ -262,7 +263,7 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
           context.beginPath();
           context.arc(160, y, 14, 0, 7);
           context.fill();
-          if (t < 3) requestAnimationFrame(draw);
+          if (t < 5) requestAnimationFrame(draw);
           else resolve();
         };
         draw();
