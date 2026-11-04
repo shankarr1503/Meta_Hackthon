@@ -4,6 +4,12 @@
 what it expects to see before every result, explains the diagnosis, and answers your
 questions from the evidence.**
 
+**Demo video (2:43, silent with burned-in captions):**
+[Watch the FailureLab AI demo](https://github.com/shankarr1503/Meta_Hackthon/releases/download/demo-2026-11-04/failurelab-demo-3min.webm)
+([narration timings (SRT)](https://github.com/shankarr1503/Meta_Hackthon/releases/download/demo-2026-11-04/failurelab-demo-3min.srt)).
+**Run it locally:** `python scripts/tasks.py serve`, then open http://127.0.0.1:8000 —
+or `docker build -t failurelab .` and `docker run -p 8000:8000 failurelab`.
+
 When a rotating machine starts to vibrate, an engineer has to work out why: imbalance,
 misalignment, a failing bearing, or several at once. Each test costs time and machine
 downtime — losses that Siemens' survey
