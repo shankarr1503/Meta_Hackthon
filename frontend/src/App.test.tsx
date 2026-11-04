@@ -317,6 +317,15 @@ describe("App live investigations", () => {
     expect(await screen.findByRole("button", { name: "Investigate Pump drive A" })).toBeVisible();
   });
 
+  it("shows the Simulated honesty label once, not once per nested view", async () => {
+    const { send } = await startRun();
+    send(2);
+    expect(screen.getAllByText("Simulated")).toHaveLength(1);
+    send(Infinity, 2);
+    fireEvent.click(screen.getByRole("button", { name: "Open full replay" }));
+    expect(screen.getAllByText("Simulated")).toHaveLength(1);
+  });
+
   it("lists saved replays without revealing their diagnosis", async () => {
     stubBackend(false, [
       {

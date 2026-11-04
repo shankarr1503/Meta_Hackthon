@@ -193,7 +193,9 @@ export default function App() {
               <span className="rounded-sm border border-amber-500 bg-amber-50 px-2 py-1 text-xs font-semibold uppercase text-amber-800 dark:bg-amber-950 dark:text-amber-200">
                 Experimental · your video
               </span>
-            ) : (
+            ) : tab === "investigate" && (live || trace) ? null : (
+              // An open investigation carries its own Simulated label; repeating
+              // the header chip as well showed the same badge two or three times.
               <SimulatedLabel />
             )}
           </div>

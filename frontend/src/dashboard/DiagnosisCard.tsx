@@ -1,6 +1,5 @@
 import type { Diagnosis } from "../api/types";
 import { hypothesisName, probability } from "../format";
-import SimulatedLabel from "../SimulatedLabel";
 import ActionPlan from "./ActionPlan";
 
 const STOP_REASONS: Record<string, string> = {
@@ -26,7 +25,6 @@ export default function DiagnosisCard({
           Diagnosis: {hypothesisName(diagnosis.top)}{" "}
           <span className="font-mono">{probability(diagnosis.probability)}</span>
         </h3>
-        <SimulatedLabel />
       </header>
       <p className="text-sm">
         {diagnosis.confident ? "Confident (at least 90%)." : "Not confident: below 90%."}{" "}
