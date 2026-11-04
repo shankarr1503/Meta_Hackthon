@@ -29,7 +29,7 @@ backend/replays/*
 !backend/replays/.gitkeep
 
 # Cached Meta model responses from the benchmark
-backend/results/llm_cache.json
+# llm_cache.json is committed: it makes the sealed-case Meta benchmark reproducible offline
 backend/results/proof-cache.json
 backend/results/proof-traces/
 backend/data/real/raw/
