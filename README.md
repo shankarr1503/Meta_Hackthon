@@ -397,7 +397,9 @@ All code in this repository was written from scratch during the event. Work star
 Measured again on 1 Nov 2026 with `python scripts/tasks.py benchmark` (150 runs per planner:
 6 sealed cases × 5 seeds + 120 generated cases; budget 8 points; stop at 90%). All cases
 are simulated with the same model family the engine assumes, so these numbers show the
-method works when the model is structurally right, not real-world accuracy.
+method works when the model is structurally right, not real-world accuracy. The Meta
+model's stated expectations are shown beside the engine's predictions so they can be
+inspected, but they are not numerically scored.
 
 | Planner | Accuracy | Mean cost (points) | Mean experiments | Reached 90% | Runtime |
 |---|---|---|---|---|---|
