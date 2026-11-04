@@ -118,6 +118,29 @@ describe("App", () => {
     );
   });
 
+  it("starts the unseen machine on a fresh seed and warns when a seed was already run", async () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.5);
+    stubBackend(true, [
+      {
+        investigation_id: "fresh-4242-meta-0-20261102132418",
+        case_id: "fresh-4242",
+        planner: "meta",
+        seed: 0,
+        top: "healthy",
+        probability: 0.99,
+        experiments: 1,
+        cost: 1,
+        demo: true,
+      },
+    ]);
+    render(<App />);
+    const machineSeed = await screen.findByLabelText("Machine seed");
+    expect(machineSeed).toHaveValue(5000);
+    fireEvent.change(machineSeed, { target: { value: "4242" } });
+    expect(screen.getByText(/no longer unseen/)).toBeInTheDocument();
+    vi.restoreAllMocks();
+  });
+
   it("reports when a fresh machine cannot be looked up", async () => {
     stubBackend(true);
     render(<App />);

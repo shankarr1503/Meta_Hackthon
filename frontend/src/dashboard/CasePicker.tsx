@@ -29,8 +29,13 @@ export default function CasePicker({
 }: Props) {
   const [planner, setPlanner] = useState<PlannerName>(metaConfigured ? "meta" : "info_gain");
   const [seed, setSeed] = useState(0);
-  const [machineSeed, setMachineSeed] = useState(4242);
+  // A random starting seed: a fixed default would already have a saved replay,
+  // so the "unseen" machine would not be unseen.
+  const [machineSeed, setMachineSeed] = useState(() =>
+    Math.floor(Math.random() * (MAX_MACHINE_SEED + 1)),
+  );
   const metaUnavailable = planner === "meta" && !metaConfigured;
+  const seedSeen = replays.some((r) => r.investigation_id.startsWith(`fresh-${machineSeed}-`));
 
   return (
     <div className="space-y-6">
@@ -122,6 +127,12 @@ export default function CasePicker({
               A new simulated machine generated from the seed alone, with no maintenance history:
               the investigator must find its fault from measurements.
             </p>
+            {seedSeen && (
+              <p role="note" className="mt-1 text-sm text-amber-700 dark:text-amber-400">
+                Seed {machineSeed} already has a saved investigation, so it is no longer unseen —
+                pick another seed for a machine nobody has run.
+              </p>
+            )}
           </div>
           <div className="flex flex-wrap items-end gap-3 text-sm">
             <label className="flex flex-col gap-1">
