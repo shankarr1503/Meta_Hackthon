@@ -23,17 +23,35 @@ export default function Shaft({ state, seed }: { state: TwinState; seed: number 
     if (spin.current) spin.current.rotation.x = angle.current;
   });
 
+  const bolts = [0, 1, 2, 3, 4, 5].map((i) => {
+    const a = (i / 6) * 2 * Math.PI;
+    return { y: 0.26 * Math.cos(a), z: 0.26 * Math.sin(a) };
+  });
+
   return (
     <group ref={whirl}>
       <group ref={spin}>
-        <mesh rotation={[0, 0, Math.PI / 2]}>
+        <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
           <cylinderGeometry args={[0.12, 0.12, SHAFT_LENGTH, 32]} />
-          <meshStandardMaterial color="#94a3b8" metalness={0.6} roughness={0.35} />
+          <meshStandardMaterial color="#cbd5e1" metalness={1} roughness={0.22} />
         </mesh>
-        <mesh rotation={[0, 0, Math.PI / 2]}>
+        <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
           <cylinderGeometry args={[0.38, 0.38, 0.18, 48]} />
-          <meshStandardMaterial color="#475569" metalness={0.4} roughness={0.5} />
+          <meshPhysicalMaterial
+            color="#64748b"
+            metalness={0.9}
+            roughness={0.32}
+            clearcoat={0.5}
+            clearcoatRoughness={0.25}
+          />
         </mesh>
+        {/* Coupling bolts, so the disc reads as a bolted coupling, not a plain puck. */}
+        {bolts.map((b, i) => (
+          <mesh key={i} position={[0.1, b.y, b.z]} rotation={[0, 0, Math.PI / 2]} castShadow>
+            <cylinderGeometry args={[0.035, 0.035, 0.05, 12]} />
+            <meshStandardMaterial color="#334155" metalness={1} roughness={0.3} />
+          </mesh>
+        ))}
         {/* Marker so the spin is visible. */}
         <mesh position={[0, 0.38, 0]}>
           <boxGeometry args={[0.2, 0.06, 0.06]} />

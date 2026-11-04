@@ -54,7 +54,8 @@ export default function TwinPanel({ reading, seed }: { reading: TwinReading; see
         )}
       </div>
       <figcaption className="text-xs text-slate-600 dark:text-slate-400">
-        Simulated twin at {rpm(reading.rpm)} (spin shown {SPIN_SLOWDOWN}× slower),{" "}
+        Drag to orbit · scroll or pinch to zoom. Simulated twin at {rpm(reading.rpm)} (spin shown{" "}
+        {SPIN_SLOWDOWN}× slower),{" "}
         {newtons(reading.load_n)} load (blue arrow).{" "}
         {m ? (
           <>

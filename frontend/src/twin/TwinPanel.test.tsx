@@ -31,4 +31,12 @@ describe("TwinPanel", () => {
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     vi.restoreAllMocks();
   });
+
+  it("tells the user how to orbit and zoom the twin", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    render(<TwinPanel reading={reading} seed={0} />);
+    expect(await screen.findByText(/Drag to orbit/)).toBeVisible();
+    expect(screen.getByText(/scroll or pinch to zoom/)).toBeVisible();
+    vi.restoreAllMocks();
+  });
 });
