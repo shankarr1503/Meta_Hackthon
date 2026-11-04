@@ -43,8 +43,8 @@ Every number below comes from a file in `backend/results/` that the tests re-che
 | Evidence | Data | Result |
 |---|---|---|
 | Rule-planner benchmark | 150 simulated runs per planner (6 sealed cases × 5 seeds + 120 generated machines) | Information gain 99.3% correct at 2.15 experiment points; fixed sweep 96.0% at 2.99; random 98.0% at 3.90 |
-| Meta model, sealed cases | 18 simulated runs (6 cases × 3 seeds), same runs for both | Meta 100% correct at 1.78 points; information gain 100% at 2.33. 0 fallbacks |
-| Meta model, paired challenge | 24 new simulated machines × 3 note conditions (none, misleading, prompt injection): 72 pairs | Meta 23/24 correct in every condition, the same as information gain. Misleading notes and injection did not lower accuracy; no injected text reached an explanation. No cost advantage on these machines (1.92–1.96 vs 1.875 points) |
+| Meta model, sealed cases | 18 simulated runs (6 cases × 3 seeds), same runs for both | Meta 18/18 correct at 1.78 points (95% interval roughly 82–100%; small sample); information gain 18/18 at 2.33. 0 fallbacks. Aggregate result only — per-run model replies are not committed, so use the 8 committed demo replays below for per-run verification |
+| Meta model, paired challenge | 24 new simulated machines × 3 note conditions (none, misleading, prompt injection): 24 machines, not 72 independent runs | Meta 23/24 machines correct in every condition, the same as information gain; the one failure is the same machine in all three conditions. Misleading notes and injection did not lower accuracy; no injected text reached an explanation. No cost advantage on these machines (1.92–1.96 vs 1.875 points), at roughly 40× the latency |
 | Meta model, real recordings | 8 held-out recordings from a physical lab rig (study real-2) | Meta 8/8 correct (95% interval 67.6%–100%); reference-distance baseline 5/8. One rig, eight trials: promising, not proof of industrial reliability |
 | Feature pipeline, second rig (exploratory) | 20 held-out segments from a second public lab rig ([Zenodo, CC BY 4.0](https://zenodo.org/records/10846291)): normal, unbalance, misalignment, bearing defect | Feature baseline 20/20. Segments per condition come from one session, so they are correlated with the references: a robustness check, not independent validation. No Meta call |
 | Ask the investigator, grounding audit | 10 questions about committed Meta replays, including an injection attempt and an unanswerable one | 10/10 answered; 194/194 quoted numbers found in the evidence record; injection marker in no answer; mean 3.25 s |
@@ -163,7 +163,7 @@ says which mode the server is in.
 | 2 | Same run, prediction check table | Each hypothesis's predicted 1x, 2x and temperature next to the measurement; probabilities before → after; the engine, not the model, moved them. |
 | 3 | Diagnosis → Ask the investigator | Ask "Why not imbalance?" The answer quotes the readings and operating points that ruled it out (in the saved replay: the 2x at 1,500 RPM under load and the missing critical-speed peak at 3,300 RPM). Compare with the experiment log: every number is there. |
 | 4 | Unseen machine, any seed | A machine generated from the seed, unknown to everyone. Watch the same loop find it; try the baseline planners for contrast. |
-| 5 | Benchmark and Real recordings | 150 simulated runs per planner; the 72-pair challenge with intervals and one retained confident error; 8/8 vs 5/8 on real recordings from one rig, with the photograph and attribution. |
+| 5 | Benchmark and Real recordings | 150 simulated runs per planner; the 24-machine, three-condition challenge with intervals and one retained confident error; 8/8 vs 5/8 on real recordings from one rig, with the photograph and attribution. |
 
 Plans and records: [Product features](docs/PRODUCT_FEATURES.md) ·
 [Technical design](docs/TECHNICAL_DESIGN.md) · [Decisions](docs/DECISIONS.md) ·
@@ -419,7 +419,7 @@ suite; "not established" means the data does not support the target.
 |---|---|---|---|
 | Accuracy on 120 unseen simulated cases | ≥ 95% | `info_gain` 99.2%, `sweep` 95.0%, `random` 98.3% | Yes (`info_gain`) |
 | Cost, information gain vs fixed sweep | Lower at equal accuracy | 2.15 vs 2.99 points, accuracy 99.3% vs 96.0% | Not established at equal accuracy |
-| Cost, Meta model vs information gain on cases with notes | Equal or lower | 1.78 vs 2.33 points on the 18 sealed runs; 1.92–1.96 vs 1.875 on the 72-pair challenge (paired intervals include zero) | Not established in general |
+| Cost, Meta model vs information gain on cases with notes | Equal or lower | 1.78 vs 2.33 points on the 18 sealed runs; 1.92–1.96 vs 1.875 on the 24-machine challenge (paired intervals include zero) | Not established in general |
 | Accuracy when the system says ≥ 90% | ≥ 90% | `info_gain` 99.3%, `sweep` 98.6%, `random` 100% | Yes |
 | Meta model fallbacks | < 5% of calls | 0 fallbacks in about 65 stages (53 new calls) and in 273 stages (209 new calls); identical prompts reuse a recorded reply | Yes on these samples |
 | Investigation time without the model | < 2 s | Under 2 s (`test_investigation_is_fast`; `info_gain` on sealed cases 0.1–0.6 s, seed 0) | Yes |

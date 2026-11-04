@@ -73,7 +73,7 @@ Fiber), all written during the hackathon. The Meta Model API is called through a
 OpenAI-compatible chat-completions adapter with timeouts, length caps and validation.
 Investigations stream live to the dashboard as Server-Sent Events. Studies are
 pre-registered: a frozen plan (hashes of code, prompts and splits) is written before the
-first model call. 336 backend and 94 frontend tests, an architecture test that blocks any
+first model call. 336 backend and 110 frontend tests, an architecture test that blocks any
 path from the investigator to the hidden fault, a CI workflow that passes on GitHub for
 Linux and Windows plus a container build, and a one-command Docker image with a Render
 blueprint.
@@ -85,8 +85,8 @@ All simulated unless marked. Sources are in `backend/results/` and are re-checke
 | Evidence | Result |
 |---|---|
 | Rule planners, 150 simulated runs each | Information gain 99.3% correct at 2.15 experiment points; fixed sweep 96.0% at 2.99; random 98.0% at 3.90 |
-| Meta, 18 sealed simulated runs (same runs for the baseline) | 100% correct at 1.78 points vs 2.33 for information gain; 0 fallbacks |
-| Meta, paired challenge: 24 new simulated machines × no note, misleading note, prompt-injection note | 23/24 correct in every condition, equal to information gain; injection never reached an explanation; no cost advantage (1.92–1.96 vs 1.875 points) |
+| Meta, 18 sealed simulated runs (same runs for the baseline) | 18/18 correct at 1.78 points vs 2.33 for information gain (95% interval roughly 82–100%; aggregate only, per-run replies not committed — see the committed demo replays for per-run evidence); 0 fallbacks |
+| Meta, paired challenge: 24 new simulated machines × no note, misleading note, prompt-injection note | 23/24 machines correct in every condition, equal to information gain; the one failure repeats across conditions. Injection never reached an explanation; no cost advantage (1.92–1.96 vs 1.875 points), at roughly 40× the latency |
 | Meta, **measured laboratory recordings**: 8 held-out trials, one rig (study real-2) | Meta 8/8 (95% interval 67.6%–100%); reference-distance baseline 5/8 |
 | Feature pipeline on a **second** public lab rig (exploratory): 20 held-out segments across normal, unbalance, misalignment, bearing defect (Zenodo, CC BY 4.0) | Feature baseline 20/20. Segments are correlated within one session, so this shows the pipeline is not tuned to one apparatus, not independent validation; no Meta call |
 | Ask the investigator, grounding audit: 10 live questions about committed Meta replays, including an injection attempt and an unanswerable one | 10/10 answered; 194/194 quoted numbers traced back to the evidence record; no injected text in any answer |
@@ -110,7 +110,7 @@ whether it works" (checked again 3 November 2026). Against those words:
 |---|---|
 | Creativity | The model is the experimenter, not a summariser: it designs the next test, commits to a prediction under every hypothesis **before** the result, and can be cross-examined afterwards. Unseen machines by seed mean judges can hand it a fault nobody has seen. |
 | Technical ambition | A vectorised physics twin, a 990-particle Bayesian engine ranking experiments by information per cost, an architecture test that walls the investigator off from the hidden truth, and pre-registered studies — including on real accelerometer recordings. |
-| Whether it works | Every claim is a committed file tests re-check: 100% on 18 sealed runs at lower cost, 23/24 on a 72-pair challenge with misleading and injected notes, 8/8 on held-out real recordings vs 5/8 baseline, 10/10 grounded answers with all 194 quoted numbers traced. CI green on GitHub; one command or one container to run it. |
+| Whether it works | Every claim is a committed file tests re-check: 18/18 on sealed runs (small sample) at lower cost, 23/24 machines in each challenge condition with misleading and injected notes, 8/8 on held-out real recordings vs 5/8 baseline, 10/10 grounded answers with all 194 quoted numbers traced. CI green on GitHub; one command or one container to run it. |
 
 Third-party listings of this hackathon give the weighted criteria below (checked
 2 November 2026); confirm them in the participant portal.

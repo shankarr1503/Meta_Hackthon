@@ -11,7 +11,7 @@ Everything the repository can verify on its own is done and recorded in
 [VERIFICATION.md](VERIFICATION.md):
 
 1. Meta model configured locally (Git-ignored `backend/.env`); live smoke test, 18-run
-   sealed benchmark, 72-pair challenge and real-data study real-2 complete.
+   sealed benchmark, 24-machine challenge and real-data study real-2 complete.
 2. Ask the investigator (D-75) built, tested with a fake model and checked live: two
    answers about the saved `case-r2` replay quoted the recorded readings correctly, and
    one more was asked through the production dashboard by the browser check.
@@ -31,7 +31,7 @@ Everything the repository can verify on its own is done and recorded in
    shared API client for the Real recordings view, enforced rule-benchmark budget
    (re-timed at 42.1 s total), transitive licence audit
    (THIRD_PARTY_LICENSES.md), and refreshed product, design, API, assumptions and
-   submission docs. Full check green: 336 backend and 94 frontend tests.
+   submission docs. Full check green: 336 backend and 110 frontend tests.
 
 ## Owner and external items
 
@@ -68,9 +68,10 @@ verify the working tree only.
 ## Proof challenge complete
 
 The 24-machine, three-condition challenge and evidence panel are implemented. All 72
-paired investigations are retained and reproduce offline. Meta matched the baseline at
-23/24 correct per condition with zero fallbacks, but did not improve experiment cost on
-this sample. Identical prompts reuse a recorded reply, so the injection-note prior was
+paired investigations (24 machines × 3 note conditions, not 72 independent runs) are
+retained and reproduce offline. Meta matched the baseline at 23/24 machines correct per
+condition with zero fallbacks, but did not improve experiment cost on this sample and
+ran at roughly 40× the latency. Identical prompts reuse a recorded reply, so the injection-note prior was
 effectively sampled once. See PROOF_OF_CONCEPT.md before making performance claims.
 
 ## Real machine examples complete
