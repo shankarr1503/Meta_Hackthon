@@ -36,6 +36,7 @@ async function main() {
       await page.goto(BASE_URL);
       await page.getByRole('button', { name: 'Investigate Compressor coupling', exact: true }).waitFor();
       await capture('cases');
+      await page.getByRole('button', { name: /Show all \d+ replays/ }).click().catch(() => {});
       await page.getByRole('button', { name: 'Open replay case-b6-info_gain-0', exact: true }).click();
       await page.getByRole('group', { name: 'Player controls' }).waitFor();
       if (await page.getByRole('heading', { name: /^Diagnosis:/ }).count()) {
@@ -102,6 +103,7 @@ async function main() {
       Object.defineProperty(window, 'WebGLRenderingContext', { value: undefined });
     });
     await fallback.goto(BASE_URL);
+    await fallback.getByRole('button', { name: /Show all \d+ replays/ }).click().catch(() => {});
     await fallback.getByRole('button', { name: 'Open replay case-b6-info_gain-0', exact: true }).click();
     await fallback.getByText('3D view unavailable (no WebGL).').waitFor();
     await fallback.getByRole('button', { name: 'Manual lab', exact: true }).focus();

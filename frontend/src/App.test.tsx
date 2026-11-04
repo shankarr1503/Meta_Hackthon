@@ -150,6 +150,30 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: "Investigate unseen machine" })).toBeEnabled();
   });
 
+  it("caps the saved-replay list until asked, and filters it", async () => {
+    const many: TraceSummary[] = Array.from({ length: 10 }, (_, i) => ({
+      investigation_id: `case-x1-info_gain-${i}`,
+      case_id: "case-x1",
+      planner: "info_gain",
+      seed: i,
+      top: "healthy",
+      probability: 0.9,
+      experiments: 1,
+      cost: 1,
+      demo: false,
+    }));
+    stubBackend(false, many);
+    render(<App />);
+    expect(await screen.findAllByRole("button", { name: /^Open replay / })).toHaveLength(8);
+    fireEvent.change(screen.getByLabelText("Filter saved replays"), {
+      target: { value: "gain-9" },
+    });
+    expect(screen.getAllByRole("button", { name: /^Open replay / })).toHaveLength(1);
+    fireEvent.change(screen.getByLabelText("Filter saved replays"), { target: { value: "" } });
+    fireEvent.click(screen.getByRole("button", { name: /Show all/ }));
+    expect(screen.getAllByRole("button", { name: /^Open replay / })).toHaveLength(10);
+  });
+
   it("shows the configured Meta model in the header", async () => {
     const fetchMock = stubBackend(true);
     fetchMock.mockImplementation((url: string) =>
