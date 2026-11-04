@@ -4,7 +4,9 @@ import { PMREMGenerator } from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 import Bearing from "./Bearing";
+import Guard from "./Guard";
 import LoadArrow from "./LoadArrow";
+import Motor from "./Motor";
 import type { TwinState } from "./mapping";
 import { clampOrbit, orbitCameraPosition, type OrbitState } from "./orbit";
 import Shaft, { SHAFT_LENGTH } from "./Shaft";
@@ -26,9 +28,9 @@ function Environment() {
 function CameraRig() {
   const camera = useThree((s) => s.camera);
   const gl = useThree((s) => s.gl);
-  // Matches the previous fixed camera at [2.2, 1.4, 3.4].
-  const target = useRef<OrbitState>({ theta: 0.57, phi: 1.24, radius: 4.28 });
-  const current = useRef<OrbitState>({ theta: 0.57, phi: 1.24, radius: 4.28 });
+  // Near the previous fixed camera, pulled back to frame the motor as well.
+  const target = useRef<OrbitState>({ theta: 0.57, phi: 1.24, radius: 4.9 });
+  const current = useRef<OrbitState>({ theta: 0.57, phi: 1.24, radius: 4.9 });
 
   useEffect(() => {
     const el = gl.domElement;
@@ -90,11 +92,11 @@ function CameraRig() {
   return null;
 }
 
-/** Machine bed the pedestals stand on; receives the contact shadows. */
+/** Machine bed the pedestals and motor stand on; receives the contact shadows. */
 function Bed() {
   return (
-    <mesh position={[0, -0.92, 0]} receiveShadow>
-      <boxGeometry args={[4.6, 0.14, 1.7]} />
+    <mesh position={[-0.4, -0.92, 0]} receiveShadow>
+      <boxGeometry args={[5.8, 0.14, 1.7]} />
       <meshStandardMaterial color="#1e293b" metalness={0.25} roughness={0.85} />
     </mesh>
   );
@@ -123,7 +125,9 @@ export default function ShaftScene({ state, seed }: { state: TwinState; seed: nu
       <directionalLight position={[-4, 2, -3]} intensity={0.5} color="#93c5fd" />
       <Environment />
       <CameraRig />
+      <Motor />
       <Shaft state={state} seed={seed} />
+      <Guard />
       <Bearing x={-SHAFT_LENGTH / 2 + 0.3} color={state.bearingColor} state={state} />
       <Bearing x={SHAFT_LENGTH / 2 - 0.3} color={state.bearingColor} state={state} />
       <LoadArrow length={state.loadArrowLength} />

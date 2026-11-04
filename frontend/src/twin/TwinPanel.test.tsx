@@ -32,6 +32,15 @@ describe("TwinPanel", () => {
     vi.restoreAllMocks();
   });
 
+  it("names the motor, guard and sensor the scene shows", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    render(<TwinPanel reading={reading} seed={0} />);
+    expect(await screen.findByText(/finned motor/)).toBeVisible();
+    expect(screen.getByText(/translucent guard/)).toBeVisible();
+    expect(screen.getByText(/sensor puck/)).toBeVisible();
+    vi.restoreAllMocks();
+  });
+
   it("tells the user how to orbit and zoom the twin", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     render(<TwinPanel reading={reading} seed={0} />);

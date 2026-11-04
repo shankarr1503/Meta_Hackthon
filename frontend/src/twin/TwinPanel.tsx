@@ -35,7 +35,7 @@ export default function TwinPanel({ reading, seed }: { reading: TwinReading; see
 
   return (
     <figure className="space-y-2">
-      <div className="h-56 w-full overflow-hidden rounded bg-slate-100 dark:bg-slate-950">
+      <div className="h-64 w-full overflow-hidden rounded bg-slate-100 dark:bg-slate-950">
         {canRender ? (
           <ErrorBoundary
             label="3D twin"
@@ -54,7 +54,8 @@ export default function TwinPanel({ reading, seed }: { reading: TwinReading; see
         )}
       </div>
       <figcaption className="text-xs text-slate-600 dark:text-slate-400">
-        Drag to orbit · scroll or pinch to zoom. Simulated twin at {rpm(reading.rpm)} (spin shown{" "}
+        Scene: finned motor at the left, translucent guard over the coupling, sensor puck on each
+        bearing. Drag to orbit · scroll or pinch to zoom. Simulated twin at {rpm(reading.rpm)} (spin shown{" "}
         {SPIN_SLOWDOWN}× slower),{" "}
         {newtons(reading.load_n)} load (blue arrow).{" "}
         {m ? (

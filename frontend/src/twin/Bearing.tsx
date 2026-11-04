@@ -33,6 +33,15 @@ export default function Bearing({
         <boxGeometry args={[0.3, 0.6, 0.5]} />
         <meshStandardMaterial color={color} metalness={0.3} roughness={0.6} />
       </mesh>
+      {/* Accelerometer puck on its stud; rides the housing shake. */}
+      <mesh position={[0, 0.31, 0]}>
+        <cylinderGeometry args={[0.03, 0.03, 0.05, 12]} />
+        <meshStandardMaterial color="#6b7280" metalness={1} roughness={0.3} />
+      </mesh>
+      <mesh position={[0, 0.38, 0]} castShadow>
+        <boxGeometry args={[0.13, 0.09, 0.13]} />
+        <meshStandardMaterial color="#111827" metalness={0.4} roughness={0.5} />
+      </mesh>
     </group>
   );
 }
