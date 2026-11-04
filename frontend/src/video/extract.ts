@@ -5,6 +5,12 @@
  * leaves the browser; the video file never does.
  */
 
+/** The one machine-speed rule (60–30,000 RPM) for video analysis and assessment. */
+export function machineRpm(text: string): number | null {
+  const rpm = Number(text);
+  return text.trim() !== "" && rpm >= 60 && rpm <= 30000 ? rpm : null;
+}
+
 export const ROI_SIZE = 32;
 export const MAX_SAMPLES = 20_000;
 export const MIN_SAMPLES = 64;

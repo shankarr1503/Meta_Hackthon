@@ -12,16 +12,10 @@ import {
 
 import { analyzeVideo, assessVideo } from "../api/client";
 import type { VideoAnalysis, VideoAssessment } from "../api/types";
-import { extractSeries } from "./extract";
+import { extractSeries, machineRpm } from "./extract";
 
 function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
-}
-
-/** The one machine-speed rule (60–30,000 RPM), shared by analysis and assessment. */
-export function machineRpm(text: string): number | null {
-  const rpm = Number(text);
-  return text.trim() !== "" && rpm >= 60 && rpm <= 30000 ? rpm : null;
 }
 
 /** Spectrum of the extracted motion, in native pixel units. */
