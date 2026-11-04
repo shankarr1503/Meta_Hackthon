@@ -8,7 +8,7 @@ import Guard from "./Guard";
 import LoadArrow from "./LoadArrow";
 import Motor from "./Motor";
 import type { TwinState } from "./mapping";
-import { clampOrbit, orbitCameraPosition, type OrbitState } from "./orbit";
+import { clampOrbit, orbitCameraPosition, zoomByPinch, type OrbitState } from "./orbit";
 import Shaft, { SHAFT_LENGTH } from "./Shaft";
 
 /** Image-based light so the PBR metals read as metal, not grey plastic. */
@@ -34,29 +34,41 @@ function CameraRig() {
 
   useEffect(() => {
     const el = gl.domElement;
-    let dragging = false;
-    let px = 0;
-    let py = 0;
+    const pointers = new Map<number, { x: number; y: number }>();
+    let pinchDist = 0;
     const down = (e: PointerEvent) => {
-      dragging = true;
-      px = e.clientX;
-      py = e.clientY;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       el.setPointerCapture(e.pointerId);
+      if (pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        pinchDist = Math.hypot(a.x - b.x, a.y - b.y);
+      }
     };
     const move = (e: PointerEvent) => {
-      if (!dragging) return;
-      const dx = e.clientX - px;
-      const dy = e.clientY - py;
-      px = e.clientX;
-      py = e.clientY;
+      const prev = pointers.get(e.pointerId);
+      if (!prev) return;
+      const dx = e.clientX - prev.x;
+      const dy = e.clientY - prev.y;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        target.current = clampOrbit({
+          ...target.current,
+          radius: zoomByPinch(target.current.radius, pinchDist, dist),
+        });
+        pinchDist = dist;
+        return;
+      }
       target.current = clampOrbit({
         theta: target.current.theta - dx * 0.005,
         phi: target.current.phi - dy * 0.005,
         radius: target.current.radius,
       });
     };
-    const up = () => {
-      dragging = false;
+    const up = (e: PointerEvent) => {
+      pointers.delete(e.pointerId);
+      if (pointers.size < 2) pinchDist = 0;
     };
     const wheel = (e: WheelEvent) => {
       e.preventDefault();

@@ -18,6 +18,12 @@ export function clampOrbit(o: OrbitState): OrbitState {
   };
 }
 
+/** Radius after a pinch: spreading fingers (distance grows) zooms in. */
+export function zoomByPinch(radius: number, prevDist: number, nextDist: number): number {
+  if (!(prevDist > 0) || !(nextDist > 0)) return clampOrbit({ theta: 0, phi: 1, radius }).radius;
+  return clampOrbit({ theta: 0, phi: 1, radius: radius * (prevDist / nextDist) }).radius;
+}
+
 /** Camera position on the orbit sphere, looking at the origin. */
 export function orbitCameraPosition(
   theta: number,

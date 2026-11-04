@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { clampOrbit, orbitCameraPosition } from "./orbit";
+import { clampOrbit, orbitCameraPosition, zoomByPinch } from "./orbit";
 
 describe("orbitCameraPosition", () => {
   it("places the camera on a sphere around the origin", () => {
@@ -16,6 +16,15 @@ describe("orbitCameraPosition", () => {
   it("keeps the distance equal to the radius", () => {
     const [x, y, z] = orbitCameraPosition(0.7, 1.1, 5);
     expect(Math.hypot(x, y, z)).toBeCloseTo(5);
+  });
+});
+
+describe("zoomByPinch", () => {
+  it("spreading fingers zooms in, pinching zooms out, clamped", () => {
+    expect(zoomByPinch(5, 100, 200)).toBeCloseTo(2.5);
+    expect(zoomByPinch(5, 200, 100)).toBe(9);
+    expect(zoomByPinch(5, 0, 100)).toBe(5);
+    expect(zoomByPinch(5, 100, 100)).toBe(5);
   });
 });
 
