@@ -28,6 +28,12 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "video", label: "Video intake" },
 ];
 
+/** The section named by `?view=`; every section is deep-linkable, unknown values use Investigate. */
+function tabFromLocation(): Tab {
+  const view = new URLSearchParams(window.location.search).get("view");
+  return TABS.some((t) => t.id === view) ? (view as Tab) : "investigate";
+}
+
 interface Loaded {
   ready: ReadyResponse;
   cases: CaseView[];
@@ -58,10 +64,22 @@ function message(error: unknown): string {
 }
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>(() => {
-    const view = new URLSearchParams(window.location.search).get("view");
-    return view === "real" || view === "video" ? view : "investigate";
-  });
+  const [tab, setTab] = useState<Tab>(tabFromLocation);
+
+  // Keep the section in the address bar so browser Back/Forward move between
+  // sections instead of leaving the app.
+  useEffect(() => {
+    const onPopState = () => setTab(tabFromLocation());
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  const selectTab = (next: Tab) => {
+    setTab(next);
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", next);
+    window.history.pushState({}, "", url);
+  };
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [replays, setReplays] = useState<TraceSummary[]>([]);
   const [trace, setTrace] = useState<Trace | null>(null);
@@ -187,7 +205,7 @@ export default function App() {
               key={t.id}
               type="button"
               aria-current={tab === t.id ? "page" : undefined}
-              onClick={() => setTab(t.id)}
+              onClick={() => selectTab(t.id)}
               className={`-mb-px border-b-2 px-3 py-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 ${
                 tab === t.id
                   ? "border-slate-900 font-semibold text-slate-900 dark:border-slate-100 dark:text-slate-100"

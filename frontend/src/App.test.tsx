@@ -174,6 +174,27 @@ describe("App navigation", () => {
     expect(screen.getByRole("heading", { name: "Manual lab" })).toBeInTheDocument();
     expect(screen.queryByText("Pump drive A")).not.toBeInTheDocument();
   });
+
+  it("writes the section into the URL so browser Back returns to it", async () => {
+    window.history.pushState({}, "", "/");
+    stubBackend();
+    render(<App />);
+    await screen.findByText("Pump drive A");
+    fireEvent.click(screen.getByRole("button", { name: "Benchmark" }));
+    expect(window.location.search).toContain("view=benchmark");
+    // Browser Back fires popstate with the previous URL restored.
+    window.history.pushState({}, "", "/?view=investigate");
+    fireEvent(window, new Event("popstate"));
+    expect(await screen.findByText("Pump drive A")).toBeInTheDocument();
+  });
+
+  it("opens the section named by a deep link", async () => {
+    window.history.pushState({}, "", "/?view=lab");
+    stubBackend();
+    render(<App />);
+    expect(await screen.findByRole("heading", { name: "Manual lab" })).toBeInTheDocument();
+    window.history.pushState({}, "", "/");
+  });
 });
 
 describe("App live investigations", () => {
