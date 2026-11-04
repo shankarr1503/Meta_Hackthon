@@ -36,6 +36,13 @@ describe("AskPanel", () => {
     expect(screen.queryByRole("button", { name: "Ask" })).not.toBeInTheDocument();
   });
 
+  it("explains why Ask is disabled for a very short question", () => {
+    render(<AskPanel investigationId="case-r2-meta-0-20261102030032" metaConfigured />);
+    fireEvent.change(screen.getByLabelText("Your question"), { target: { value: "ab" } });
+    expect(screen.getByRole("button", { name: "Ask" })).toBeDisabled();
+    expect(screen.getByText(/at least 3 characters/)).toBeInTheDocument();
+  });
+
   it("sends a typed question and shows the grounded answer", async () => {
     const fetchMock = vi.fn(() => Promise.resolve(json(answer())));
     vi.stubGlobal("fetch", fetchMock);

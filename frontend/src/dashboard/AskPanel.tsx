@@ -85,6 +85,11 @@ export default function AskPanel({ investigationId, metaConfigured }: Props) {
                 Ask
               </button>
             </div>
+            {question.trim().length > 0 && question.trim().length < MIN_CHARS && (
+              <span role="note" className="text-slate-500">
+                Questions need at least {MIN_CHARS} characters.
+              </span>
+            )}
           </label>
           <ul aria-label="Suggested questions" className="flex flex-wrap gap-2">
             {SUGGESTED_QUESTIONS.map((suggestion) => (
