@@ -103,8 +103,15 @@ export function extractSeries(
     video.currentTime = 0;
     video.muted = true;
     withCallback.requestVideoFrameCallback?.(step);
-    void video.play().catch((error: unknown) => {
-      reject(error instanceof Error ? error : new Error(String(error)));
+    void video.play().catch(() => {
+      // The browser's own message ("no supported sources") means nothing to a
+      // user; say what to do instead.
+      reject(
+        new Error(
+          "The video could not be decoded. Try another clip (MP4, MOV or WebM), " +
+            "ideally a short slow-motion recording.",
+        ),
+      );
     });
   });
 }

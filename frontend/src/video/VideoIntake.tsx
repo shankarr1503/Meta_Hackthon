@@ -18,6 +18,12 @@ function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
+/** The one machine-speed rule (60–30,000 RPM), shared by analysis and assessment. */
+export function machineRpm(text: string): number | null {
+  const rpm = Number(text);
+  return text.trim() !== "" && rpm >= 60 && rpm <= 30000 ? rpm : null;
+}
+
 /** Spectrum of the extracted motion, in native pixel units. */
 function VideoSpectrum({ analysis }: { analysis: VideoAnalysis }) {
   const data = analysis.spectrum_freq_hz.map((f, i) => ({ f, a: analysis.spectrum[i] }));
@@ -203,6 +209,12 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
 
   const onFile = (file: File | undefined) => {
     if (!file) return;
+    if (!file.type.startsWith("video/")) {
+      setError(
+        "That file does not look like a video. Choose a video clip (for example .mp4, .mov or .webm).",
+      );
+      return;
+    }
     if (url) URL.revokeObjectURL(url);
     setUrl(URL.createObjectURL(file));
     setAnalysis(null);
@@ -225,12 +237,11 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
     setAnalysis(null);
     try {
       const series = await extractSeries(video, point);
-      const rpm = Number(rpmText);
       setAnalysis(
         await analyzeVideo({
           fps: series.fps,
           samples: series.samples,
-          nominal_rpm: rpmText && rpm >= 60 && rpm <= 30000 ? rpm : null,
+          nominal_rpm: machineRpm(rpmText),
         }),
       );
     } catch (e) {
@@ -275,6 +286,11 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
             onChange={(e) => setRpmText(e.target.value)}
             className="w-40 rounded border border-slate-300 bg-white px-2 py-1.5 dark:border-slate-600 dark:bg-slate-900"
           />
+          {rpmText.trim() !== "" && machineRpm(rpmText) === null && (
+            <span role="note" className="text-amber-700 dark:text-amber-400">
+              Use 60–30,000 RPM; this value will be ignored.
+            </span>
+          )}
         </label>
         {url && (
           <button
@@ -318,7 +334,7 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
       {analysis && (
         <VideoResults
           analysis={analysis}
-          nominalRpm={rpmText && Number(rpmText) >= 60 ? Number(rpmText) : null}
+          nominalRpm={machineRpm(rpmText)}
           metaConfigured={metaConfigured}
         />
       )}

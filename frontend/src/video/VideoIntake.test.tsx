@@ -41,6 +41,23 @@ describe("VideoIntake", () => {
     expect(screen.getByText(/half the frame rate/)).toBeInTheDocument();
     expect(screen.getByLabelText(/Video file/)).toBeInTheDocument();
   });
+
+  it("rejects a non-video file with a plain-language error", () => {
+    render(<VideoIntake metaConfigured={true} />);
+    const file = new File(["not a video"], "notes.txt", { type: "text/plain" });
+    fireEvent.change(screen.getByLabelText(/Video file/), { target: { files: [file] } });
+    expect(screen.getByRole("alert")).toHaveTextContent(/does not look like a video/);
+    expect(screen.queryByRole("button", { name: /Extract vibration/ })).not.toBeInTheDocument();
+  });
+
+  it("flags an out-of-range machine speed instead of silently ignoring it", () => {
+    render(<VideoIntake metaConfigured={true} />);
+    const rpm = screen.getByLabelText(/Machine speed/);
+    fireEvent.change(rpm, { target: { value: "50000" } });
+    expect(screen.getByText(/will be ignored/)).toBeInTheDocument();
+    fireEvent.change(rpm, { target: { value: "1500" } });
+    expect(screen.queryByText(/will be ignored/)).not.toBeInTheDocument();
+  });
 });
 
 describe("VideoResults", () => {
