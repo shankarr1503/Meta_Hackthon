@@ -399,7 +399,9 @@ Measured again on 1 Nov 2026 with `python scripts/tasks.py benchmark` (150 runs 
 are simulated with the same model family the engine assumes, so these numbers show the
 method works when the model is structurally right, not real-world accuracy. The Meta
 model's stated expectations are shown beside the engine's predictions so they can be
-inspected, but they are not numerically scored.
+inspected, but they are not numerically scored. The model replies behind the sealed-case
+Meta result are committed in `backend/results/llm_cache.json`: rerunning
+`backend/scripts/benchmark.py --planner meta` reproduces 18/18 with zero new model calls.
 
 | Planner | Accuracy | Mean cost (points) | Mean experiments | Reached 90% | Runtime |
 |---|---|---|---|---|---|

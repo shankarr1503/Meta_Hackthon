@@ -39,7 +39,7 @@ Everything the repository can verify on its own is done and recorded in
 |---|---|---|
 | Git hosting | Public repository https://github.com/shankarr1503/Meta_Hackthon; `main` pushed on 2 November 2026 | Keep `main` pushed after each commit; CI result is recorded in VERIFICATION.md |
 | Hosted demo | Dockerfile and `render.yaml` verified locally | Create a Render Blueprint from the public repository, enter `FAILURELAB_LLM_API_KEY` in the Render dashboard, deploy; or run the image on another host (DEPLOYMENT.md) |
-| Final video | Script in DEMO.md rehearsed against the production build | Record the three-minute script (one live Meta run, one live question, one unseen machine); upload and supply its URL |
+| Final video | Recorded locally on 4 November (2:43 WebM with burned-in captions + SRT timings, kept out of the repository) | Upload the recording externally and supply its URL |
 | Team and eligibility | Account-specific details unavailable | Confirm in the participant portal and add members |
 | Submission form and rules | Public event overview checked on 1 November | Confirm detailed rules, judging criteria and exact fields in the participant portal; paste SUBMISSION.md |
 
@@ -56,9 +56,9 @@ verify the working tree only.
 
 1. Push `main` and confirm the GitHub Actions run is green on the pushed commits
    (Linux, Windows, container smoke test).
-2. Record the three-minute video with `docs/DEMO.md` (one live Meta run, one live
-   question, one unseen machine; saved replays as fallback). Upload it externally
-   and keep the file out of the repository.
+2. Upload the recorded three-minute video (recorded locally with `docs/DEMO.md`:
+   one live Meta run, one live question, one unseen machine; file kept out of the
+   repository) and paste its URL.
 3. Paste the video URL into the submission form and under the README title.
 4. Paste `docs/SUBMISSION.md` into the form; confirm track (Indie Developer), team
    members and eligibility.

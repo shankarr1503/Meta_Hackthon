@@ -383,7 +383,7 @@ same day, each step committed separately after a green check:
   stashes; `main` only.
 - Pitch-number audit on 3 November: every judge-facing figure was re-read from its
   committed source. Benchmark costs/accuracies, the 28% sweep gap and the 23.8%
-  sealed-case saving, the 72-pair 23/24 rows with 209 new calls and one retained
+  sealed-case saving, the 24-machine 23/24 rows with 209 new calls and one retained
   confident machine, ask-audit 10/10 with 194/194 grounded numbers at 3.25 s mean,
   real-data 8/8 vs 5/8 with 32 recorded events, second-rig 20/20, sealed 30/30,
   demo replays 8/8 with 28 calls and 0 fallbacks, and the case-r2 replay behind

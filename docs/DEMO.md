@@ -63,8 +63,8 @@ Optional opening stake, if the first scene has room: "Siemens prices unplanned d
 at 1.4 trillion dollars a year for the world's 500 biggest companies — up to 2.3 million
 dollars an hour in automotive" (The True Cost of Downtime 2024, cited in the README).
 
-Keep the 23.8% saving attached to the 18-run sealed-case study only; the 72-pair challenge
-did not reproduce it. If the live Meta run is slow, switch to the saved replay tab and say
+Keep the 23.8% saving attached to the 18-run sealed-case study only; the 24-machine
+challenge did not reproduce it. If the live Meta run is slow, switch to the saved replay tab and say
 it is a recording of an earlier live run.
 
 Unseen-machine seeds for rehearsal (probed offline with the baseline on 3 November; a
