@@ -44,3 +44,7 @@ Thumbs.db
 # Local verification tools and screenshots
 .tmp/
 debug.log
+
+# Local-only files, not part of the submission
+AGENTS.md
+pytest-of-*/
