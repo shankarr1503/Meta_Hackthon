@@ -21,8 +21,8 @@ import VideoIntake from "./video/VideoIntake";
 type Tab = "investigate" | "lab" | "benchmark" | "real" | "video";
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: "real", label: "Real recordings" },
   { id: "investigate", label: "Investigate" },
+  { id: "real", label: "Real recordings" },
   { id: "lab", label: "Manual lab" },
   { id: "benchmark", label: "Benchmark" },
   { id: "video", label: "Video intake" },
