@@ -58,6 +58,16 @@ describe("AskPanel", () => {
     expect(input).toHaveValue("");
   });
 
+  it("sets the wait expectation while the model is answering", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => new Promise<Response>(() => {})));
+    render(<AskPanel investigationId="case-r2-meta-0-20261102030032" metaConfigured />);
+    fireEvent.change(screen.getByLabelText("Your question"), {
+      target: { value: "Why not imbalance?" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Ask" }));
+    expect(await screen.findByRole("status")).toHaveTextContent(/usually a few seconds/);
+  });
+
   it("sends a suggested question exactly as shown", async () => {
     const fetchMock = vi.fn<(url: string, init?: RequestInit) => Promise<Response>>(() =>
       Promise.resolve(json(answer({ question: SUGGESTION, answer: "Experiment 2." }))),

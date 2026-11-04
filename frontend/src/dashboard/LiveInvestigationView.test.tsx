@@ -114,6 +114,14 @@ describe("LiveInvestigationView", () => {
     expect(screen.queryByRole("heading", { name: /^Diagnosis:/ })).not.toBeInTheDocument();
   });
 
+  it("shows elapsed time and the expected wait while a Meta run is in progress", async () => {
+    const trace = makeTrace();
+    const { send } = await startLive(trace);
+    send(liveFrames(trace)[0]);
+    expect(screen.getByRole("status")).toHaveTextContent(/elapsed/);
+    expect(screen.getByRole("status")).toHaveTextContent(/about 10 seconds each/);
+  });
+
   it("shows a readable message when the stream stops before the trace", async () => {
     const trace = makeTrace();
     const { source, send } = await startLive(trace);

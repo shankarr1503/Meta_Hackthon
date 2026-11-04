@@ -110,7 +110,7 @@ export default function AskPanel({ investigationId, metaConfigured }: Props) {
 
       {busy && (
         <p role="status" className="mt-3 text-sm text-slate-500">
-          Asking the Meta model…
+          Asking the Meta model… (usually a few seconds)
         </p>
       )}
       {error && (

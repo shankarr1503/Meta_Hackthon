@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 import { streamInvestigation } from "../api/client";
 import type { CaseView, PlannerName, Trace } from "../api/types";
@@ -90,6 +90,15 @@ export default function LiveInvestigationView({
   const budget = state.trace?.budget ?? DEFAULT_BUDGET;
   const { trace, diagnosis } = state;
 
+  // A live Meta run takes tens of seconds; show that the wait is normal.
+  const [elapsed, setElapsed] = useState(0);
+  const finished = trace !== null || state.error !== null;
+  useEffect(() => {
+    if (finished) return;
+    const id = window.setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [finished]);
+
   return (
     <div className="space-y-4">
       <header className="flex flex-wrap items-start justify-between gap-3">
@@ -105,8 +114,10 @@ export default function LiveInvestigationView({
         <SimulatedLabel />
       </header>
 
-      <p role="status" aria-live="polite" className="text-xs text-slate-500">
+      <p role="status" aria-live="polite" className="text-sm text-slate-500">
         {progress(state, current?.experiment.index ?? null)}
+        {!finished &&
+          ` ${elapsed}s elapsed${planner === "meta" ? " — Meta model calls usually take about 10 seconds each; saved replays open instantly." : "."}`}
       </p>
 
       {state.error && (
