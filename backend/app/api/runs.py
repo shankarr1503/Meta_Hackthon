@@ -32,26 +32,39 @@ class MetaNotConfiguredError(RuntimeError):
 
 
 class MetaRunLimiter:
-    """At most `per_hour` Meta investigations per rolling hour, per server process.
+    """At most `per_hour` starts per rolling hour, per server process.
 
     Protects the model budget from scripted or cross-site requests. O(1) amortised per check.
+    When a client key is given, that client is also capped at a third of the global
+    budget, so one visitor cannot exhaust the shared allowance for everyone else.
     """
 
     WINDOW_S = 3600.0
 
     def __init__(self, per_hour: int, clock=time.monotonic) -> None:
         self.per_hour = per_hour
+        self.per_client = max(1, per_hour // 3) if per_hour > 0 else 0
         self._clock = clock
         self._starts: deque[float] = deque()
+        self._by_client: dict[str, deque[float]] = {}
         self._lock = threading.Lock()
 
-    def try_start(self) -> bool:
+    def _prune(self, starts: deque[float], now: float) -> None:
+        while starts and now - starts[0] >= self.WINDOW_S:
+            starts.popleft()
+
+    def try_start(self, client: str | None = None) -> bool:
         with self._lock:
             now = self._clock()
-            while self._starts and now - self._starts[0] >= self.WINDOW_S:
-                self._starts.popleft()
+            self._prune(self._starts, now)
             if len(self._starts) >= self.per_hour:
                 return False
+            if client is not None:
+                starts = self._by_client.setdefault(client, deque())
+                self._prune(starts, now)
+                if len(starts) >= self.per_client:
+                    return False
+                starts.append(now)
             self._starts.append(now)
             return True
 

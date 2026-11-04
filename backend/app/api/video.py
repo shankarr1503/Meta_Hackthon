@@ -82,7 +82,7 @@ def assess(
     if not settings.llm_configured:
         raise HTTPException(status_code=503, detail=META_NOT_CONFIGURED)
     limiter: MetaRunLimiter = request.app.state.question_limiter
-    if not limiter.try_start():
+    if not limiter.try_start(request.client.host if request.client else "unknown"):
         raise HTTPException(status_code=429, detail="Hourly Meta question limit reached.")
     features = body.model_dump(mode="json", exclude={"context"})
     with ChatCompletionsClient.from_settings(settings) as client:
@@ -91,7 +91,13 @@ def assess(
 
 
 @router.post("/analyze", response_model=VideoAnalyzeResponse)
-def analyze(body: VideoAnalyzeRequest) -> VideoAnalyzeResponse:
+def analyze(body: VideoAnalyzeRequest, request: Request) -> VideoAnalyzeResponse:
+    limiter: MetaRunLimiter = request.app.state.compute_limiter
+    if not limiter.try_start(request.client.host if request.client else "unknown"):
+        raise HTTPException(
+            status_code=429,
+            detail="The hourly compute limit for this server has been reached. Try again later.",
+        )
     samples = np.asarray(body.samples, dtype=float)
     samples = samples - samples.mean()
     nyquist = body.fps / 2.0

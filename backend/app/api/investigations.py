@@ -47,13 +47,27 @@ QUESTION_LIMIT_REACHED = (
 )
 
 
+def _client_key(request: Request) -> str:
+    return request.client.host if request.client else "unknown"
+
+
 def _admit_meta(request: Request, settings: Settings) -> None:
     """503 when the model is not configured, 429 when the hourly Meta budget is spent."""
     if not settings.llm_configured:
         raise HTTPException(status_code=503, detail=META_NOT_CONFIGURED)
     limiter: MetaRunLimiter = request.app.state.meta_limiter
-    if not limiter.try_start():
+    if not limiter.try_start(_client_key(request)):
         raise HTTPException(status_code=429, detail=META_LIMIT_REACHED)
+
+
+def _admit_compute(request: Request) -> None:
+    """429 when this client's share of the hourly compute budget is spent."""
+    limiter: MetaRunLimiter = request.app.state.compute_limiter
+    if not limiter.try_start(_client_key(request)):
+        raise HTTPException(
+            status_code=429,
+            detail="The hourly compute limit for this server has been reached. Try again later.",
+        )
 
 
 def _sse(frame: dict[str, Any]) -> str:
@@ -94,6 +108,8 @@ def run_investigation(body: InvestigationRequest, request: Request, settings: Se
     store = ReplayStore(settings.replays_dir)
     if body.planner == "meta":
         _admit_meta(request, settings)
+    else:
+        _admit_compute(request)
     try:
         return run_and_save(scenario, body.planner, body.seed, settings, store)
     except MetaNotConfiguredError as error:
@@ -120,6 +136,8 @@ def stream_investigation(
     store = ReplayStore(settings.replays_dir)
     if planner == "meta":
         _admit_meta(request, settings)
+    else:
+        _admit_compute(request)
 
     def event_iter():
         # The id is reserved only once streaming starts, so a client that disconnects
@@ -201,7 +219,7 @@ def ask_investigation(
     if not settings.llm_configured:
         raise HTTPException(status_code=503, detail=META_NOT_CONFIGURED)
     limiter: MetaRunLimiter = request.app.state.question_limiter
-    if not limiter.try_start():
+    if not limiter.try_start(_client_key(request)):
         raise HTTPException(status_code=429, detail=QUESTION_LIMIT_REACHED)
     with ChatCompletionsClient.from_settings(settings) as client:
         result = answer_question(client, trace.model_dump(mode="json"), body.question)

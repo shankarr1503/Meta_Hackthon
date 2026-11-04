@@ -34,6 +34,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = settings
     app.state.meta_limiter = MetaRunLimiter(settings.meta_runs_per_hour)
     app.state.question_limiter = MetaRunLimiter(settings.meta_questions_per_hour)
+    app.state.compute_limiter = MetaRunLimiter(settings.compute_per_hour)
     for router in (
         health_router,
         simulation_router,
