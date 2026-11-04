@@ -50,6 +50,12 @@ describe("VideoIntake", () => {
     expect(screen.queryByRole("button", { name: /Extract vibration/ })).not.toBeInTheDocument();
   });
 
+  it("offers a synthetic sample clip when the browser cannot generate one", async () => {
+    render(<VideoIntake metaConfigured={true} />);
+    fireEvent.click(screen.getByRole("button", { name: /synthetic sample/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(/not supported|does not look/);
+  });
+
   it("flags an out-of-range machine speed instead of silently ignoring it", () => {
     render(<VideoIntake metaConfigured={true} />);
     const rpm = screen.getByLabelText(/Machine speed/);

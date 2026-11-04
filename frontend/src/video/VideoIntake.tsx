@@ -223,6 +223,62 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
     });
   };
 
+  /** A 3-second synthetic clip (bright point oscillating at ~5 Hz), generated
+   * in the browser so the view is never a dead end without a recording. */
+  const loadSample = async () => {
+    setError(null);
+    try {
+      if (typeof MediaRecorder === "undefined") {
+        throw new Error(
+          "Sample generation is not supported in this browser; choose a video file instead.",
+        );
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = 320;
+      canvas.height = 240;
+      const context = canvas.getContext("2d");
+      if (!context || typeof canvas.captureStream !== "function") {
+        throw new Error(
+          "Sample generation is not supported in this browser; choose a video file instead.",
+        );
+      }
+      const recorder = new MediaRecorder(canvas.captureStream(30), { mimeType: "video/webm" });
+      const chunks: Blob[] = [];
+      recorder.ondataavailable = (e) => {
+        if (e.data.size) chunks.push(e.data);
+      };
+      const stopped = new Promise<void>((resolve) => {
+        recorder.onstop = () => resolve();
+      });
+      recorder.start();
+      const t0 = performance.now();
+      await new Promise<void>((resolve) => {
+        const draw = () => {
+          const t = (performance.now() - t0) / 1000;
+          context.fillStyle = "#1f2937";
+          context.fillRect(0, 0, 320, 240);
+          const y = 120 + 42 * Math.sin(2 * Math.PI * 5 * t);
+          context.fillStyle = "#f8fafc";
+          context.beginPath();
+          context.arc(160, y, 14, 0, 7);
+          context.fill();
+          if (t < 3) requestAnimationFrame(draw);
+          else resolve();
+        };
+        draw();
+      });
+      recorder.stop();
+      await stopped;
+      onFile(
+        new File([new Blob(chunks, { type: "video/webm" })], "synthetic-sample.webm", {
+          type: "video/webm",
+        }),
+      );
+    } catch (e) {
+      setError(message(e));
+    }
+  };
+
   const extract = async () => {
     const video = videoRef.current;
     if (!video) return;
@@ -270,6 +326,13 @@ export default function VideoIntake({ metaConfigured }: { metaConfigured: boolea
             className="text-sm"
           />
         </label>
+        <button
+          type="button"
+          onClick={() => void loadSample()}
+          className="rounded border border-slate-300 px-3 py-1.5 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+        >
+          Load a synthetic sample clip
+        </button>
         <label className="flex flex-col gap-1">
           <span className="font-medium">Machine speed (RPM, optional)</span>
           <input
